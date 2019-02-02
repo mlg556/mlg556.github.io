@@ -131,7 +131,7 @@ function y = asymClipSin(t,freq,clipPlus,clipMinus)
     y = output;
 end
 
-{% endhighlight %}*
+{% endhighlight %}
 
 Here are the resulting plots:
 
