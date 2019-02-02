@@ -2,6 +2,7 @@
 layout: post
 title:  "Web Scraping With Python3 and Selenium"
 date:   2019-02-02 17:00:23 +0300
+categories: [Python, Selenium]
 ---
 
 [Ekşi Sözlük](https://eksisozluk.com) (or "sourtimes") is an attempt at a *dictionary* or a *holy source of information* where users can create articles or post entries just about anything which comes to mind. It was created at 1999 by [Sedat 'ssg' Kapanoğlu](https://twitter.com/esesci) with inspiration from [Douglas Adams' The Hitchhiker's Guide to the Galaxy](https://en.wikipedia.org/wiki/The_Hitchhiker%27s_Guide_to_the_Galaxy). It is currently the most active "dictionary" style page in Turkey, so an interesting place to look from the perspective of data science.

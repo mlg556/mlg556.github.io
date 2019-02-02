@@ -3,6 +3,7 @@ layout: post
 title:  "Collatz Conjecture With Python3"
 date:   2019-02-02 20:00:12 +0300
 mathjax: true
+categories: [Python, Mathematics]
 ---
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
