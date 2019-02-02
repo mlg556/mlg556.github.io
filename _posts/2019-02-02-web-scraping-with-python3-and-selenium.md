@@ -28,7 +28,7 @@ In this post I will be automating a Google Chrome browser instance. You can obvi
 
 # Selenium
 
-First you will need the python3 `selenium` package, which can be install via `pip install selenium` (or `pip3`, depending on your environment).
+Selenium is a toolkit to automate browsers. Since we will be using _Python_, we will need the _Python 3 API_. This package can be installed via `pip install selenium`.
 
 # chromedriver
 
@@ -44,7 +44,7 @@ To automate Google Chrome using Selenium, you will also need the `chromedriver` 
 
 # adjustText
 
-We will use this little library to make annotations look prettier in matplotlib (they tend to infuriatingly overlap). It can be installed again via `pip install adjustText`, see the [GitHub page](https://github.com/Phlya/adjustText) for more information.
+We will use this little library to make annotations look prettier in matplotlib (they tend to infuriatingly overlap). It can be installed via `pip install adjustText`, see the [GitHub page](https://github.com/Phlya/adjustText) for more information.
 
 ## The Code
 
