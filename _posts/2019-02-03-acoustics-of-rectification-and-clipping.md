@@ -2,7 +2,7 @@
 layout: post
 title:  "Acoustics of Rectification and Clipping"
 date:   2019-02-03 10:02:32 +0300
-categories: [matlab, mathematics]
+categories: [MATLAB, Mathematics]
 ---
 
 <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"> </script>
