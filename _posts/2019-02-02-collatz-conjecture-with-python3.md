@@ -4,6 +4,10 @@ title:  "Collatz Conjecture With Python3"
 date:   2019-02-02 20:00:12 +0300
 mathjax: true
 ---
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+
 
 [The Collatz Conjecture](http://mathworld.wolfram.com/CollatzProblem.html) is a problem posed by L. Collatz in 1937. Take a positive integer. If it is even, divide it by two. If it is odd, multiply by 3 and add 1. The conjecture states that if you iterate this process for _any_ positive integer, you will always reach $$1$$. So if we take the function:
 
