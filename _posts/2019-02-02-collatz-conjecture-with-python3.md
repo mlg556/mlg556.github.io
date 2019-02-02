@@ -4,7 +4,7 @@ title:  "Collatz Conjecture With Python3"
 date:   2019-02-02 20:00:12 +0300
 ---
 
-[The Collatz Conjecture](http://mathworld.wolfram.com/CollatzProblem.html) is a problem posed by L. Collatz in 1937. Take a positive integer. If it is even, divide it by two. If it is odd, multiply by 3 and add 1. The conjecture states that if you iterate this process for _any_ positive integer, you will always reach $1$. So if we take the function:
+[The Collatz Conjecture](http://mathworld.wolfram.com/CollatzProblem.html) is a problem posed by L. Collatz in 1937. Take a positive integer. If it is even, divide it by two. If it is odd, multiply by 3 and add 1. The conjecture states that if you iterate this process for _any_ positive integer, you will always reach $$1$$. So if we take the function:
 
 $$
 f(x) = \begin{cases}
@@ -13,9 +13,9 @@ f(x) = \begin{cases}
         \end{cases}
 $$
 
-and iterate it for any positive integer $n$, we will always reach $1$.
+and iterate it for any positive integer $$n$$, we will always reach $$1$$.
 
-For example for $7$, this looks like
+For example for $$7$$, this looks like
 
 $$
 7 \rightarrow 22 \rightarrow 11 \rightarrow 34 \rightarrow 17 \rightarrow 52 \rightarrow 26 \rightarrow 13 \rightarrow 40 \rightarrow 20 \rightarrow 10 \rightarrow 5 \rightarrow 16 \rightarrow 8 \rightarrow 4 \rightarrow 2 \rightarrow 1
@@ -121,7 +121,7 @@ By using the `timeit` module, we can see that the whole calculation took about 1
 
 It looks like two streams coming from 0 and somehwere between 100-120 to meet with another. We can also see peculiarly straight horizontal lines.
 
-For perspective, let's plot the first million numbers, along with the function $log_{2} x$. This function is particularly interesting because for any power of $2$, $log_{2} x$ is the number of the steps it takes to reach $1$. In other words, the number $2^n$ reaches $1$ in $n$ steps. Modifying the code a little bit, and using `np.savetxt()` to dump the data for future use, we observe that the operation took 147 seconds for the first million numbers.
+For perspective, let's plot the first million numbers, along with the function $$log_{2} x$$. This function is particularly interesting because for any power of $$2$$, $$log_{2} x$$ is the number of the steps it takes to reach $$1$$. In other words, the number $$2^n$$ reaches $$1$$ in $$n$$ steps. Modifying the code a little bit, and using `np.savetxt()` to dump the data for future use, we observe that the operation took 147 seconds for the first million numbers.
 
 {% highlight python %}
 
@@ -163,9 +163,9 @@ plt.show()
 
 ![](/assets/2019-02-02-collatz-conjecture-with-python3/collatz_1M.png)
 
-We can observe that the function $log_{2} x$ acts as a lower bound for the number of steps, and the figure reaches horizontal stability except for some outliers.
+We can observe that the function $$log_{2} x$$ acts as a lower bound for the number of steps, and the figure reaches horizontal stability except for some outliers.
 
-Just to utilize the `collatzer_steps()` function, let us see the steps a very large number takes. Since the y axis starts off quite high and diminishes rather quickly, I will use a $\log y$ axis.
+Just to utilize the `collatzer_steps()` function, let us see the steps a very large number takes. Since the y axis starts off quite high and diminishes rather quickly, I will use a $$\log y$$ axis.
 
 {% highlight python %}
 
