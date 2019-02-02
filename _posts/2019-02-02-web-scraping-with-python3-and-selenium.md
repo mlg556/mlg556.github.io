@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Web Scraping With Python3 and Selenium"
+title:  "Web Scraping with Python3 and Selenium"
 date:   2019-02-02 17:00:23 +0300
 categories: [Python, Selenium]
 ---
@@ -32,7 +32,7 @@ In this post I will be automating a Google Chrome browser instance. You can obvi
 
 # chromedriver
 
-To automate Google Chrome using Selenium, you will also need the `chromedriver` binary. The latest releases can be found at their [downloads page](http://chromedriver.chromium.org/downloads). After extracting the zip file, you will have to but the `chromedriver` binary somewhere in your `$PATH` (for example `usr/local/bin`).
+To automate Google Chrome using Selenium, you will also need the `chromedriver` binary. The latest releases can be found at their [downloads page](http://chromedriver.chromium.org/downloads). After extracting the zip file, you will have to put the `chromedriver` binary somewhere in your `$PATH` (for example `usr/local/bin`).
 
 # Beautiful Soup
 
@@ -51,7 +51,7 @@ We will use this little library to make annotations look prettier in matplotlib 
 Ekşi Sözlük has "articles" and "entries". We will scrape the date data from the pages, to see when an article had the most entries written to it. I will not go through all the code line by line, but some of the more crucial concepts.
 
 
-To automate a "headless" Google Chrome browser instance, we will need the absolute paths of the Google Chrome binary and the `chromedriver` binary. On a macOS system, the Google Chrome binary will likely to be located inside the application: `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"` The `chromedriver` binary is wherever you put it.
+To automate a "headless" Google Chrome browser instance, we will need the absolute paths of the Google Chrome binary and the `chromedriver` binary. On a macOS system, the Google Chrome binary will likely to be located inside the application: `"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"` The `chromedriver` binary is wherever you have copied it in the installation step.
 
 The code for a simple automation is as follows:
 

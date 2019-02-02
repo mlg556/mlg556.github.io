@@ -24,6 +24,7 @@ def eksi_title_extractor(url):
     title = title[0]
     return title
 
+
 # formats seconds into hours, minutes and seconds
 def sec_formatter(seconds):
     mins = int(seconds / 60)
@@ -36,6 +37,7 @@ def sec_formatter(seconds):
         return str(hours) + 'H ' + str(mins) + 'M ' + str(secs) + 'S'
 
     return str(mins) + 'M ' + str(secs) + 'S'
+
 
 # the url
 url = argv[1]
@@ -58,7 +60,7 @@ loop_times = []
 url = url + '?p='
 
 binary_path = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-chromedriver_path = "/Users/ooloncolluphid/Documents/bin/chromedriver"
+chromedriver_path = "REPLACE/THIS/PATH"
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
