@@ -28,7 +28,7 @@ In this post I will be automating a Google Chrome browser instance. You can obvi
 
 # Selenium
 
-Selenium is a toolkit to automate browsers. Since we will be using _Python_, we will need the _Python 3 API_. This package can be installed via `pip install selenium`.
+[Selenium](https://selenium-python.readthedocs.io) is a toolkit to automate browsers. Since we will be using _Python_, we will need the _Python 3 API_. This package can be installed via `pip install selenium`.
 
 # chromedriver
 
