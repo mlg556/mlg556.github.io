@@ -17,7 +17,7 @@ title: Fruits of Discontent
 email: mlg556@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
     Welcome to my personal blog, focused on
-    technical stuff which a university student might encounter in their lives.
+    technical stuff which might occupy a regular university student's mind.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  mlg556
