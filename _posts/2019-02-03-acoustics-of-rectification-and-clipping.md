@@ -7,6 +7,8 @@ categories: [MATLAB, Mathematics]
 
 <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"> </script>
 
+
+
 While designing my electro guitar effects pedal (which will be featured in a future post), I had to deal with a fundamental question: How does the shape of a periodic signal affect its harmonic characteristics? Or, more technically speaking, how does the shape of a periodic signal affects its [Fourier Transform](http://mathworld.wolfram.com/FourierTransform.html)? To analyze this on a simplified level, I have decided to use [MATLAB](https://www.mathworks.com/products/matlab.html).
 
 ## Installations
