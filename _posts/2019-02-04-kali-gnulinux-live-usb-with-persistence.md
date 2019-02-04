@@ -6,7 +6,7 @@ mathjax: true
 categories: [GNULinux]
 ---
 
-In this post I will show you how to setup a Kali GNU/Linux Live system with _persistence_ on a USB drive, so that you can carry it around anywhere and boot from it whenever you want to. The _persistence_ feature will allow the system to be saved and persist through different boot-ups, so it will just be like using a default OS. As the [official documentation](https://docs.kali.org/downloading/kali-linux-live-usb-persistence) suggests: _" (...) the preservation of data on the “Kali Live” USB drive — across reboots of “Kali Live”. This can be an extremely useful enhancement, and enables you to retain documents, collected testing results, configurations, etc., when running Kali Linux “Live” from the USB drive, even across different systems."_
+In this post I will show you how to setup a Kali GNU/Linux Live system with _persistence_ on a USB drive, so that you can carry it around anywhere and boot from it whenever you want to. The _persistence_ feature will allow the system to be saved and persist through different boot-ups. As the [official documentation](https://docs.kali.org/downloading/kali-linux-live-usb-persistence) suggests: _" (...) the preservation of data on the “Kali Live” USB drive — across reboots of “Kali Live”. This can be an extremely useful enhancement, and enables you to retain documents, collected testing results, configurations, etc., when running Kali Linux “Live” from the USB drive, even across different systems."_
 
 I will be doing this on a MacBook Air (13-inch, Early 2014) with macOS Mojave 10.14.1 installed, so your mileage may vary on another system.
 
