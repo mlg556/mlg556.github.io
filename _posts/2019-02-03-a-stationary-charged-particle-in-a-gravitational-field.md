@@ -3,7 +3,8 @@ layout: post
 title:  "A Stationary Charged Particle in a Gravitational Field"
 date:   2019-02-03 20:37:12 +0300
 mathjax: true
-categories: [Mathematics, Physics ]
+categories: [Mathematics, Physics]
+comments: true
 ---
 Let us conduct a simple [_gedankenexperiment_](https://www.britannica.com/science/Gedankenexperiment) about charges, acceleration, radiation and gravity. Consider an inertial observer, $$K$$, floating in free-space. Now add to the picture a charged particle $$q$$, accelerating away from the observer $$K$$ with the acceleration $$\overrightarrow{a}$$. According to our current physics knowledge, this acceleration should produce an electromagnetic radiation emanating from the accelerated charge, which can be observed by the observer $$K$$. (See [Larmor formula](https://en.wikipedia.org/wiki/Larmor_formula), [Electromagnetic field of an accelerated charge](http://www.tapir.caltech.edu/~teviet/Waves/empulse.html)). Now let us think of another observer, $$K'$$, who is co-accelerating with the charged particle. By applying [Einstein's Equivalence Principle](http://www.einstein-online.info/spotlights/equivalence_principle.html) to this system of $$K'$$ and $$q$$, we can transform the acceleration into "standing still in a uniform gravitational field". You can check out the childish drawing below if you are a bit confused.
 

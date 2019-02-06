@@ -3,6 +3,7 @@ layout: post
 title:  "VHDL Simulation Workflow in macOS"
 date:   2019-02-01 23:54:23 +0300
 categories: VHDL
+comments: true
 ---
 
 The [XILINX Vivado Design Suite](https://www.xilinx.com/products/design-tools/vivado.html) does not work natively on the macOS platform, so you can not download your code to your development board. What you _can_ do, however, is to run simulations of your VHDL code. This post will show how to do it using `ghdl` and `gtkwave`.

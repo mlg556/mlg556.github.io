@@ -3,6 +3,7 @@ layout: post
 title:  "Kali GNU/Linux Live USB with Persistence"
 date:   2019-02-04 23:12:08 +0300
 mathjax: true
+comments: true
 categories: [GNULinux]
 ---
 

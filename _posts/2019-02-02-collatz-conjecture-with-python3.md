@@ -3,6 +3,7 @@ layout: post
 title:  "Collatz Conjecture with Python3"
 date:   2019-02-02 20:00:12 +0300
 mathjax: true
+comments: true
 categories: [Python, Mathematics]
 ---
 
