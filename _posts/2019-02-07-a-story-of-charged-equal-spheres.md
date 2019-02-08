@@ -157,7 +157,7 @@ $$
 
 {% endraw %}
 
-We finally have the $$ \frac{a}{3}+\frac{b}{3}+\frac{c}{3} $$ we are looking for, but I do not see how the rest goes to $$ 0 $$ as $$ \lim_{n\to\infty} $$, since there are terms like $$ (-1)^n $$ which would prevent it from converging.
+We finally have the $$ \frac{a}{3}+\frac{b}{3}+\frac{c}{3} $$ we are looking for, and the right hand side converges to $$ 0 $$, as $$ \lim_{n\to\infty} (\frac{-1}{2})^n = 0 $$.
 
 ## Downloads
 
