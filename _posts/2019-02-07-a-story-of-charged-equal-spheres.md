@@ -159,6 +159,11 @@ $$
 
 We finally have the $$ \frac{a}{3}+\frac{b}{3}+\frac{c}{3} $$ we are looking for, and the right hand side converges to $$ 0 $$, as $$ \lim_{n\to\infty} (\frac{-1}{2})^n = 0 $$.
 
+## Convergence Rate
+
+This proof was about the special case $$ N = 3 $$ spheres, but I am guessing it can be extended to any finite number of spheres as long as no sphere is left unconnected. Also the convergence rate to the arithmetic mean probably is _slower_ as the number of spheres increase. To get a sense of the convergence rate in the numerical results, I will calculate the [standard deviation](http://mathworld.wolfram.com/StandardDeviation.html) of the sphere charges at step $$ N $$ to see how quickly it decreases. The script I wrote checks when the standard deviation is $$ 0 $$ and reports the number of steps it took. Running it a few times, it seems that for the three sphere case, the standard deviation converges to $$ 0 $$ at about $$ 55-60 $$ steps. For the case of 10 spheres, the script ran for about 15 mins and the standard deviation failed to converge to `0` (of course checking equalities in floating-point arithmetic is a bit sloppy) after 8 million steps; so we can empirically conclude that the convergence rate indeed decreases for larger number of spheres.
+
+
 ## Downloads
 
 [avg.py][1]
@@ -167,7 +172,15 @@ We finally have the $$ \frac{a}{3}+\frac{b}{3}+\frac{c}{3} $$ we are looking for
 
 [avg.m][3]
 
+[avg10.py][4]
+
+[avg10_conv.py][5]
+
+[avg_conv.py][6]
 
 [1]:{{ site.url }}/downloads/2019-02-07-a-story-of-charged-equal-spheres/avg.py
 [2]:{{ site.url }}/downloads/2019-02-07-a-story-of-charged-equal-spheres/sym_avg.py
 [3]:{{ site.url }}/downloads/2019-02-07-a-story-of-charged-equal-spheres/avg.m
+[4]:{{ site.url }}/downloads/2019-02-07-a-story-of-charged-equal-spheres/avg10.py
+[5]:{{ site.url }}/downloads/2019-02-07-a-story-of-charged-equal-spheres/avg10_conv.py
+[6]:{{ site.url }}/downloads/2019-02-07-a-story-of-charged-equal-spheres/avg_conv.py
