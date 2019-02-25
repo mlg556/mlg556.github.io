@@ -16,7 +16,7 @@ We will be using an [Arduino](https://www.arduino.cc) board to act as an [ISP pr
 
 # AVRDUDE
 
-[AVRDUDE](https://www.nongnu.org/avrdude/) is a command line utility which will be used to write the generated `.hex` file in to the ROM of the microchip. You can install it with `brew install avrdude`. Since the default config file does not support AT89S52, we will use a modified version provided by [varun96](https://www.instructables.com/id/Programming-AT89s52-Using-USBasp-ISP-Programmer/). It can be downloaded via the Instructables site, or directly [here]({{ site.url }}/downloads/2019-02-14-8051-assembly-workflow-in-macos/F40R96CIUSLFZFP.conf). Put this file somehwere accessible, we will later refer to it.
+[AVRDUDE](https://www.nongnu.org/avrdude/) is a command line utility which will be used to write the generated `.hex` file in to the ROM of the microchip. You can install it with `brew install avrdude`. Since the default config file does not support AT89S52, we will use a modified version provided by [varun96](https://www.instructables.com/id/Programming-AT89s52-Using-USBasp-ISP-Programmer/). It can be downloaded via the Instructables site, or directly [here]({{ site.url }}/downloads/2019-02-14-8051-assembly-workflow-in-macos/F40R96CIUSLFZFP.conf). Put this file somewhere accessible, we will later refer to it.
 
 # as31
 
@@ -55,7 +55,7 @@ Begin Pass #1
 Begin Pass #2
 {% endhighlight %}
 
-The assembler ran without any errors, and generated the file `sum.hex` which we will use to simulate the code. When you run the `8051 emulator` you have downloaded, you will be presented with a scree like this:
+The assembler ran without any errors, and generated the file `sum.hex` which we will use to simulate the code. When you run the `8051 emulator` you have downloaded, you will be presented with a screen like this:
 
 ![](/assets/2019-02-14-8051-assembly-workflow-in-macos/emu0.png)
 
@@ -69,7 +69,7 @@ Now the emulator will show the assembly code on the bottom left, and the real-ti
 
 ![](/assets/2019-02-14-8051-assembly-workflow-in-macos/emu3.png)
 
-To run a simulation with time, you have to press `R` and adjust the simulation speed with `+-` keys.
+To run a simulation in real-time (or faster), you have to press `R` and adjust the simulation speed with `+-` keys.
 
 This code won't be of much use when embedded in the microchip. Let us simulate another code, designed to blink a LED.
 
@@ -135,7 +135,7 @@ After triple-checking the connections, it is time to flash the program to the mi
 
 `avrdude -C PATH_TO_CONFIG_FILE -c stk500v1 -P PATH_TO_ARDUINO -p 89s52 -b 19200 -U flash:w:PATH_TO_HEX_FILE`
 
-`PATH_TO_CONFIG_FILE` is the path of the modifed config file `F40R96CIUSLFZFP.conf` that we have downloaded. To find the name and path of the Arduino board, you can simply check it in the Arduino IDE or do a `ls /dev/cu.*` to list all connected serial devices.
+`PATH_TO_CONFIG_FILE` is the path of the modified config file `F40R96CIUSLFZFP.conf` that we have downloaded. To find the name and path of the Arduino board, you can simply check it in the Arduino IDE or do a `ls /dev/cu.*` to list all connected serial devices.
 
 Make sure to check the output of this command; most importantly, it has to return the correct device signature. If it returns `0x0000`, or `Yikes!  Invalid device signature.`, check your connections again. _DO NOT_ "_use -F to override this check._" After flashing the code, you can also verify it by changing the letter `w`(write) to `v`(verify) in the `avrdude` command.
 
