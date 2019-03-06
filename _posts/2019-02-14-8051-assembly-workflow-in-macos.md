@@ -18,9 +18,9 @@ We will be using an [Arduino](https://www.arduino.cc) board to act as an [ISP pr
 
 [AVRDUDE](https://www.nongnu.org/avrdude/) is a command line utility which will be used to write the generated `.hex` file in to the ROM of the microchip. You can install it with `brew install avrdude`. Since the default config file does not support AT89S52, we will use a modified version provided by [varun96](https://www.instructables.com/id/Programming-AT89s52-Using-USBasp-ISP-Programmer/). It can be downloaded via the Instructables site, or directly [here]({{ site.url }}/downloads/2019-02-14-8051-assembly-workflow-in-macos/F40R96CIUSLFZFP.conf). Put this file somewhere accessible, we will later refer to it.
 
-# as31
+# C51ASM
 
-[AS31](https://www.pjrc.com/tech/8051/tools/as31-doc.html) is an assembler written by Ken Stauffer for the 8051 architecture. Fortunately, github user [_ericponce_](https://github.com/ericponce) has modified it to work on macOS. Requirements and installation instructions can be found [here](https://github.com/ericponce/as31).
+_C51ASM_ is an assembler written by Atmel (which is now called _Microchip_) for the 8051 architecture, supporting the AT89S52 we are using. However, perhaps because of the acquirement by _Microchip_, the link for the product [http://www.atmel.com/tools/C51ASM.aspx](http://www.atmel.com/tools/C51ASM.aspx) no longer works. Fortunately, by the magic of [WayBackMachine](https://web.archive.org), I was able to connect to an archived version and download the executable. [Here](https://web.archive.org/web/20160410011650/http://www.atmel.com/tools/C51ASM.aspx) is the link for the archived webpage, and [c51asm_macosx_1-2.zip]({{ site.url }}/downloads/2019-02-14-8051-assembly-workflow-in-macos/c51asm_macosx_1-2.zip) is the macos version which can be directly downloaded. Make sure to extract the files in the correct places, perhaps `/usr/local/bin` and `usr/local/include`.
 
 # 8051 emulator
 Jari Komppa's [8051 emulator](http://sol.gfxile.net/8051.html) is a simple emulator which you can run in the Terminal since the UI is based on _ncurses_. The [compiled OSX Intel binary version](http://sol.gfxile.net/zip/emu8051_072.dmg) worked fine for me. It achieves faster than real-time simulations which are great for simulating code such as a blinking LED etc...
@@ -29,30 +29,44 @@ Jari Komppa's [8051 emulator](http://sol.gfxile.net/8051.html) is a simple emula
 Let us try to simulate this basic code, which sums decimal `3` and `4` and stores the result in the `A`(or `ACC`) register of the chip.
 
 {% highlight nasm %}
-.ORG 0H
+ORG 0H
 
     MOV A, #3
     MOV R2, #4
 
     ADD A, R2
 
-.END
+END
 {% endhighlight %}
 
-Note that the assembler directives for this assembler require a `.` before them. I have found that `.ORG` and `.END` do not work on most other assemblers.
 
 ## Simulation
 
 First we have to assemble the code. Assuming that the file name is `sum.asm`:
 
 {% highlight bash %}
-~$ as31 sum.asm
+~$ c51asm sum.asm
+C51ASM: advanced C51 macro assembler Version 1.2 (06 May 2011)
+Copyright (C) 2011 Atmel Corp.
 
-AS31 2.0b3 (beta), March 20, 2001
-Please report problems to: paul@pjrc.com
 
-Begin Pass #1
-Begin Pass #2
+Pass 1 completed with no warnings and no errors
+
+Pass 2 completed with no warnings and no errors
+
+Segment usage:
+   Code      :      5 bytes
+   Data      :      0 bytes
+   Idata     :      0 bytes
+   Edata     :      0 bytes
+   Fdata     :      0 bytes
+   Xdata     :      0 bytes
+   Bit       :      0 bits
+
+   Register banks used: ---
+
+   Warnings: 0
+   Errors:   0
 {% endhighlight %}
 
 The assembler ran without any errors, and generated the file `sum.hex` which we will use to simulate the code. When you run the `8051 emulator` you have downloaded, you will be presented with a screen like this:
@@ -79,9 +93,9 @@ This code won't be of much use when embedded in the microchip. Let us simulate a
 ; = 0.5 * PER milliseconds
 ; on-time = 0.25 * PER
 
-        .ORG 0H
+        ORG 0H
 
-        .EQU PER, 2
+        EQU PER EQU 2
 
 MAIN:   ACALL ON
         ACALL DELAY
@@ -102,7 +116,7 @@ LOOP:   DJNZ R1, LOOP
         DJNZ R0, LOOP
         RET
 
-        .END
+        END
 {% endhighlight %}
 
 As before, run `as31 blink.asm`, and load the `.hex` file to the emulator. Satisfied with the simulation, we can finally embed the program to the AT89S52.
@@ -141,27 +155,25 @@ Make sure to check the output of this command; most importantly, it has to retur
 
 ## Summary
 
-In conclusion, assuming `as31` points to the _as31 assembler_, `emu` points to the _8051 emulator_, `PATH_TO_CONFIG_FILE` is the location of the modified `F40R96CIUSLFZFP.conf` file and `PATH_TO_ARDUINO` is the name of the serial port which the Arduino board is connected (something like `/dev/cu.usbserial-A9OZNH9X`), the following utility summarizes the workflow.
+In conclusion, assuming `c51asm` points to the _c51asm assembler_, `emu` points to the _8051 emulator_, `PATH_TO_CONFIG_FILE` is the location of the modified `F40R96CIUSLFZFP.conf` file and `PATH_TO_ARDUINO` is the name of the serial port which the Arduino board is connected (something like `/dev/cu.usbserial-A9OZNH9X`), the following utility summarizes the workflow.
 
 {% highlight bash %}
 #!/bin/bash
 
 if [ "$1" == 'ass' ]; then
-    as31 $2.asm
+    c51asm $2.asm -l --target AT89S52
 elif [ "$1" == 'sim' ]; then
     emu $2.hex
 elif [ "$1" == 'prg' ]; then
-    avrdude -C PATH_TO_CONFIG_FILE -c stk500v1 -P PATH_TO_ARDUINO -p 89s52 -b 19200 -U flash:w:$2.hex
-elif [ "$1" == 'ver' ]; then
-    avrdude -C PATH_TO_CONFIG_FILE -c stk500v1 -P PATH_TO_ARDUINO -p 89s52 -b 19200 -U flash:v:$2.hex
+    avrdude -C PATH_TO_CONFIG_FILE -c stk500v1 -P `PATH_TO_ARDUINO` -p 89s52 -b 19200 -U flash:w:$2.hex
 else
-    echo "asm v1.0 -- @mlg556
-Usage:  
-  asm (ass | prg | ver)
+    echo "asm v1.1 -- @mlg556
+Usage:
+  asm (ass | sim | prg | )
 Options:
-  ass    Assemble using as32
-  prg    Write .hex to flash
-  ver    Verify written .hex"
+  ass    		Assemble using as32
+  sim	 		Simulate the assembled .hex
+  prg    		Write .hex to flash"
 fi
 
 {% endhighlight %}
