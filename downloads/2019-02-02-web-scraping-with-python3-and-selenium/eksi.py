@@ -1,3 +1,19 @@
+#    Eksisozluk Scaper and Plotter.
+#    Copyright (C) 2019 Mirac L. Gulgonul
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import re
 import itertools
 import matplotlib.pyplot as plt
@@ -97,7 +113,8 @@ for i in range(2, limit + 1):
     loop_times.append(loop_time)
     loop_time_avg = mean(loop_times)
 
-    print(str(i) + '/' + str(limit) + ' ----------------- %' + ("{0:.2f}".format((i/limit) * 100)))
+    print(str(i) + '/' + str(limit) + ' ----------------- %' +
+          ("{0:.2f}".format((i/limit) * 100)))
     secs = ((limit-i)*loop_time_avg)
     print('ETA: ' + sec_formatter(secs))
 
@@ -135,8 +152,10 @@ texts = []
 
 for i in range(top_count):
     top_x, top_y = top[i]
-    texts.append(plt.text(mdates.date2num(dt.datetime.strptime(str(top[i][0]), '%d.%m.%Y').date()),
-                          top[i][1], str(top[i][0]) + ', ' + str(top[i][1]), ha='right', va='top'))
+    texts.append(plt.text(mdates.date2num(dt.datetime.strptime(str(top[i][0]),
+                 '%d.%m.%Y').date()), top[i][1],
+                  str(top[i][0]) + ', ' + str(top[i][1]),
+                  ha='right', va='top'))
 
 adjust_text(texts)
 
