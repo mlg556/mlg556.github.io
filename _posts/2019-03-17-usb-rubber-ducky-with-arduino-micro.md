@@ -86,7 +86,7 @@ void typer() {
     }
 }
 
-// Opens a the Command Prompt. Basically hitting Windows+R, typing "cmd" and pressing ENTER.
+// Opens the command prompt: hitting Windows+R, typing "cmd" and pressing ENTER.
 void cmdOpen() {
     Keyboard.press(KEY_LEFT_GUI);
     Keyboard.press('r');
