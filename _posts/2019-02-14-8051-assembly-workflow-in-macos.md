@@ -97,23 +97,23 @@ This code won't be of much use when embedded in the microchip. Let us simulate a
 
         EQU PER EQU 2
 
-MAIN:   ACALL ON
-        ACALL DELAY
-        ACALL OFF
-        ACALL DELAY
-        AJMP MAIN
+MAIN:   ACALL   ON
+        ACALL   DELAY
+        ACALL   OFF
+        ACALL   DELAY
+        AJMP    MAIN
 
-ON:     SETB P1.0
+ON:     SETB    P1.0
         RET
 
-OFF:    CLR P1.0
+OFF:    CLR     P1.0
         RET
 
-DELAY:  MOV R0, #PER ; generate delay, for 0.5 * PER ms
-        MOV R1, #0
+DELAY:  MOV     R0, #PER ; generate delay, for 0.5 * PER ms
+        MOV     R1, #0
 
-LOOP:   DJNZ R1, LOOP
-        DJNZ R0, LOOP
+LOOP:   DJNZ    R1, LOOP
+        DJNZ    R0, LOOP
         RET
 
         END
@@ -147,7 +147,9 @@ After this, you have to wire the Arduino to the AT89S52. The ArduinoISP sketch t
 
 After triple-checking the connections, it is time to flash the program to the microchip memory. The command will have the form:
 
-`avrdude -C PATH_TO_CONFIG_FILE -c stk500v1 -P PATH_TO_ARDUINO -p 89s52 -b 19200 -U flash:w:PATH_TO_HEX_FILE`
+{% highlight bash %}
+avrdude -C PATH_TO_CONFIG_FILE -c stk500v1 -P PATH_TO_ARDUINO -p 89s52 -b 19200 -U flash:w:PATH_TO_HEX_FILE
+{% endhighlight %}
 
 `PATH_TO_CONFIG_FILE` is the path of the modified config file `F40R96CIUSLFZFP.conf` that we have downloaded. To find the name and path of the Arduino board, you can simply check it in the Arduino IDE or do a `ls /dev/cu.*` to list all connected serial devices.
 
