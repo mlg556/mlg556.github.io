@@ -6,7 +6,7 @@ comments: true
 categories: [RaspberryPi, ARM]
 ---
 
-This post is about how to setup your _Raspberry Pi_ in a headless configuration, so you can plug it in to your main computer and SSH into it. I will be using macOS Mojave 10.14.4 and a [Raspberry Pi Zero W](https://www.raspberrypi.org/products/raspberry-pi-zero-w/), but most of this should work on any _*nix_ system.
+This post is about how to setup your _Raspberry Pi_ in a headless configuration, so you can plug it in to your main computer and SSH into it. I will be using macOS Mojave 10.14.4 and a [Raspberry Pi Zero W](https://www.raspberrypi.org/products/raspberry-pi-zero-w/), but most of this should work on any _*nix_ system and any relatively new Raspberry Pi.
 
 ## Installing the OS
 
