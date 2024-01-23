@@ -7,7 +7,7 @@ date: 28 May 2019
 
 As a term project, we designed and implemented a guitar (or any instrument) tuner device using the FRDM-KL25Z board, a microphone and an OLED display. The tuner reads the sound from the microphone, breaks down the signal into its frequency components, displays the frequency with the most amplitude (the base frequency), and also displays the closest musical note to that frequency, indicating whether the instrument should be tuned up (higher pitch) or tuned down (lower pitch) to match that closest musical note. An analog microphone is used to capture the input audio signal, the FRDM-KL25Z board acts as the digital signal processor, and a 128x64 OLED screen displays the user interface.
 
-![The components used.](comp.png){ width=50% }
+![The components used.](comp.jpg){ width=50% }
 
 # Theory
 
@@ -26,7 +26,7 @@ The analog output of the microphone is connected to the board (via the `PTC2` po
 | PTC8 | SCL | - |
 | PTC9 | SDA | - |
 
-![The connections between components.](setup.jpg){ width=50% }
+![The connections between components.](setup.jpg){ width=30% }
 
 ## Code
 
@@ -46,7 +46,7 @@ The array `float samples[FFT_SIZE*2]` holds the samples read at each loop (note 
 
 The screen shows to the user the current frequency of the signal in the first row, the second row shows the closest musical note, and how far away it is. *Figure 4* shows an example scenario: the input signals frequency is *433 Hz*, the closest musical note to this frequency is **A4**, which is *440 Hz* so the user has to tighten the string to increase the frequency by **7 Hz**. 
 
-![User interface.](ui.jpg){ width=50% }
+![User interface.](ui.jpg){ width=20% }
 
 # Differences Between Proposal and Work Done
 
