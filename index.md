@@ -1,6 +1,9 @@
 ---
-# Feel free to add content and custom Front Matter to this file.
-# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-
-layout: home
+title: Index
 ---
+
+<!-- trick it into loading katex so i can use the fonts here as well. -->
+
+$\space$
+
+- [8051 Assembly Workflow in macOS](posts/8051-assembly-workflow-in-macos/8051-assembly-workflow-in-macos.html)

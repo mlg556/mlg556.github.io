@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2019-02-14" />
+  <title>8051 Assembly Workflow in macOS</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #f8f8f8; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ef2929; } /* Alert */
+    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #204a87; } /* Attribute */
+    code span.bn { color: #0000cf; } /* BaseN */
+    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4e9a06; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #8f5902; font-style: italic; } /* Comment */
+    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+    code span.dt { color: #204a87; } /* DataType */
+    code span.dv { color: #0000cf; } /* DecVal */
+    code span.er { color: #a40000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #0000cf; } /* Float */
+    code span.fu { color: #204a87; font-weight: bold; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+    code span.ot { color: #8f5902; } /* Other */
+    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+    code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+    code span.ss { color: #4e9a06; } /* SpecialString */
+    code span.st { color: #4e9a06; } /* String */
+    code span.va { color: #000000; } /* Variable */
+    code span.vs { color: #4e9a06; } /* VerbatimString */
+    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+      html, body {
+          margin-top: 1%;
+          margin-left: 10%;
+          margin-right: 10%;
+          background-color: #fbfbfb;
+          color: #403f52;
+          font-family: 'KaTeX_SansSerif';
+          font-size: 18px;
+      }
+
+      img {
+          max-width: 80%;
+      }
+
+      figcaption{
+          font-style: italic;
+      }
+
+      pre code {
+          display:inline-block;
+          font-size: 14px;
+          margin: 10px 10px 10px 10px;
+      }
+
+      .footer {
+          text-align: center;
+          margin-top: 1%;
+          margin-bottom: 1%;
+      }
+
+      a { color: inherit; }
+  </style>
+
+  <script src="https://kit.fontawesome.com/fa8004ee4c.js" crossorigin="anonymous"></script>
+
+  <script defer=""
+  src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">8051 Assembly Workflow in macOS</h1>
+<p class="date">14 February 2019</p>
+</header>
+<p>Intel 8051 is a microcontroller unit developed in 1980s. On the off
+chance that you are writing <a
+href="https://en.wikipedia.org/wiki/Assembly_language">Assembly</a> code
+for this arcane technology, this post will exemplify a workflow on how
+to code, simulate and embed your program in a <a
+href="https://www.microchip.com/wwwproducts/en/at89s52">AT89S52/51</a>
+microchip.</p>
+<h1 id="requirements">Requirements</h1>
+<h2 id="arduino">Arduino</h2>
+<p>We will be using an <a href="https://www.arduino.cc">Arduino</a>
+board to act as an <a
+href="https://www.arduino.cc/en/tutorial/arduinoISP">ISP programmer</a>.
+Pretty much any model will do, I will be using an <a
+href="https://store.arduino.cc/usa/arduino-nano">Arduino Nano</a>.
+Obviously, you will also need the <a
+href="https://www.arduino.cc/en/Main/Software">IDE</a> to program the
+Arduino board first. You <em>could</em> in theory do this with an <a
+href="https://www.fischl.de/usbasp/">USBasp</a>, but for the device to
+support AT89S52 series, you have to update the firmware: which again
+requires an Arduino, so why not just cut the middle man.</p>
+<h2 id="avrdude">AVRDUDE</h2>
+<p><a href="https://www.nongnu.org/avrdude/">AVRDUDE</a> is a command
+line utility which will be used to write the generated <code>.hex</code>
+file in to the ROM of the microchip. You can install it with
+<code>brew install avrdude</code>. Since the default config file does
+not support AT89S52, we will use a modified version provided by <a
+href="https://www.instructables.com/id/Programming-AT89s52-Using-USBasp-ISP-Programmer/">varun96</a>.
+It can be downloaded via the Instructables site, or directly here: <a
+href="files/F40R96CIUSLFZFP.conf">F40R96CIUSLFZFP.conf</a>. Put this
+file somewhere accessible, we will later refer to it.</p>
+<h2 id="c51asm">C51ASM</h2>
+<p><em>C51ASM</em> is an assembler written by Atmel (which is now called
+<em>Microchip</em>) for the 8051 architecture, supporting the AT89S52 we
+are using. However, perhaps because of the acquirement by
+<em>Microchip</em>, the link for the product <a
+href="http://www.atmel.com/tools/C51ASM.aspx">http://www.atmel.com/tools/C51ASM.aspx</a>
+no longer works. Fortunately, by the magic of <em>WayBackMachine</em>, I
+was able to connect to an archived version and download the executable.
+<a
+href="https://web.archive.org/web/20160410011650/http://www.atmel.com/tools/C51ASM.aspx">Here</a>
+is the link for the archived webpage, and <a
+href="files/c51asm_macosx_1-2.zip">c51asm_macosx_1-2.zip</a> is the
+macOS version which can be directly downloaded. Make sure to extract the
+files in the correct places, perhaps <code>/usr/local/bin</code> and
+<code>usr/local/include</code>.</p>
+<h2 id="emulator">8051 emulator</h2>
+<p>Jari Komppa’s <a href="http://sol.gfxile.net/8051.html">8051
+emulator</a> is a simple emulator which you can run in the Terminal
+since the UI is based on <em>ncurses</em>. The <a
+href="http://sol.gfxile.net/zip/emu8051_072.dmg">pre-built OSX Intel
+binary version</a> worked fine for me. It achieves faster than real-time
+simulations which are great for simulating code such as a blinking LED
+etc…</p>
+<h1 id="simulation">Simulation</h1>
+<p>Let us try to simulate this basic code, which sums decimal
+<code>3</code> and <code>4</code> and stores the result in the
+<code>A</code>(or <code>ACC</code>) register of the chip.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ORG</span> <span class="dv">0</span><span class="er">H</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">MOV</span> A<span class="op">,</span> #<span class="dv">3</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">MOV</span> R2<span class="op">,</span> #<span class="dv">4</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ADD</span> A<span class="op">,</span> R2</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>END</span></code></pre></div>
+<p>First we have to assemble the code. Assuming that the file name is
+<code>sum.asm</code>:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">~$</span> c51asm sum.asm</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">C51ASM:</span> advanced C51 macro assembler Version 1.2 <span class="er">(</span><span class="ex">06</span> May 2011<span class="kw">)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Copyright</span> <span class="er">(</span><span class="ex">C</span><span class="kw">)</span> <span class="ex">2011</span> Atmel Corp.</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ex">Pass</span> 1 completed with no warnings and no errors</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Pass</span> 2 completed with no warnings and no errors</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="ex">Segment</span> usage:</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>   <span class="ex">Code</span>      :      5 bytes</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>   <span class="ex">Data</span>      :      0 bytes</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>   <span class="ex">Idata</span>     :      0 bytes</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>   <span class="ex">Edata</span>     :      0 bytes</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>   <span class="ex">Fdata</span>     :      0 bytes</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>   <span class="ex">Xdata</span>     :      0 bytes</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>   <span class="ex">Bit</span>       :      0 bits</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>   <span class="ex">Register</span> banks used: <span class="at">---</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>   <span class="ex">Warnings:</span> 0</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>   <span class="ex">Errors:</span>   0</span></code></pre></div>
+<p>The assembler ran without any errors, and generated the file
+<code>sum.hex</code> which we will use to simulate the code. When you
+run the <code>8051 emulator</code> you have downloaded, you will be
+presented with a screen like this:</p>
+<figure>
+<img src="images/emu0.png" alt="Emulator start." />
+<figcaption aria-hidden="true">Emulator start.</figcaption>
+</figure>
+<p>You can load the generated <code>.hex</code> file by pressing
+<code>L</code> and entering the file name (<code>sum.hex</code> in our
+case).</p>
+<figure>
+<img src="images/emu1.png" alt="Emulator load file." />
+<figcaption aria-hidden="true">Emulator load file.</figcaption>
+</figure>
+<p>Now the emulator will show the assembly code on the bottom left, and
+the real-time values of various registers and memory elements. Since we
+do not want to simulate this code in real-time, we can simply press
+<code>SPACE</code> to <em>step</em> the simulation. We can see the
+assembly code executed and the results:</p>
+<figure>
+<img src="images/emu2.png" alt="Emulator assembly code." />
+<figcaption aria-hidden="true">Emulator assembly code.</figcaption>
+</figure>
+<figure>
+<img src="images/emu3.png" alt="Emulator registers." />
+<figcaption aria-hidden="true">Emulator registers.</figcaption>
+</figure>
+<p>To run a simulation in real-time (or faster), you have to press
+<code>R</code> and adjust the simulation speed with <code>+-</code>
+keys.</p>
+<p>This code won’t be of much use when embedded in the microchip. Let us
+simulate another code, designed to blink a LED.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">; LED blinker.</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">; total period = ((256 * 24 * PER) / 12000) milliseconds</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">; = 0.5 * PER milliseconds</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">; on-time = 0.25 * PER</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">ORG</span> <span class="dv">0</span><span class="er">H</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="dt">EQU</span> PER <span class="dt">EQU</span> <span class="dv">2</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">MAIN:</span>   ACALL   ON</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        ACALL   DELAY</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        ACALL   OFF</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        ACALL   DELAY</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        AJMP    MAIN</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ON:</span>     <span class="kw">SETB</span>    P1<span class="op">.</span>0</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">RET</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="fu">OFF:</span>    CLR     P1<span class="op">.</span>0</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">RET</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="fu">DELAY:</span>  <span class="kw">MOV</span>     R0<span class="op">,</span> #PER <span class="co">; generate delay, for 0.5 * PER ms</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        <span class="kw">MOV</span>     R1<span class="op">,</span> #<span class="dv">0</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="fu">LOOP:</span>   DJNZ    R1<span class="op">,</span> LOOP</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        DJNZ    R0<span class="op">,</span> LOOP</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">RET</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>        END</span></code></pre></div>
+<p>As before, run <code>as31 blink.asm</code>, and load the
+<code>.hex</code> file to the emulator. Satisfied with the simulation,
+we can finally embed the program to the AT89S52.</p>
+<h1 id="programming">Programming</h1>
+<p>First, we will have to configure the Arduino board to act as the ISP
+programmer. To do this, open the Arduino IDE. Then open
+<em>File&gt;Examples&gt;ArduinoISP</em>. This is the sketch we will be
+uploading to the Arduino, but first, uncomment the line
+<code>#define USE_OLD_STYLE_WIRING</code>(You can alternatively use the
+ICSP headers, but I have found this to be less problematic.) Go on and
+click <em>Upload</em> and program the Arduino.</p>
+<h2 id="connections">Connections</h2>
+<p>Now that we have configured the Arduino board, we have to make the
+necessary connections. Before interconnecting the two chips, first put a
+10 <span class="math inline">\mu F</span> capacitor between the
+<code>RST</code> pin and <code>GND</code> of the Arduino board. This
+prevents the auto-reset function interfering with the programming we are
+about to do. After that, the AT8952 chip requires a crystal oscillator
+and some capacitors to function. This schematic from <a
+href="http://ernstc.dk/arduino/at89s.html">ernstc.dk</a> shows the basic
+idea:</p>
+<figure>
+<img src="images/conn.jpg" alt="Programming At89s5x." />
+<figcaption aria-hidden="true">Programming At89s5x.</figcaption>
+</figure>
+<p>After this, you have to wire the Arduino to the AT89S52. The
+ArduinoISP sketch that we have uploaded has configured the pins 10 as
+<code>RESET</code>, 11 as <code>MISO</code>, 12 as <code>MOSI</code> and
+13 as <code>SCK</code>. This means that the connections are:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Arduino Pin</th>
+<th>AT89S52 Pin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>D10 (RESET)</td>
+<td>9 (RST)</td>
+</tr>
+<tr class="even">
+<td>D11 (MISO)</td>
+<td>6 (MOSI) (P1.5)</td>
+</tr>
+<tr class="odd">
+<td>D12 (MOSI)</td>
+<td>7 (MISO) (P1.6)</td>
+</tr>
+<tr class="even">
+<td>D13 (SCK)</td>
+<td>8 (SCK) (P1.7)</td>
+</tr>
+<tr class="odd">
+<td>5V</td>
+<td>40 (VCC), 31 (EA/VPP)</td>
+</tr>
+<tr class="even">
+<td>GND</td>
+<td>20 (GND)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="flashing">Flashing</h2>
+<p>After triple-checking the connections, it is time to flash the
+program to the microchip memory. The command will have the form:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">avrdude</span> <span class="dt">\</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>-C PATH_TO_CONFIG_FILE <span class="at">-c</span> stk500v1 <span class="dt">\</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>-P ARDUINO_PORT <span class="at">-p</span> 89s52 <span class="at">-b</span> 19200 <span class="dt">\</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>-U flash:w:PATH_TO_HEX_FILE <span class="dt">\</span></span></code></pre></div>
+<p><code>PATH_TO_CONFIG_FILE</code> is the path of the modified config
+file <code>F40R96CIUSLFZFP.conf</code> that we have downloaded. To find
+which port your Arduino is connected to, check it in the Arduino IDE or
+on a terminal enter <code>ls /dev/cu.*</code> to list all connected
+serial devices.</p>
+<p>Make sure to check the output of this command; most importantly, it
+has to return the correct device signature. If it returns
+<code>0x0000</code>, or <code>Yikes!  Invalid device signature.</code>,
+check your connections again. <em>DO NOT</em> “<em>use -F to override
+this check.</em>” After flashing the code, you can also verify it by
+changing the letter <code>w</code>(write) to <code>v</code>(verify) in
+the <code>avrdude</code> command.</p>
+<h1 id="summary">Summary</h1>
+<p>Assuming <code>c51asm</code> points to the <em>c51asm assembler</em>,
+<code>emu</code> points to the <em>8051 emulator</em>,
+<code>PATH_TO_CONFIG_FILE</code> is the location of the modified
+<code>F40R96CIUSLFZFP.conf</code> file and <code>PATH_TO_ARDUINO</code>
+is the name of the serial port which the Arduino board is connected
+(something like <code>/dev/cu.usbserial-A9OZNH9X</code> in macOS), the
+following utility summarizes the workflow.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">[</span> <span class="st">&quot;</span><span class="va">$1</span><span class="st">&quot;</span> <span class="ot">==</span> <span class="st">&#39;ass&#39;</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">c51asm</span> <span class="va">$2</span>.asm <span class="at">-l</span> <span class="at">--target</span> AT89S52</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> <span class="bu">[</span> <span class="st">&quot;</span><span class="va">$1</span><span class="st">&quot;</span> <span class="ot">==</span> <span class="st">&#39;sim&#39;</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">emu</span> <span class="va">$2</span>.hex</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> <span class="bu">[</span> <span class="st">&quot;</span><span class="va">$1</span><span class="st">&quot;</span> <span class="ot">==</span> <span class="st">&#39;prg&#39;</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">avrdude</span> <span class="at">-C</span> PATH_TO_CONFIG_FILE <span class="at">-c</span> stk500v1 <span class="at">-P</span> <span class="kw">`</span><span class="ex">ARDUINO_PORT</span><span class="kw">`</span> <span class="at">-p</span> 89s52 <span class="at">-b</span> 19200 <span class="at">-U</span> flash:w:<span class="va">$2</span>.hex</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;asm v1.1 -- @mlg556</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="st">Usage:</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="st">  asm (ass | sim | prg)</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="st">Options:</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="st">  ass           Assemble using as32</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="st">  sim           Simulate the assembled .hex</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="st">  prg           Write .hex to flash&quot;</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span></code></pre></div>
+<hr>
+
+<div class="footer">
+
+    <p>
+        Miraç Lütfullah Gülgönül
+        <br>
+        <a class="fa-solid fa-globe" href="https://miraclgulgonul.github.io"></a>
+        &nbsp
+        <a class="fa-regular fa-envelope" href="mailto:miraclgulgonul@gmail.com"></a>
+        &nbsp
+        <a class="fa-brands fa-linkedin" href="https://www.linkedin.com/in/mira%C3%A7-g%C3%BClg%C3%B6n%C3%BCl-b787841b5/"></a> 
+    </p>
+
+
+</div>
+
+</body>
+</html>

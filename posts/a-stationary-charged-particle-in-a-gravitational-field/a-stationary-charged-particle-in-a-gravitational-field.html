@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2019-02-03" />
+  <title>A Stationary Charged Particle in a Gravitational Field</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+      html, body {
+          margin-top: 1%;
+          margin-left: 10%;
+          margin-right: 10%;
+          background-color: #fbfbfb;
+          color: #403f52;
+          font-family: 'KaTeX_SansSerif';
+          font-size: 18px;
+      }
+
+      img {
+          max-width: 80%;
+      }
+
+      figcaption{
+          font-style: italic;
+      }
+
+      pre code {
+          display:inline-block;
+          font-size: 14px;
+          margin: 10px 10px 10px 10px;
+      }
+
+      .footer {
+          text-align: center;
+          margin-top: 1%;
+          margin-bottom: 1%;
+      }
+
+      a { color: inherit; }
+  </style>
+
+  <script src="https://kit.fontawesome.com/fa8004ee4c.js" crossorigin="anonymous"></script>
+
+  <script defer=""
+  src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">A Stationary Charged Particle in a Gravitational
+Field</h1>
+<p class="date">03 February 2019</p>
+</header>
+<p>Let us conduct a simple <a
+href="https://www.britannica.com/science/Gedankenexperiment"><em>gedankenexperiment</em></a>
+about charges, acceleration, radiation and gravity. Consider an inertial
+observer <span class="math inline">K</span>, floating in free-space. Now
+add to the picture a charged particle <span
+class="math inline">q</span>, accelerating away from the observer <span
+class="math inline">K</span> with the acceleration <span
+class="math inline">\overrightarrow{a}</span>. According to our current
+physics knowledge, this acceleration should produce an electromagnetic
+radiation emanating from the accelerated charge, which can be observed
+by the observer <span class="math inline">K</span>. (See <a
+href="https://en.wikipedia.org/wiki/Larmor_formula">Larmor formula</a>,
+<a
+href="http://www.tapir.caltech.edu/~teviet/Waves/empulse.html">Electromagnetic
+field of an accelerated charge</a>). Now let us think of another
+observer, <span class="math inline">K&#39;</span>, who is
+co-accelerating with the charged particle. By applying <a
+href="http://www.einstein-online.info/spotlights/equivalence_principle.html">Einstein’s
+Equivalence Principle</a> to this system of <span
+class="math inline">K&#39;</span> and <span
+class="math inline">q</span>, we can transform the acceleration into
+“standing still in a uniform gravitational field”. You can check out the
+childish drawing below if you are a bit confused.</p>
+<p><img src="images/rel0.png" /></p>
+<p>After this transformation, a serious problem arises. If the charge
+still radiates, then it’s a direct violation of <a
+href="http://www.nyu.edu/classes/tuckerman/adv.chem/lectures/lecture_2/node4.html">Law
+of conservation of energy</a>: we could just put solar panels (or
+antennas) around this ever-radiating charge and generate free limitless
+energy. If the charge does not radiate, this means we have conceded a
+wrong assumption somewhere along the chain: which does not seem to be
+the case since both <em>Larmor formula</em> and <em>Einstein’s
+Equivalence Principle</em> are verified and credible explanations of
+natural phenomena. However, there is another hidden assumption we have
+made: which is that <em>“if some radiation is observable by <span
+class="math inline">K</span>, then it is also observable by <span
+class="math inline">K&#39;</span>”</em>. It seems absurd to question
+this assumption because after all, radiation of an object must be
+independent from the states of the observers. As <a
+href="https://www.mathpages.com/home/kmath528/kmath528.htm">mathpages</a>
+puts it:</p>
+<blockquote>
+<p>Our consideration of charged particles in a gravitational field seems
+to suggest that we can always find a system of coordinates (at least
+locally) with respect to which a charged particle (at a given instant)
+does not radiate - even though the particle may be radiating at that
+instant with respect to some other system of coordinates.</p>
+</blockquote>
+<p>Upon tiresome research on the world-wide-web, I have failed to
+convince myself of a resolution to this apparent paradox. Maybe one of
+the readers of this post will be the one to “crack it.”</p>
+<h2 id="further-reading">Further Reading</h2>
+<p>On a side note, I highly recommend <a
+href="https://www.mathpages.com">mathpages.com</a> for mind-boggling
+scientific articles.</p>
+<ul>
+<li><p><a
+href="https://www.mathpages.com/home/kmath528/kmath528.htm">Does A
+Uniformly Accelerating Charge Radiate?</a></p></li>
+<li><p><a href="https://www.mathpages.com/rr/s5-06/5-06.htm">The
+Equivalence Principle</a></p></li>
+<li><p><a
+href="https://www.mathpages.com/home/kmath622/kmath622.htm">Controversies
+Over the Equivalence Principle</a></p></li>
+<li><p><a href="https://www.mathpages.com/home/kmath629/kmath629.htm">On
+The Many Principles Of Equivalence</a></p></li>
+<li><p><a
+href="https://en.wikipedia.org/wiki/Paradox_of_radiation_of_charged_particles_in_a_gravitational_field">Paradox
+of radiation of charged particles in a gravitational field</a></p></li>
+<li><p><a
+href="https://en.wikipedia.org/wiki/Equivalence_principle">Equivalence
+Principle</a></p></li>
+<li><p><a
+href="http://www.einstein-online.info/spotlights/equivalence_principle.html">The
+elevator, the rocket, and gravity: the equivalence
+principle</a></p></li>
+<li><p><a href="https://arxiv.org/abs/1509.08757">Gründler, Gerold.
+“<em>Electrical charges in gravitational fields, and Einstein’s
+equivalence principle</em>”</a></p></li>
+</ul>
+<hr>
+
+<div class="footer">
+
+    <p>
+        Miraç Lütfullah Gülgönül
+        <br>
+        <a class="fa-solid fa-globe" href="https://miraclgulgonul.github.io"></a>
+        &nbsp
+        <a class="fa-regular fa-envelope" href="mailto:miraclgulgonul@gmail.com"></a>
+        &nbsp
+        <a class="fa-brands fa-linkedin" href="https://www.linkedin.com/in/mira%C3%A7-g%C3%BClg%C3%B6n%C3%BCl-b787841b5/"></a> 
+    </p>
+
+
+</div>
+
+</body>
+</html>
