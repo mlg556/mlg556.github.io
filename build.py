@@ -17,10 +17,10 @@ for post in posts:
     # debug
     #print(" ".join(pandoc))
 
-    # extract title, date as datetime object, and path
+    # extract title, date as datetime object, and path of .html file
     metadata = frontmatter.load(post)
     date = datetime.strptime(metadata['date'], "%d %B %Y")
-    posts_metadata.append((metadata['title'], date, str(post)))
+    posts_metadata.append((metadata['title'], date, f"{fname}.html"))
 
 
 # write index.md
@@ -34,6 +34,9 @@ title: Index
 
 for p in posts_metadata:
     content += f"- [{p[0]}]({p[2]})\n\n"
+
+content += "<!-- trick it into loading katex so i can use the fonts here as well. -->\n"
+content += "$\space$"
 
 with open("index.md", "w+") as f:
     f.write(content)

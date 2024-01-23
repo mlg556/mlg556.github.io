@@ -7,7 +7,7 @@ date: 28 May 2019
 
 As a term project, we designed and implemented a guitar (or any instrument) tuner device using the FRDM-KL25Z board, a microphone and an OLED display. The tuner reads the sound from the microphone, breaks down the signal into its frequency components, displays the frequency with the most amplitude (the base frequency), and also displays the closest musical note to that frequency, indicating whether the instrument should be tuned up (higher pitch) or tuned down (lower pitch) to match that closest musical note. An analog microphone is used to capture the input audio signal, the FRDM-KL25Z board acts as the digital signal processor, and a 128x64 OLED screen displays the user interface.
 
-![The components used.](comp.png)
+![The components used.](comp.png){ width=50% }
 
 # Theory
 
@@ -26,7 +26,7 @@ The analog output of the microphone is connected to the board (via the `PTC2` po
 | PTC8 | SCL | - |
 | PTC9 | SDA | - |
 
-![The connections between components.](setup.jpg)
+![The connections between components.](setup.jpg){ width=50% }
 
 ## Code
 
@@ -40,13 +40,13 @@ We will be using the `mbed` environment to program the board. The library `mbed-
 
 The array `float samples[FFT_SIZE*2]` holds the samples read at each loop (note that the size is `FFT_SIZE*2` because we need two elements for each complex coefficient). Then the function `arm_cfft_f32()` is called with this array, overwriting it with the complex coefficients $a, b$. The function `arm_cmplx_mag_f32()` processes this array to calculate the magnitudes of these complex coefficients, putting them in an array of type `float magnitudes[FFT_SIZE]`. The index of the maximum element in this array corresponds to the base frequency of the input audio signal. The closest musical note to this frequency is calculated from a lookup table and the difference is stored to be displayed. To eliminate possible noise, these values are displayed once every 1024 loop: this trivially reduces response time, but greatly increases the overall accuracy of the system.
 
-![Demonstration with an sinusoidal audio input of 392 Hz.](demo.jpg)
+![Demonstration with an sinusoidal audio input of 392 Hz.](demo.jpg){ width=50% }
 
 ## User Interface
 
 The screen shows to the user the current frequency of the signal in the first row, the second row shows the closest musical note, and how far away it is. *Figure 4* shows an example scenario: the input signals frequency is *433 Hz*, the closest musical note to this frequency is **A4**, which is *440 Hz* so the user has to tighten the string to increase the frequency by **7 Hz**. 
 
-![User interface.](ui.jpg)
+![User interface.](ui.jpg){ width=50% }
 
 # Differences Between Proposal and Work Done
 

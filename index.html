@@ -55,6 +55,24 @@
 
   <script src="https://kit.fontawesome.com/fa8004ee4c.js" crossorigin="anonymous"></script>
 
+  <script defer=""
+  src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -65,15 +83,17 @@
 </header>
 <ul>
 <li><p><a
-href="posts\8051-assembly-workflow-in-macos\8051-assembly-workflow-in-macos.md">8051
+href="posts\8051-assembly-workflow-in-macos\8051-assembly-workflow-in-macos.html">8051
 Assembly Workflow in macOS</a></p></li>
 <li><p><a
-href="posts\a-stationary-charged-particle-in-a-gravitational-field\a-stationary-charged-particle-in-a-gravitational-field.md">A
+href="posts\a-stationary-charged-particle-in-a-gravitational-field\a-stationary-charged-particle-in-a-gravitational-field.html">A
 Stationary Charged Particle in a Gravitational Field</a></p></li>
 <li><p><a
-href="posts\guitar-tuner-term-project\guitar-tuner-term-project.md">Guitar
+href="posts\guitar-tuner-term-project\guitar-tuner-term-project.html">Guitar
 Tuner Term Project</a></p></li>
 </ul>
+<!-- trick it into loading katex so i can use the fonts here as well. -->
+<p><span class="math inline">\space</span></p>
 <hr>
 
 <div class="footer">
