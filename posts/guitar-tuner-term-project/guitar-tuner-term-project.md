@@ -1,5 +1,5 @@
 ---
-title: Guitar Tuner Term Project Final Report
+title: Guitar Tuner Term Project
 date: 28 May 2019
 ---
 
@@ -13,7 +13,6 @@ As a term project, we designed and implemented a guitar (or any instrument) tune
 
 By using Discrete Fourier Transform (DFT), one can decompose a sampled discrete digital signal into a coefficient matrix which represent the required "weights" to reproduce the sampled signal; provided that the sampling frequency $F_s$ is equal or greater than the bandwidth $B$ of the input signal (due to *Nyquist–Shannon sampling theorem*). A typical guitar can produce sounds ranging from the note $C2$ (65.41 Hz) to $F4$ (349.23 Hz). To round things off, a sampling frequency of $1000 \text{ Hz}$ will suffice to correctly analyse sounds up to $B4$ (493 Hz). The incoming sound signal $x[t]$ will be transformed into the frequency domain $X[jw]$. Then the magnitudes of these complex coefficients will be calculated to produce $|X[jw]|$. Since the guitar sound contains many harmonics, the frequency with the highest magnitude will be extracted, and compared with the closest musical note.
 
-\newpage
 
 # Work Done
 
@@ -27,9 +26,7 @@ The analog output of the microphone is connected to the board (via the `PTC2` po
 | PTC8 | SCL | - |
 | PTC9 | SDA | - |
 
-![The connections between components.](setup.jpg){ width=70% }
-
-\newpage
+![The connections between components.](setup.jpg)
 
 ## Code
 
@@ -43,17 +40,13 @@ We will be using the `mbed` environment to program the board. The library `mbed-
 
 The array `float samples[FFT_SIZE*2]` holds the samples read at each loop (note that the size is `FFT_SIZE*2` because we need two elements for each complex coefficient). Then the function `arm_cfft_f32()` is called with this array, overwriting it with the complex coefficients $a, b$. The function `arm_cmplx_mag_f32()` processes this array to calculate the magnitudes of these complex coefficients, putting them in an array of type `float magnitudes[FFT_SIZE]`. The index of the maximum element in this array corresponds to the base frequency of the input audio signal. The closest musical note to this frequency is calculated from a lookup table and the difference is stored to be displayed. To eliminate possible noise, these values are displayed once every 1024 loop: this trivially reduces response time, but greatly increases the overall accuracy of the system.
 
-![Demonstration with an sinusoidal audio input of 392 Hz.](demo.jpg){ width=70% }
-
-\newpage
+![Demonstration with an sinusoidal audio input of 392 Hz.](demo.jpg)
 
 ## User Interface
 
 The screen shows to the user the current frequency of the signal in the first row, the second row shows the closest musical note, and how far away it is. *Figure 4* shows an example scenario: the input signals frequency is *433 Hz*, the closest musical note to this frequency is **A4**, which is *440 Hz* so the user has to tighten the string to increase the frequency by **7 Hz**. 
 
 ![User interface.](ui.jpg)
-
-\newpage
 
 # Differences Between Proposal and Work Done
 
@@ -66,8 +59,6 @@ Also, the user interface is visually different than the proposed one because of 
 All together, each group member spent about 12 hours for a total of 24. Group member *Miraç L. Gülgönül* was tasked with the audio processing tasks: reading the signal from the pin with the sampling rate, calculating the DTFT(Discrete-Time Fourier Transform) of the signal and finding the corresponding frequency with the biggest amplitude. Group member *S. Çağatay Çelebi* was tasked with interfacing with the OLED screen using the libraries: displaying the frequency, the musical note and the distance from the musical note.
 
 This process was informative in various aspects such as collaborative coding and division of labor. Also, the coding environment provided by the `mbed` platform was very different from coding in `8051-Assembly`. The code was easier to read, we could do debugging and we could divide the code to components more easily. Obviously each paradigm has its advantages: `Assembly` allows for more compact and bare metal coding whereas `C++` provides more abstraction and ease of coding: however at the modern age we believe that programmer time is more important than processing time.
-
-\newpage
 
 # Appendices
 

@@ -22,3 +22,24 @@ for post in posts:
     date = datetime.strptime(metadata['date'], "%d %B %Y")
     posts_metadata.append((metadata['title'], date, str(post)))
 
+
+# write index.md
+    
+content = """
+---
+title: Index
+---
+
+"""
+
+for p in posts_metadata:
+    content += f"- [{p[0]}]({p[2]})\n\n"
+
+with open("index.md", "w+") as f:
+    f.write(content)
+
+# build index.md to index.html
+# pandoc -s index.md -t html5 --katex --css style.css -A footer.html -H header.html -o index.html
+pandoc = ["pandoc", "-s", "index.md", "-t", "html5", "--katex", "--css", "style.css", "-A", "footer.html", "-H", "header.html", "-o", "index.html"]
+sbp.check_call(pandoc)
+
