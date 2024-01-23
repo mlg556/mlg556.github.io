@@ -5,7 +5,7 @@ date: 05 Febuary 2019
 
 About four years ago a security engineer by the name of Dominique Bongard [tweeted this](https://web.archive.org/web/20160801084256/https://twitter.com/Reversity/status/490978005859454978):
 
-![](images/tweet.png){ width=40% }
+![](images/tweet.jpg){ width=40% }
 
 His words convey his surprise; imagine mine when I found out that my recently-bought router was susceptible to the very same vulnerability: which allowed the WPA key to be cracked in a matter of _seconds_. This post will show you how.
 
