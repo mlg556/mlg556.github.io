@@ -1,21 +1,20 @@
-+++
-title = "A Story of Charged Equal Spheres"
-date = 2019-02-07T10:30:42+03:00
-categories = ["Physics", "Mathematics"]
-draft = false
-+++
+---
+title: "A Story of Charged Equal Spheres"
+date: 07 February 2019
+---
 
 # Problem
 
-Imagine three conductive spheres $A, B$ and $C$ each having charges of respectively $ 3q, 4q, \text{and } 5q $.
+Imagine three conductive spheres $A, B$ and $C$ each having charges of respectively $3q, 4q$ , and $5q$.
 
-{{< figure src="images/ch0.png" width="350">}}
+![](images/ch0.png){ width=25% }
 
-We know that if we connect all three spheres together, their charges will be the same value: which is the arithmetic mean of the system. So $ \frac{3 + 4 + 5}{3} = 4 $.
 
-{{< figure src="images/ch1.png" width="350">}}
+We know that if we connect all three spheres together, their charges will be the same value: which is the arithmetic mean of the system. So $\frac{3 + 4 + 5}{3} = 4$.
 
-Now imagine we do not connect all three together, but only two at each time, alternating between the first two and the last two (i.e. $ AB, BC, AB, BC ... $). Surprisingly, if you continue this process _ad infinitum_, the charge of each sphere will converge into the arithmetic mean - even though all three spheres never touch each other at any moment.
+![](images/ch1.png){ width=25% }
+
+Now imagine we do not connect all three together, but only two at each time, alternating between the first two and the last two (i.e. $AB, BC, AB, BC ...$). Surprisingly, if you continue this process _ad infinitum_, the charge of each sphere will converge into the arithmetic mean - even though all three spheres never touch each other at any moment.
 
 This seemed intuitive to me, but I have decided to check it numerically with a botched up script:
 
@@ -96,19 +95,19 @@ After convincing myself that this is indeed the case, I have decided to come up 
 
 $\lim_{n\to\infty} {Q_A(n) = Q_B(n) = Q_C(n)} = \frac{Q_A + Q_B + Q_C}{3}$
 
-where $n$ is the number of steps this procedure is repeated, $Q(n)$ is the charge of any sphere at the step $ n $ and $ Q_{A, B, C} $ are the initial charges of the respective spheres. By running a similar python script but utilising symbolic math with `sympy`, we can see how the charge of the middle sphere $B$ changes with $ n $.
+where $n$ is the number of steps this procedure is repeated, $Q(n)$ is the charge of any sphere at the step $n$ and $Q_{A, B, C}$ are the initial charges of the respective spheres. By running a similar python script but utilising symbolic math with `sympy`, we can see how the charge of the middle sphere $B$ changes with $n$.
 
 
 ```
-n = 1 +++ a/2 + b/2
-n = 2 +++ a/4 + b/4 + c/2
-n = 3 +++ 3*a/8 + 3*b/8 + c/4
-n = 4 +++ 5*a/16 + 5*b/16 + 3*c/8
-n = 5 +++ 11*a/32 + 11*b/32 + 5*c/16
-n = 6 +++ 21*a/64 + 21*b/64 + 11*c/32
-n = 7 +++ 43*a/128 + 43*b/128 + 21*c/64
-n = 8 +++ 85*a/256 + 85*b/256 + 43*c/128
-n = 9 +++ 171*a/512 + 171*b/512 + 85*c/256
+n = 1 --- a/2 + b/2
+n = 2 --- a/4 + b/4 + c/2
+n = 3 --- 3*a/8 + 3*b/8 + c/4
+n = 4 --- 5*a/16 + 5*b/16 + 3*c/8
+n = 5 --- 11*a/32 + 11*b/32 + 5*c/16
+n = 6 --- 21*a/64 + 21*b/64 + 11*c/32
+n = 7 --- 43*a/128 + 43*b/128 + 21*c/64
+n = 8 --- 85*a/256 + 85*b/256 + 43*c/128
+n = 9 --- 171*a/512 + 171*b/512 + 85*c/256
 ```
 
 
@@ -120,7 +119,7 @@ $$
 Q_B(n) = \frac{J(n)}{2^n}a +\frac{J(n)}{2^n}b + \frac{J(n-1)}{2^{n-1}}c
 $$
 
-At this point I ran out of my wits and my `sympy` skills. So using the formula $ J(n) = 2^{n-1} - J(n-1) \Leftrightarrow J(n-1) = 2^{n-1} - J(n) $ and substituting $ J(n) $ with the closed form $ J(n) = \frac{2^n - (-1)^n}{3} $ in _MATLAB_:
+At this point I ran out of my wits and my `sympy` skills. So using the formula $ J(n) = 2^{n-1} - J(n-1) \Leftrightarrow J(n-1) = 2^{n-1} - J(n) $ and substituting $J(n)$ with the closed form $J(n) = \frac{2^n - (-1)^n}{3}$ in _MATLAB_:
 
 ```octave
 syms J(n)
@@ -134,10 +133,10 @@ simp_expr
 ```
 
 We get:
+
 $$
 \frac{a}{3}+\frac{b}{3}+\frac{c}{3}-\frac{{\left(-1\right)}^n a}{3 \cdot 2^n}-\frac{{\left(-1\right)}^n b}{3 \cdot 2^n}+\frac{2{\left(-1\right)}^n c}{3 \cdot 2^n}
 $$
-
 
 We finally have the $\frac{a}{3}+\frac{b}{3}+\frac{c}{3}$ we are looking for, and the right hand side converges to $0$, as $\lim_{n\to\infty} (\frac{-1}{2})^n = 0$.
 

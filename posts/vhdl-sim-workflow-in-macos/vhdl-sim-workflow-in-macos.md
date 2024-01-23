@@ -1,11 +1,9 @@
-+++
-title = "VHDL Simulation Workflow in macOS"
-date = 2019-02-01T23:54:23+03:00
-categories = ["VHDL"]
-+++
+---
+title: "VHDL Simulation Workflow in macOS"
+date: 02 April 2019
+---
 
-
-The [XILINX Vivado Design Suite](https://www.xilinx.com/products/design-tools/vivado.html) does not work natively on the macOS platform, so you can not download your code to your development board. What you _can_ do, however, is to run simulations of your VHDL code. This post will show how to do it using `ghdl` and `gtkwave`.
+The [XILINX Vivado Design Suite](https://www.xilinx.com/products/design-tools/vivado.html) does not work natively on the macOS platform, so you can not upload your code to your development board. What you _can_ do, however, is to run simulations of your VHDL code. This post will show how to do it using `ghdl` and `gtkwave`.
 
 # Requirements
 
@@ -164,3 +162,5 @@ open $1.fst
 [half_adder_tb.vhd](files/half_adder_tb.vhd)
 
 [mhdl](files/mhdl)
+
+$\space$

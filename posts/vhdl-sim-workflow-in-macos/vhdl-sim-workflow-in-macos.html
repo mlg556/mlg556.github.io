@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2019-04-02" />
+  <title>VHDL Simulation Workflow in macOS</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #f8f8f8; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ef2929; } /* Alert */
+    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #204a87; } /* Attribute */
+    code span.bn { color: #0000cf; } /* BaseN */
+    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4e9a06; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #8f5902; font-style: italic; } /* Comment */
+    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+    code span.dt { color: #204a87; } /* DataType */
+    code span.dv { color: #0000cf; } /* DecVal */
+    code span.er { color: #a40000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #0000cf; } /* Float */
+    code span.fu { color: #204a87; font-weight: bold; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+    code span.ot { color: #8f5902; } /* Other */
+    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+    code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+    code span.ss { color: #4e9a06; } /* SpecialString */
+    code span.st { color: #4e9a06; } /* String */
+    code span.va { color: #000000; } /* Variable */
+    code span.vs { color: #4e9a06; } /* VerbatimString */
+    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+      html, body {
+          margin-top: 1%;
+          margin-left: 10%;
+          margin-right: 10%;
+          background-color: #fbfbfb;
+          color: #403f52;
+          font-family: 'KaTeX_SansSerif';
+          font-size: 18px;
+      }
+
+      img {
+          max-width: 80%;
+      }
+
+      figcaption{
+          font-style: italic;
+      }
+
+      pre code {
+          display:inline-block;
+          font-size: 14px;
+          margin: 10px 10px 10px 10px;
+      }
+
+      code {
+          display:inline-block;
+          font-size: 14px;
+      }
+
+      .footer {
+          text-align: center;
+          margin-top: 1%;
+          margin-bottom: 1%;
+      }
+
+      .date {
+          font-style: italic;
+      }
+
+      a { color: inherit; }
+  </style>
+
+  <script src="https://kit.fontawesome.com/fa8004ee4c.js" crossorigin="anonymous"></script>
+
+  <h1>
+      <a href="/index.html" style="text-decoration:none">Miraç Lütfullah Gülgönül</a>
+  </h1>
+
+  <hr>
+
+  <script defer=""
+  src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">VHDL Simulation Workflow in macOS</h1>
+<p class="date">02 April 2019</p>
+</header>
+<p>The <a
+href="https://www.xilinx.com/products/design-tools/vivado.html">XILINX
+Vivado Design Suite</a> does not work natively on the macOS platform, so
+you can not upload your code to your development board. What you
+<em>can</em> do, however, is to run simulations of your VHDL code. This
+post will show how to do it using <code>ghdl</code> and
+<code>gtkwave</code>.</p>
+<h1 id="requirements">Requirements</h1>
+<h2 id="ghdl">GHDL</h2>
+<p>The first thing you have to do is install <a
+href="https://github.com/ghdl/ghdl">GHDL</a>, which is <em>“the
+open-source compiler and simulator for VHDL”</em>. It can be downloaded
+from <a href="https://github.com/ghdl/ghdl/releases">the releases
+tab</a> in their GitHub repo. The downloaded .tar archive will have
+<code>bin</code>, <code>include</code> and <code>lib</code> folders.
+After moving the contents of these files to somewhere in your
+<code>$PATH</code>, (for example <code>usr/local/bin</code>) you can
+check if the setup is working.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$~</span> which ghdl</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/usr/local/bin/ghdl</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$~</span> ghdl <span class="at">--version</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">GHDL</span> 0.36-dev <span class="er">(</span><span class="ex">20181129</span><span class="kw">)</span> <span class="ex">[Dunoon</span> edition]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a> <span class="ex">Compiled</span> with GNAT Version: GPL 2017 <span class="er">(</span><span class="ex">20170515-63</span><span class="kw">)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a> <span class="ex">mcode</span> code generator</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ex">Written</span> by Tristan Gingold.</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ex">Copyright</span> <span class="er">(</span><span class="ex">C</span><span class="kw">)</span> <span class="ex">2003</span> <span class="at">-</span> 2015 Tristan Gingold.</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ex">GHDL</span> is free software, covered by the GNU General Public License.  There is NO</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="ex">warranty</span><span class="kw">;</span> <span class="ex">not</span> even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</span></code></pre></div>
+<h2 id="gtkwave">gtkwave</h2>
+<p>To be able to view the resulting waveforms, you can use <a
+href="http://gtkwave.sourceforge.net">gtkwave</a>. On macOS systems, it
+can easily be installed via <code>brew cask install gtkwave</code>.
+After the installation is completed, <em>gtkwave.app</em> will be
+available in your default <em>Applications</em> folder.</p>
+<h1 id="simulation">Simulation</h1>
+<p>Let’s use a simple half-adder circuit coded in VHDL.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode vhdl"><code class="sourceCode vhdl"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">library</span> ieee;</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> ieee<span class="ot">.</span>std_logic_1164<span class="ot">.</span><span class="kw">all</span>;</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="cf">entity</span> <span class="dv">half_adder</span> <span class="kw">is</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">port</span>(</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    A <span class="ot">:</span> <span class="kw">in</span> <span class="dt">std_logic</span>;</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    B <span class="ot">:</span> <span class="kw">in</span> <span class="dt">std_logic</span>;</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    S <span class="ot">:</span> <span class="kw">out</span> <span class="dt">std_logic</span>;</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    C <span class="ot">:</span> <span class="kw">out</span> <span class="dt">std_logic</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    );</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="cf">end half_adder;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="cf">architecture</span> <span class="dv">RTL</span> <span class="kw">of</span> <span class="fu">half_adder</span> <span class="kw">is</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">begin</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        S <span class="ot">&lt;=</span> A <span class="kw">XOR</span> B;</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        C <span class="ot">&lt;=</span> A <span class="kw">AND</span> B;</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="cf">end RTL;</span></span></code></pre></div>
+<p>To simulate this code, you will need a test-bench module. Here’s an
+example:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode vhdl"><code class="sourceCode vhdl"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">library</span> ieee;</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> ieee<span class="ot">.</span>std_logic_1164<span class="ot">.</span><span class="kw">all</span>;</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">entity</span> <span class="dv">half_adder_tb</span> <span class="kw">is</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="cf">end entity;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="cf">architecture</span> <span class="dv">Behavioural</span> <span class="kw">of</span> <span class="fu">half_adder_tb</span> <span class="kw">is</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="ot">constant</span> c_WAIT <span class="ot">:</span> <span class="dt">time</span> <span class="ot">:=</span> <span class="dv">20</span> <span class="dt">ns</span>;</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="ot">signal</span> r_input_a <span class="ot">:</span> <span class="dt">std_logic</span> <span class="ot">:=</span> <span class="bn">&#39;0&#39;</span>;</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="ot">signal</span> r_input_b <span class="ot">:</span> <span class="dt">std_logic</span> <span class="ot">:=</span> <span class="bn">&#39;0&#39;</span>;</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="ot">signal</span> r_output_s <span class="ot">:</span> <span class="dt">std_logic</span> <span class="ot">:=</span> <span class="bn">&#39;0&#39;</span>;</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="ot">signal</span> r_output_c <span class="ot">:</span> <span class="dt">std_logic</span> <span class="ot">:=</span> <span class="bn">&#39;0&#39;</span>;</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">component</span> <span class="dv">half_adder</span> <span class="kw">is</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">port</span>(</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        A <span class="ot">:</span> <span class="kw">in</span> <span class="dt">std_logic</span>;</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        B <span class="ot">:</span> <span class="kw">in</span> <span class="dt">std_logic</span>;</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        S <span class="ot">:</span> <span class="kw">out</span> <span class="dt">std_logic</span>;</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        C <span class="ot">:</span> <span class="kw">out</span> <span class="dt">std_logic</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        );</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end component half_adder;</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">begin</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>        <span class="dv">UUT</span> <span class="ot">:</span> <span class="fu">half_adder</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>        <span class="kw">port map </span>(</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>        A <span class="ot">=&gt;</span> r_input_a<span class="ot">,</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>        B <span class="ot">=&gt;</span> r_input_b<span class="ot">,</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>        S <span class="ot">=&gt;</span> r_output_s<span class="ot">,</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>        C <span class="ot">=&gt;</span> r_output_c</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>        );</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>        <span class="dv">p_comb</span> <span class="ot">:</span> <span class="sc">process</span> <span class="kw">is</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>            <span class="sc">begin</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>                <span class="kw">wait</span> <span class="kw">for</span> c_WAIT;</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>                r_input_a <span class="ot">&lt;=</span> <span class="bn">&#39;0&#39;</span>;</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>                r_input_b <span class="ot">&lt;=</span> <span class="bn">&#39;0&#39;</span>;</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>                <span class="kw">wait</span> <span class="kw">for</span> c_WAIT;</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>                r_input_a <span class="ot">&lt;=</span> <span class="bn">&#39;0&#39;</span>;</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>                r_input_b <span class="ot">&lt;=</span> <span class="bn">&#39;1&#39;</span>;</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>                <span class="kw">wait</span> <span class="kw">for</span> c_WAIT;</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>                r_input_a <span class="ot">&lt;=</span> <span class="bn">&#39;1&#39;</span>;</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>                r_input_b <span class="ot">&lt;=</span> <span class="bn">&#39;0&#39;</span>;</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>                <span class="kw">wait</span> <span class="kw">for</span> c_WAIT;</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>                r_input_a <span class="ot">&lt;=</span> <span class="bn">&#39;1&#39;</span>;</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>                r_input_b <span class="ot">&lt;=</span> <span class="bn">&#39;1&#39;</span>;</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>            <span class="sc">end process;</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="cf">end Behavioural;</span></span></code></pre></div>
+<p>The files are named <code>half_adder.vhd</code> and
+<code>half_adder_tb.vhd</code>. To run the simulation, first you have to
+<em>analyse</em> and <em>elaborate</em> the source files.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ghdl</span> <span class="at">-a</span> half_adder.vhd</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ghdl</span> <span class="at">-e</span> half_adder</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ghdl</span> <span class="at">-a</span> half_adder_tb.vhd</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">ghdl</span> <span class="at">-e</span> half_adder_tb</span></code></pre></div>
+<p>Notice how the elaborate commands do not have the file extensions in
+their parameters. Finally, we can run the simulation and output the
+results in a <em>fst</em> file to be opened by <em>gtkwave</em>.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ghdl</span> <span class="at">-r</span> half_adder_tb <span class="at">--stop-time</span><span class="op">=</span>200ns  <span class="at">--fst</span><span class="op">=</span>half_adder.fst</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">open</span> half_adder.fst</span></code></pre></div>
+<p>The <code>open</code> command will launch <em>gtkwave</em> and there
+you can see the waveform results of the simulation. Simply by dragging
+your signals from the left bar, you can observe them.</p>
+<p><img src="images/ss0.png" /></p>
+<p>And there it is! You can now easily simulate your code in macOS
+before downloading it to your hardware.</p>
+<h2 id="extras">Extras</h2>
+<p>Running each specific <code>ghdl</code> command can be a bit tedious.
+You can write a simple <code>bash</code> script to automate some of the
+task. For example, the following script takes the main module name -
+<em>half_adder</em> in this case - and a stop time for the simulation. I
+gave it the name <em>mhdl</em>, so I can simply run
+<code>mhdl half_adder 200ns</code></p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ghdl</span> <span class="at">-a</span> <span class="va">$1</span>.vhd</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ghdl</span> <span class="at">-e</span> <span class="va">$1</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">ghdl</span> <span class="at">-a</span> <span class="va">$1</span>_tb.vhd</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="ex">ghdl</span> <span class="at">-e</span> <span class="va">$1</span>_tb</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="ex">ghdl</span> <span class="at">-r</span> <span class="va">$1</span>_tb <span class="at">--stop-time</span><span class="op">=</span><span class="va">$2</span> <span class="at">--fst</span><span class="op">=</span><span class="va">$1</span>.fst</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="ex">open</span> <span class="va">$1</span>.fst</span></code></pre></div>
+<h1 id="downloads">Downloads</h1>
+<p><a href="files/half_adder.vhd">half_adder.vhd</a></p>
+<p><a href="files/half_adder_tb.vhd">half_adder_tb.vhd</a></p>
+<p><a href="files/mhdl">mhdl</a></p>
+<p><span class="math inline">\space</span></p>
+<hr>
+
+<div class="footer">
+
+    <p>
+        Miraç Lütfullah Gülgönül
+        <br>
+        <a class="fa-solid fa-globe" style="text-decoration:none" href="https://mlg556.github.io"></a>
+        &nbsp
+        <a class="fa-regular fa-envelope" style="text-decoration:none" href="mailto:miraclgulgonul@gmail.com"></a>
+        &nbsp
+        <a class="fa-brands fa-linkedin" style="text-decoration:none" href="https://www.linkedin.com/in/mira%C3%A7-g%C3%BClg%C3%B6n%C3%BCl-b787841b5/"></a> 
+    </p>
+
+
+</div>
+
+</body>
+</html>

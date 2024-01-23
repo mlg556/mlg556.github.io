@@ -1,8 +1,7 @@
-+++
-title = "Collatz Conjecture with Python"
-date = 2019-02-02T20:00:12+03:00
-categories = ["Python", "Mathematics"]
-+++
+---
+title: "Collatz Conjecture with Python"
+date: 02 February 2019
+---
 
 # Problem
 

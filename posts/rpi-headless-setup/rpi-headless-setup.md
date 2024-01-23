@@ -1,10 +1,9 @@
-+++
-title = "Raspberry Pi Headless Setup"
-date = 2019-06-25T13:07:04+03:00
-categories = ["GNULinux"]
-+++
+---
+title: "Raspberry Pi Headless Setup"
+date: 25 June 2019
+---
 
-This post is about how to setup your _Raspberry Pi_ in a headless configuration, so you can plug it in to your main computer and SSH into it. I will be using macOS Mojave 10.14.4 and a [Raspberry Pi Zero W](https://www.raspberrypi.org/products/raspberry-pi-zero-w/), but most of this should work on any _*nix_ system and any relatively new Raspberry Pi.
+This post is about how to setup your _Raspberry Pi_ in a headless configuration, so you can plug it in to your main computer and SSH into it. I will be using macOS Mojave 10.14.4 and a [Raspberry Pi Zero W](https://www.raspberrypi.org/products/raspberry-pi-zero-w/), but most of this should work on any *\*nix* system and any relatively new Raspberry Pi.
 
 # Installing the OS
 
@@ -17,6 +16,7 @@ Here is the download page for [Raspbian OS](https://www.raspberrypi.org/download
 After the burning process is complete, take out the SD card and plug it again. You will see a partition named `boot` show up: we are going to edit some files here to enable SSH and the ability to share your computer's internet connection with the Raspberry Pi.
 
 On a terminal, `cd` into this partition.
+
 * First create an empty file named `ssh` via `touch ssh`.
 
 * After this, open the file named `config.txt` and at the end of this file append the parameter `dtoverlay=dwc2`.
@@ -62,3 +62,5 @@ Since you will presumably be SSH'ing into your Pi from the same computer all the
 * To copy this pair to your Pi, enter `ssh-copy-id -i NEW_USER@NEW_HOSTNAME.local` for the regular user and  `ssh-copy-id -i root@NEW_HOSTNAME.local` again for the root user.
 
 Now, you can SSH into the Pi from your computer anytime without entering the user passwords.
+
+$\space$

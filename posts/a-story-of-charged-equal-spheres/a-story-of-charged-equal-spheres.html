@@ -1,22 +1,182 @@
-<p>+++ title = “A Story of Charged Equal Spheres” date =
-2019-02-07T10:30:42+03:00 categories = [“Physics”, “Mathematics”] draft
-= false +++</p>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2019-02-07" />
+  <title>A Story of Charged Equal Spheres</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #f8f8f8; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ef2929; } /* Alert */
+    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #204a87; } /* Attribute */
+    code span.bn { color: #0000cf; } /* BaseN */
+    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4e9a06; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #8f5902; font-style: italic; } /* Comment */
+    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+    code span.dt { color: #204a87; } /* DataType */
+    code span.dv { color: #0000cf; } /* DecVal */
+    code span.er { color: #a40000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #0000cf; } /* Float */
+    code span.fu { color: #204a87; font-weight: bold; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+    code span.ot { color: #8f5902; } /* Other */
+    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+    code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+    code span.ss { color: #4e9a06; } /* SpecialString */
+    code span.st { color: #4e9a06; } /* String */
+    code span.va { color: #000000; } /* Variable */
+    code span.vs { color: #4e9a06; } /* VerbatimString */
+    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+      html, body {
+          margin-top: 1%;
+          margin-left: 10%;
+          margin-right: 10%;
+          background-color: #fbfbfb;
+          color: #403f52;
+          font-family: 'KaTeX_SansSerif';
+          font-size: 18px;
+      }
+
+      img {
+          max-width: 80%;
+      }
+
+      figcaption{
+          font-style: italic;
+      }
+
+      pre code {
+          display:inline-block;
+          font-size: 14px;
+          margin: 10px 10px 10px 10px;
+      }
+
+      code {
+          display:inline-block;
+          font-size: 14px;
+      }
+
+      .footer {
+          text-align: center;
+          margin-top: 1%;
+          margin-bottom: 1%;
+      }
+
+      .date {
+          font-style: italic;
+      }
+
+      a { color: inherit; }
+  </style>
+
+  <script src="https://kit.fontawesome.com/fa8004ee4c.js" crossorigin="anonymous"></script>
+
+  <h1>
+      <a href="/index.html" style="text-decoration:none">Miraç Lütfullah Gülgönül</a>
+  </h1>
+
+  <hr>
+
+  <script defer=""
+  src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">A Story of Charged Equal Spheres</h1>
+<p class="date">07 February 2019</p>
+</header>
 <h1 id="problem">Problem</h1>
-<p>Imagine three conductive spheres <span
-class="math inline"><em>A</em>, <em>B</em></span> and <span
-class="math inline"><em>C</em></span> each having charges of
-respectively $ 3q, 4q, 5q $.</p>
-<p>{{&lt; figure src=“images/ch0.png” width=“350”&gt;}}</p>
+<p>Imagine three conductive spheres <span class="math inline">A,
+B</span> and <span class="math inline">C</span> each having charges of
+respectively <span class="math inline">3q, 4q</span> , and <span
+class="math inline">5q</span>.</p>
+<p><img src="images/ch0.png" style="width:25.0%" /></p>
 <p>We know that if we connect all three spheres together, their charges
-will be the same value: which is the arithmetic mean of the system. So $
-= 4 $.</p>
-<p>{{&lt; figure src=“images/ch1.png” width=“350”&gt;}}</p>
+will be the same value: which is the arithmetic mean of the system. So
+<span class="math inline">\frac{3 + 4 + 5}{3} = 4</span>.</p>
+<p><img src="images/ch1.png" style="width:25.0%" /></p>
 <p>Now imagine we do not connect all three together, but only two at
-each time, alternating between the first two and the last two (i.e. $
-AB, BC, AB, BC … $). Surprisingly, if you continue this process <em>ad
-infinitum</em>, the charge of each sphere will converge into the
-arithmetic mean - even though all three spheres never touch each other
-at any moment.</p>
+each time, alternating between the first two and the last two
+(i.e. <span class="math inline">AB, BC, AB, BC ...</span>).
+Surprisingly, if you continue this process <em>ad infinitum</em>, the
+charge of each sphere will converge into the arithmetic mean - even
+though all three spheres never touch each other at any moment.</p>
 <p>This seemed intuitive to me, but I have decided to check it
 numerically with a botched up script:</p>
 <div class="sourceCode" id="cb1"><pre
@@ -89,25 +249,25 @@ Avg: 1.6666666666666667</code></pre>
 <p>After convincing myself that this is indeed the case, I have decided
 to come up with an analytical proof to show that the following relation
 holds:</p>
-<p><span class="math inline">$\lim_{n\to\infty} {Q_A(n) = Q_B(n) =
-Q_C(n)} = \frac{Q_A + Q_B + Q_C}{3}$</span></p>
-<p>where <span class="math inline"><em>n</em></span> is the number of
-steps this procedure is repeated, <span
-class="math inline"><em>Q</em>(<em>n</em>)</span> is the charge of any
-sphere at the step $ n $ and $ Q_{A, B, C} $ are the initial charges of
+<p><span class="math inline">\lim_{n\to\infty} {Q_A(n) = Q_B(n) =
+Q_C(n)} = \frac{Q_A + Q_B + Q_C}{3}</span></p>
+<p>where <span class="math inline">n</span> is the number of steps this
+procedure is repeated, <span class="math inline">Q(n)</span> is the
+charge of any sphere at the step <span class="math inline">n</span> and
+<span class="math inline">Q_{A, B, C}</span> are the initial charges of
 the respective spheres. By running a similar python script but utilising
 symbolic math with <code>sympy</code>, we can see how the charge of the
-middle sphere <span class="math inline"><em>B</em></span> changes with $
-n $.</p>
-<pre><code>n = 1 +++ a/2 + b/2
-n = 2 +++ a/4 + b/4 + c/2
-n = 3 +++ 3*a/8 + 3*b/8 + c/4
-n = 4 +++ 5*a/16 + 5*b/16 + 3*c/8
-n = 5 +++ 11*a/32 + 11*b/32 + 5*c/16
-n = 6 +++ 21*a/64 + 21*b/64 + 11*c/32
-n = 7 +++ 43*a/128 + 43*b/128 + 21*c/64
-n = 8 +++ 85*a/256 + 85*b/256 + 43*c/128
-n = 9 +++ 171*a/512 + 171*b/512 + 85*c/256</code></pre>
+middle sphere <span class="math inline">B</span> changes with <span
+class="math inline">n</span>.</p>
+<pre><code>n = 1 --- a/2 + b/2
+n = 2 --- a/4 + b/4 + c/2
+n = 3 --- 3*a/8 + 3*b/8 + c/4
+n = 4 --- 5*a/16 + 5*b/16 + 3*c/8
+n = 5 --- 11*a/32 + 11*b/32 + 5*c/16
+n = 6 --- 21*a/64 + 21*b/64 + 11*c/32
+n = 7 --- 43*a/128 + 43*b/128 + 21*c/64
+n = 8 --- 85*a/256 + 85*b/256 + 43*c/128
+n = 9 --- 171*a/512 + 171*b/512 + 85*c/256</code></pre>
 <p>By some Googling, I have found that the sequence
 <code>1 - 1 - 3 - 5 - 11 - 21 - 43 - 85 - 171 ...</code> is called the
 <a href="https://oeis.org/A001045">Jacobsthal sequence</a>. The <a
@@ -116,13 +276,14 @@ page</a> sums it up as: “<em>in simple terms, the sequence starts with 0
 and 1, then each following number is found by adding the number before
 it to twice the number before that.</em>”</p>
 <p>It would seem by inspection that the charge of the middle sphere
-<span class="math inline"><em>B</em></span> can be written as:</p>
-<p><span class="math display">$$
+<span class="math inline">B</span> can be written as:</p>
+<p><span class="math display">
 Q_B(n) = \frac{J(n)}{2^n}a +\frac{J(n)}{2^n}b + \frac{J(n-1)}{2^{n-1}}c
-$$</span></p>
+</span></p>
 <p>At this point I ran out of my wits and my <code>sympy</code> skills.
 So using the formula $ J(n) = 2^{n-1} - J(n-1) J(n-1) = 2^{n-1} - J(n) $
-and substituting $ J(n) $ with the closed form $ J(n) = $ in
+and substituting <span class="math inline">J(n)</span> with the closed
+form <span class="math inline">J(n) = \frac{2^n - (-1)^n}{3}</span> in
 <em>MATLAB</em>:</p>
 <div class="sourceCode" id="cb4"><pre
 class="sourceCode octave"><code class="sourceCode octave"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>syms <span class="bu">J</span>(n)</span>
@@ -133,32 +294,32 @@ class="sourceCode octave"><code class="sourceCode octave"><span id="cb4-1"><a hr
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>simp_expr <span class="op">=</span> simplify(expr<span class="op">,</span> <span class="st">&#39;Steps&#39;</span><span class="op">,</span> <span class="fl">10</span>)<span class="op">;</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>simp_expr</span></code></pre></div>
-<p>We get: <span class="math display">$$
+<p>We get:</p>
+<p><span class="math display">
 \frac{a}{3}+\frac{b}{3}+\frac{c}{3}-\frac{{\left(-1\right)}^n a}{3 \cdot
 2^n}-\frac{{\left(-1\right)}^n b}{3 \cdot
 2^n}+\frac{2{\left(-1\right)}^n c}{3 \cdot 2^n}
-$$</span></p>
+</span></p>
 <p>We finally have the <span
-class="math inline">$\frac{a}{3}+\frac{b}{3}+\frac{c}{3}$</span> we are
+class="math inline">\frac{a}{3}+\frac{b}{3}+\frac{c}{3}</span> we are
 looking for, and the right hand side converges to <span
 class="math inline">0</span>, as <span
-class="math inline">$\lim_{n\to\infty} (\frac{-1}{2})^n = 0$</span>.</p>
+class="math inline">\lim_{n\to\infty} (\frac{-1}{2})^n = 0</span>.</p>
 <h1 id="convergence-rate">Convergence Rate</h1>
-<p>This proof was about the special case <span
-class="math inline"><em>N</em> = 3</span> spheres, but I am guessing it
-can be extended to any finite number of spheres as long as no sphere is
-left unconnected. Also the convergence rate to the arithmetic mean
-probably is <em>slower</em> as the number of spheres increase. To get a
-sense of the convergence rate in the numerical results, I will calculate
-the <a
+<p>This proof was about the special case <span class="math inline">N =
+3</span> spheres, but I am guessing it can be extended to any finite
+number of spheres as long as no sphere is left unconnected. Also the
+convergence rate to the arithmetic mean probably is <em>slower</em> as
+the number of spheres increase. To get a sense of the convergence rate
+in the numerical results, I will calculate the <a
 href="http://mathworld.wolfram.com/StandardDeviation.html">standard
 deviation</a> of the sphere charges at step <span
-class="math inline"><em>N</em></span> to see how quickly it decreases.
-The script I wrote checks when the standard deviation is <span
+class="math inline">N</span> to see how quickly it decreases. The script
+I wrote checks when the standard deviation is <span
 class="math inline">0</span> and reports the number of steps it took.
 Running it a few times, it seems that for the three sphere case, the
 standard deviation converges to <span class="math inline">0</span> at
-about <span class="math inline">55 − 60</span> steps. For the case of 10
+about <span class="math inline">55-60</span> steps. For the case of 10
 spheres, the script ran for about 15 mins and the standard deviation
 failed to converge to <code>0</code> (of course checking equalities in
 floating-point arithmetic is a bit sloppy) after 8 million steps; so we
@@ -171,3 +332,22 @@ larger number of spheres.</p>
 <p><a href="files/avg_conv.py">avg_conv.py</a></p>
 <p><a href="files/avg10.py">avg10.py</a></p>
 <p><a href="files/avg10_conv.py">avg10_conv.py</a></p>
+<hr>
+
+<div class="footer">
+
+    <p>
+        Miraç Lütfullah Gülgönül
+        <br>
+        <a class="fa-solid fa-globe" style="text-decoration:none" href="https://mlg556.github.io"></a>
+        &nbsp
+        <a class="fa-regular fa-envelope" style="text-decoration:none" href="mailto:miraclgulgonul@gmail.com"></a>
+        &nbsp
+        <a class="fa-brands fa-linkedin" style="text-decoration:none" href="https://www.linkedin.com/in/mira%C3%A7-g%C3%BClg%C3%B6n%C3%BCl-b787841b5/"></a> 
+    </p>
+
+
+</div>
+
+</body>
+</html>

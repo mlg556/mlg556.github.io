@@ -18,9 +18,9 @@ for post in posts:
     #print(" ".join(pandoc))
 
     # extract title, date as datetime object, and path of .html file
-    metadata = frontmatter.load(post)
-    date = datetime.strptime(metadata['date'], "%d %B %Y")
-    posts_metadata.append((metadata['title'], date, f"{fname}.html"))
+    # metadata = frontmatter.load(post)
+    # date = datetime.strptime(metadata['date'], "%d %B %Y")
+    # posts_metadata.append((metadata['title'], date, f"{fname}.html"))
 
 
 # write index.md

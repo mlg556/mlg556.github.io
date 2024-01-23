@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Bruteforce WPS with Reaver and pixiewps</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+      html, body {
+          margin-top: 1%;
+          margin-left: 10%;
+          margin-right: 10%;
+          background-color: #fbfbfb;
+          color: #403f52;
+          font-family: 'KaTeX_SansSerif';
+          font-size: 18px;
+      }
+
+      img {
+          max-width: 80%;
+      }
+
+      figcaption{
+          font-style: italic;
+      }
+
+      pre code {
+          display:inline-block;
+          font-size: 14px;
+          margin: 10px 10px 10px 10px;
+      }
+
+      code {
+          display:inline-block;
+          font-size: 14px;
+      }
+
+      .footer {
+          text-align: center;
+          margin-top: 1%;
+          margin-bottom: 1%;
+      }
+
+      .date {
+          font-style: italic;
+      }
+
+      a { color: inherit; }
+  </style>
+
+  <script src="https://kit.fontawesome.com/fa8004ee4c.js" crossorigin="anonymous"></script>
+
+  <h1>
+      <a href="/index.html" style="text-decoration:none">Miraç Lütfullah Gülgönül</a>
+  </h1>
+
+  <hr>
+
+  <script defer=""
+  src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Bruteforce WPS with Reaver and pixiewps</h1>
+<p class="date">05 Febuary 2019</p>
+</header>
+<p>About four years ago a security engineer by the name of Dominique
+Bongard <a
+href="https://web.archive.org/web/20160801084256/https://twitter.com/Reversity/status/490978005859454978">tweeted
+this</a>:</p>
+<p><img src="images/tweet.png" style="width:40.0%" /></p>
+<p>His words convey his surprise; imagine mine when I found out that my
+recently-bought router was susceptible to the very same vulnerability:
+which allowed the WPA key to be cracked in a matter of <em>seconds</em>.
+This post will show you how.</p>
+<p><strong><em>DISCLAIMER:</em></strong> <em>This is merely a proof of
+concept for education purposes. Use it only against your own networks
+and devices! This post is meant to draw more attention to this still
+unfixed vulnerability.</em></p>
+<h1 id="background">Background</h1>
+<p><a
+href="https://sviehb.files.wordpress.com/2011/12/viehboeck_wps.pdf">It
+had already been shown</a> by <a
+href="https://twitter.com/sviehb?lang=en">Stefan Viehböck</a> in 2011
+that the <a
+href="https://en.wikipedia.org/wiki/Wi-Fi_Protected_Setup">WPS
+protocol</a> was sorely susceptible to online brute force attacks. About
+<em>11,000</em> PIN guesses and about 6 hours on average were enough to
+gain unauthorized access to a router. To make matters worse, in 2014
+Dominique Bongard published his slides on <a
+href="http://archive.hack.lu/2014/Hacklu2014_offline_bruteforce_attack_on_wps.pdf">Offline
+bruteforce attack on WiFi Protected Setup</a>. This offline bruteforce
+attack allowed the WPA to be cracked in “less than a second”. To his
+credit, Mr. Bongard contacted various vendors about this and concluded
+his slide with a dire warning: <em>“Disable WPS now !”</em></p>
+<h1 id="requirements">Requirements</h1>
+<p>I will be conducting this on a <a href="https://www.kali.org">Kali
+GNU/Linux</a> system, however it should be doable on any GNU/Linux
+distribution.</p>
+<h2 id="wifi-adapter-with-monitor-mode-support">WiFi adapter with
+monitor mode support</h2>
+<p>You will need a network adapter which supports <em>monitor mode</em>.
+I am using a 1st version <em>tp-link TL-WN722N</em>. You can refer to <a
+href="https://null-byte.wonderhowto.com/how-to/buy-best-wireless-network-adapter-for-wi-fi-hacking-2019-0178550/">here</a>
+and <a
+href="https://www.wirelesshack.org/best-kali-linux-compatible-usb-adapter-dongles.html">here</a>
+to find which dongles support this.</p>
+<h2 id="aircrack-ng">Aircrack-ng</h2>
+<p>You are going to need the <a
+href="https://www.aircrack-ng.org">Aircrack-ng</a> suite on any project
+assessing WiFi network security. Their <a
+href="https://www.aircrack-ng.org/doku.php?id=getting_started">documentation</a>
+is really thorough and helpful. Check out the page on <a
+href="https://www.aircrack-ng.org/doku.php?id=install_aircrack#installing_pre-compiled_binaries">Installing
+pre-compiled binaries</a> for installation instructions.</p>
+<h2 id="reaver">Reaver</h2>
+<p>I will be using this community fork of <a
+href="https://github.com/t6x/reaver-wps-fork-t6x">reaver</a>, because it
+includes the offline Pixie Dust attack using the tool <a
+href="https://github.com/wiire-a/pixiewps">pixiewps</a>. Refer to
+individual pages for library requirements etc…</p>
+<h1 id="getting-started">Getting Started</h1>
+<p>Enter <code>airmon-ng</code> to list the network adapters attached to
+your computer. My system has two adapters attached, one is the built-in
+<em>Broadcom</em> on my MacBook; and the other one is the
+<em>Atheros</em> chipset in the <em>tp-link TL-WN722N</em> WiFi adapter.
+I will be using the second one, <code>wlan1</code>.</p>
+<p><img src="images/mon0.png" style="width:60.0%" /></p>
+<p>The command <code>airmon-ng start wlan1</code> will put the selected
+interface on <em>monitor mode</em>, and rename it as
+<code>wlan1mon</code>.</p>
+<p><img src="images/mon1.png" style="width:60.0%" /></p>
+<h1 id="scanning">Scanning</h1>
+<p>Enter <code>wash -i wlan1mon</code> to see the WiFi access points in
+your range. As you can see, my router has a MAC address
+<code>E4:FB:5D:8C:4A:ED</code> on <code>Ch 1</code>, with the chipset
+vendor <em>Realtek</em>. Note that the majority of the routers around
+share the same chipset, which suggests that they are also
+vulnerable.</p>
+<p><img src="images/wash.png" style="width:60.0%" /></p>
+<h1 id="brute-force">Brute-force</h1>
+<p>Noting the <em>MAC address</em> and the <em>channel</em>, you can
+initiate a <em>pixie dust attack</em> with the command:</p>
+<p><code>reaver -i wlan1mon -b E4:FB:5D:8C:4A:ED -KvvNwL -c 1</code></p>
+<p>Don’t forget to replace <code>wlan1mon</code> with your monitoring
+mode interface, <code>E4:FB:5D:8C:4A:ED</code> with the MAC address of
+the router you are attacking, and <code>-c 1</code> with the channel of
+that router. The parameter <code>-K</code> enables the <em>pixie dust
+attack</em> option and the rest are just additional parameters I have
+found to help the procedure. You can learn more by reading the <a
+href="https://github.com/t6x/reaver-wps-fork-t6x">documentation</a>.</p>
+<p>If luck is on your side, or the router is vulnerable, or you are just
+fast with the arrow up and Enter keys; the command will succeed and you
+will get the WPS pin. The chances are sometimes you will get stuck on
+the <code>[+] Sending EAPOL START request</code> phase. You can either
+try the command again, or maybe <a
+href="https://github.com/alobbs/macchanger">change your MAC address</a>.
+Also make sure to be as close as possible to the router in question.</p>
+<p><img src="images/wps.png" style="width:60.0%" /></p>
+<p>After finding the WPS pin of the router (in a crazy short time like
+6ms), you can now ask the router to give up its WPA key. This is done
+again with <code>reaver</code> by simply erasing the <code>-K</code>
+option for <code>pixiedust</code> and add the pin number via
+<code>-p PIN</code>. Noting the pin number <code>10666197</code>,
+executing
+<code>reaver -i wlan1mon -b E4:FB:5D:8C:4A:ED -vvNwL -c 1 -p 10666197</code>
+will yield the WPA key.</p>
+<p><img src="images/fin.png" style="width:60.0%" /></p>
+<h2 id="countermeasures">Countermeasures</h2>
+<p>Apparently some vendor companies have implemented measures such as
+rate limiting and MAC blocking to deal with this vulnerability. The best
+way to check if your router suffers from this predicament is to launch
+the attack yourself before someone else does. The best way to prevent
+this attack, as Mr. Bongard warns: <strong><em>“Disable WPS now
+!”</em></strong>. Altough <a
+href="https://arstechnica.com/information-technology/2012/01/hands-on-hacking-wifi-protected-setup-with-reaver/">this
+article from <em>arstechnica</em></a> suggests that disabling WPS in the
+UI does not always work:</p>
+<blockquote>
+<p>Having demonstrated the insecurity of WPS, I went into the Linksys’
+administrative interface and turned WPS off. Then, I relaunched Reaver,
+figuring that surely setting the router to manual configuration would
+block the attacks at the door. But apparently Reaver didn’t get the
+memo, and the Linksys’ WPS interface still responded to its queries—once
+again coughing up the password and SSID.</p>
+</blockquote>
+<blockquote>
+<p>In a phone conversation, Craig Heffner said that the inability to
+shut this vulnerability down is widespread. He and others have found it
+to occur with every Linksys and Cisco Valet wireless access point
+they’ve tested. “On all of the Linksys routers, you cannot manually
+disable WPS,” he said. While the Web interface has a radio button that
+allegedly turns off WPS configuration, “it’s still on and still
+vulnerable.”</p>
+</blockquote>
+<p><span class="math inline">\space</span></p>
+<hr>
+
+<div class="footer">
+
+    <p>
+        Miraç Lütfullah Gülgönül
+        <br>
+        <a class="fa-solid fa-globe" style="text-decoration:none" href="https://mlg556.github.io"></a>
+        &nbsp
+        <a class="fa-regular fa-envelope" style="text-decoration:none" href="mailto:miraclgulgonul@gmail.com"></a>
+        &nbsp
+        <a class="fa-brands fa-linkedin" style="text-decoration:none" href="https://www.linkedin.com/in/mira%C3%A7-g%C3%BClg%C3%B6n%C3%BCl-b787841b5/"></a> 
+    </p>
+
+
+</div>
+
+</body>
+</html>

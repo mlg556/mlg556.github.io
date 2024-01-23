@@ -1,9 +1,7 @@
-+++
-title = "Acoustics of Rectification and Clipping"
-date = 2019-02-03T10:02:32+03:00
-categories = ["MATLAB", "Mathematics"]
-draft = false
-+++
+---
+title: "Acoustics of Rectification and Clipping"
+date: 03 February 2019
+---
 
 While designing my electro guitar effects pedal (which will be featured in a future post), I had to deal with a fundamental question: How does the shape of a periodic signal affect its harmonic characteristics? Or, more technically speaking, how does the shape of a periodic signal affects its [Fourier Transform](http://mathworld.wolfram.com/FourierTransform.html)? To analyze this on a simplified level, I have decided to use [MATLAB](https://www.mathworks.com/products/matlab.html).
 
@@ -19,7 +17,7 @@ Since I hate how MATLAB's `subplot()` deals with whitespace, I have decided to u
 
 # The Code
 
-I will be analysing four types of sinusoidal waves. The first one will be a pure sine wave with the frequency of 100Hz and amplitude of $2$. The second will be the half-wave rectified version of the same wave (so the negative parts will be $0$). The third waveform will be a clipped version of the pure sine wave with the clipping occuring at $ \pm 0.5 $. The last waveform will be an asymmetrically clipped sine with the clippings at $+0.4$ and $-0.2$. The code is as follows:
+I will be analysing four types of sinusoidal waves. The first one will be a pure sine wave with the frequency of 100Hz and amplitude of $2$. The second will be the half-wave rectified version of the same wave (so the negative parts will be $0$). The third waveform will be a clipped version of the pure sine wave with the clipping occuring at $\pm 0.5$. The last waveform will be an asymmetrically clipped sine with the clippings at $+0.4$ and $-0.2$. The code is as follows:
 ```octave
 sampl = 5000;
 freq = 100;

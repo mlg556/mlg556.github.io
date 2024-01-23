@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2019-02-04" />
+  <title>Kali GNU/Linux Live USB with Persistence</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #f8f8f8; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ef2929; } /* Alert */
+    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #204a87; } /* Attribute */
+    code span.bn { color: #0000cf; } /* BaseN */
+    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4e9a06; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #8f5902; font-style: italic; } /* Comment */
+    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+    code span.dt { color: #204a87; } /* DataType */
+    code span.dv { color: #0000cf; } /* DecVal */
+    code span.er { color: #a40000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #0000cf; } /* Float */
+    code span.fu { color: #204a87; font-weight: bold; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+    code span.ot { color: #8f5902; } /* Other */
+    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+    code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+    code span.ss { color: #4e9a06; } /* SpecialString */
+    code span.st { color: #4e9a06; } /* String */
+    code span.va { color: #000000; } /* Variable */
+    code span.vs { color: #4e9a06; } /* VerbatimString */
+    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+      html, body {
+          margin-top: 1%;
+          margin-left: 10%;
+          margin-right: 10%;
+          background-color: #fbfbfb;
+          color: #403f52;
+          font-family: 'KaTeX_SansSerif';
+          font-size: 18px;
+      }
+
+      img {
+          max-width: 80%;
+      }
+
+      figcaption{
+          font-style: italic;
+      }
+
+      pre code {
+          display:inline-block;
+          font-size: 14px;
+          margin: 10px 10px 10px 10px;
+      }
+
+      code {
+          display:inline-block;
+          font-size: 14px;
+      }
+
+      .footer {
+          text-align: center;
+          margin-top: 1%;
+          margin-bottom: 1%;
+      }
+
+      .date {
+          font-style: italic;
+      }
+
+      a { color: inherit; }
+  </style>
+
+  <script src="https://kit.fontawesome.com/fa8004ee4c.js" crossorigin="anonymous"></script>
+
+  <h1>
+      <a href="/index.html" style="text-decoration:none">Miraç Lütfullah Gülgönül</a>
+  </h1>
+
+  <hr>
+
+  <script defer=""
+  src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Kali GNU/Linux Live USB with Persistence</h1>
+<p class="date">04 February 2019</p>
+</header>
+<p>In this post I will show you how to setup a Kali GNU/Linux Live
+system with <em>persistence</em> on a USB drive, so that you can carry
+it around anywhere and boot from it whenever you want to. The
+<em>persistence</em> feature will allow the system to be saved and
+persist through different boot-ups. As the <a
+href="https://docs.kali.org/downloading/kali-linux-live-usb-persistence">official
+documentation</a> suggests: <em>” (…) the preservation of data on the
+“Kali Live” USB drive — across reboots of “Kali Live”. This can be an
+extremely useful enhancement, and enables you to retain documents,
+collected testing results, configurations, etc., when running Kali Linux
+“Live” from the USB drive, even across different systems.”</em></p>
+<p>I will be doing this on a MacBook Air (13-inch, Early 2014) with
+macOS Mojave 10.14.1 installed, so your mileage may vary on another
+system.</p>
+<p><em>NOTE: You will notice that I have paid attention to use the
+correct form “GNU/Linux” through this article. See <a
+href="https://www.gnu.org/gnu/linux-and-gnu.en.html">Linux and the GNU
+System</a> by <a href="http://www.stallman.org">Richard Stallman</a> for
+why this is an issue.</em></p>
+<h1 id="requirements">Requirements</h1>
+<h2 id="usb-drive">USB Drive</h2>
+<p>The full version of the <em>Kali GNU/Linux ISO</em> takes about 3GB,
+so theoretically any USB drive with larger capacity should work. I will
+be using a 16GB SanDisk.</p>
+<h2 id="kali-linux-iso">Kali Linux ISO</h2>
+<p>You will need the <em>.iso</em> file of the Kali GNU/Linux variant
+you want to use. I recommend the <a href="https://www.xfce.org">XFCE</a>
+version of the latest weekly build (the “official” releases can
+sometimes fall behind, which causes problems with the version of the
+included Linux kernel). The weekly build <em>.iso</em> files can be
+downloaded from <a
+href="http://cdimage.kali.org/kali-images/kali-weekly/">here</a>.</p>
+<h2 id="balena-etcher-optional">balena Etcher (Optional)</h2>
+<p>You can do the flashing with the built-in command <code>dd</code>,
+but I have found <a href="https://www.balena.io/etcher/">balena
+Etcher</a> to be faster. Also <code>dd</code> is a bit dangerous to use,
+you can overwrite crucial files if you are not careful.</p>
+<h1 id="flashing">Flashing</h1>
+<p>After downloading the <em>.iso</em> file, it is always good practice
+to check the <code>shasum</code> to avoid cases of files corrupted on
+transfer. On the <a
+href="http://cdimage.kali.org/kali-images/kali-weekly/">kali-weekly
+download page</a>, the file called <code>SHA256SUMS</code> contains the
+<a href="https://en.wikipedia.org/wiki/SHA-2">SHA-256</a> codes for the
+<em>.iso</em> files provided. You can check the <code>SHA256SUM</code>
+of your downloaded <em>.iso</em> file with the command
+<code>shasum -a 256 YOUR_KALI.iso</code> and compare it with the
+checksum provided. In my case I am using the
+<code>kali-linux-xfce-2019-W04-amd64.iso</code> file, and as you can
+see, the checksums match.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">~$</span> shasum <span class="at">-a</span> 256 kali-linux-xfce-2019-W04-amd64.iso</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">b15508aaf84b30b7e606289f7e9524393c54798cde2011d0e24db57cde2e5fe6</span>  kali-linux-xfce-2019-W04-amd64.iso</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">~$</span> cat sha256sums.txt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">...</span><span class="kw">)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">b15508aaf84b30b7e606289f7e9524393c54798cde2011d0e24db57cde2e5fe6</span>  kali-linux-xfce-2019-W04-amd64.iso</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">...</span><span class="kw">)</span></span></code></pre></div>
+<p>Now that we have ensured the integrity of the file, it is time to
+flash it. If you are using <em>balena Etcher</em>, all you have to do is
+select the <em>.iso</em> file and the USB to be flashed on the GUI.</p>
+<p>If you are using <code>dd</code>, then you have to first identify
+your USB drive. It is also recommended to do a <code>sudo su</code>
+beforehand because most of the commands require root privileges.
+<code>diskutil list</code> will show the disks attached to your
+MacBook.</p>
+<p><img src="images/diskutil_list.png" /></p>
+<p>As you can see, I can identify my 16GB SanDisk USB as
+<code>/dev/disk2</code>. Now that you know your disk’s path, you will
+have to unmount it by <code>diskutil unmountDisk /dev/disk2</code>. We
+can finally flash the <em>.iso</em> file. The <code>dd</code> command by
+default by itself doesn’t have a progress bar, so if you want one you
+will have to install <a href="https://linux.die.net/man/1/pv">pv</a> on
+your macOS by <code>brew install pv</code>. Using <code>pv</code>, we
+can pipe the <code>dd</code> commands through it to monitor the
+progress. The command</p>
+<p><code>dd if=kali-linux-xfce-2019-W04-amd64.iso | pv -s 3G | dd of=/dev/disk2 bs=4m</code></p>
+<p>will start flashing the iso file to your selected drive; and show you
+a progress bar/ETA. <strong>BE VERY CAREFUL</strong> to enter the
+correct paths to your <em>.iso</em> file and more importantly the target
+disk. Also note that the <code>-s 3G</code> provides the file size to be
+used in calculating the ETA. Finally, you can increase the <em>batch
+size</em> <code>bs</code> to increase the speed, but I have found
+<code>bs=4m</code> to be stable.</p>
+<p><img src="images/dd.png" /></p>
+<h2 id="booting">Booting</h2>
+<p>After the flash process is complete, you will boot to your USB by
+rebooting your MacBook. Make sure to hold the OPTION KEY - ⌥ while your
+computer is starting up to enter the <a
+href="https://support.apple.com/en-us/HT202796">Startup Manager</a>. You
+will be presented with disks to boot from. The exact names on your
+screen <em>might</em> vary, but the Kali GNU/Linux USB is likely to be
+named <em>EFI Boot</em>.</p>
+<p><img src="images/boot.png" style="width:50.0%" /></p>
+<p>Booting from your Kali GNU/Linux USB drive, you will be presented
+with the Kali boot up screen. From this screen choose <em>Live system
+(persistence, check kali.org/prst)</em>.</p>
+<p><img src="images/persis.png" style="width:50.0%" /></p>
+<p>On <em>XFCE</em>, you will presented with the login screen below. The
+default user is <code>root</code> with the password <code>toor</code>;
+so you can log in with those.</p>
+<p><img src="images/root.png" style="width:50.0%" /></p>
+<h2 id="partitioning">Partitioning</h2>
+<p>Now that you are booted up on Kali GNU/Linux Live, you will have to
+create a partition to put the <em>persistence</em> configuration
+files.</p>
+<p>Start by opening up a <em>Terminal</em> and enter
+<code>parted</code>,<a
+href="https://wiki.archlinux.org/index.php/Parted">a program for
+creating and manipulating partition tables</a>. Enter
+<code>print devices</code> to print out the disks attached to your
+notebook (just like <code>diskutil list</code>). You will again have to
+identify the attached USB disk (which we have just booted from). In my
+case, it is <code>/dev/sdb</code>.</p>
+<p><img src="images/parted0.png" /></p>
+<p>Enter <code>select /dev/sdb</code> to work on the USB drive (which
+will helpfully print <code>"Using /dev/sdb"</code>). Enter
+<code>print</code> to list the info about the drive.</p>
+<p><img src="images/parted1.png" /></p>
+<p>As you can see, the Kali GNU/Linux <em>.iso</em> file takes about
+3GB, while the rest is free space which we will use to store the
+persistence data. Noting exactly where the second partition ends,
+entering <code>mkpart primary END_OF_PART_2 -1</code> will create a
+partition filling up the rest of the drive. So in my case the command is
+<code>mkpart primary 3219 -1</code>. Entering <code>print</code> again
+will confirm that the partition is created. Enter <code>quit</code> to
+exit <code>parted</code>.</p>
+<p><img src="images/parted2.png" /></p>
+<h2 id="persistence">Persistence</h2>
+<p>Now that we have created the partition, we can finally setup
+<em>persistence</em>. Noting the number of the partition we have just
+created (which was <code>3</code> in my case), the command
+<code>mkfs.ext4 -L persistence /dev/sdb3</code> will create a <a
+href="https://opensource.com/article/17/5/introduction-ext4-filesystem">EXT4</a>
+filesystem in the partition, and label it. The command
+<code>e2label /dev/sdb3 persistence</code> will label the filesystem
+again as <em>persistence</em>. (Make sure to replace
+<code>/dev/sdbX</code> with your partition’s number in these
+commands.)</p>
+<p>As the last step, we will have to create a <em>persistence.conf</em>
+file in the USB drive. To do so, you have to create a mounting point
+with the command <code>mkdir -p /mnt/kali</code>. Then mount your
+partition with the command <code>mount /dev/sdb3 /mnt/kali</code>. The
+command <code>echo "/ union" &gt; /mnt/kali/persistence.conf</code> will
+create the config file containing the line <em>“/ union”</em>. You are
+finally done! Upon reboot, you will have a ready-to-rock Kali GNU/Linux
+Live system.</p>
+<h1 id="extras">Extras</h1>
+<h2 id="wi-fi">Wi-Fi</h2>
+<p>If you are using the Kali GNU/Linux Live system on a MacBook, you
+will notice that the system will not automatically recognize the
+built-in Wi-Fi driver. This because the <em>Broadcom</em> chip on your
+MacBook has a proprietary driver which is not installed on Kali
+GNU/Linux by default. If you want to be able to use the built-in Wi-Fi
+driver, entering <code>sudo apt install broadcom-sta-dkms</code> will
+download and install the driver. To remove possible conflictions with
+other drivers, enter
+<code>modprobe -r b44 b43 b43legacy ssb brcmsmac</code>. Finally, the
+command <code>modprobe wl</code> should initialise the driver.</p>
+<h2 id="bluetooth">Bluetooth</h2>
+<p>Fortunately the driver for the built-in Bluetooth chip on most
+MacBooks is already installed by default. To enable <em>Bluetooth</em>
+on a <em>XFCE</em> system, enter
+<code>sudo apt install bluetooth blueman</code>. Then enter
+<code>/etc/init.d/bluetooth start</code> to start the <em>Bluetooth</em>
+service. The command <code>blueman-manager</code> will open the
+Bluetooth manager so that you can connect your devices.</p>
+<h1 id="resources">Resources</h1>
+<p>I would like to extend my gratitude towards the authors of the
+following website articles.</p>
+<p><a
+href="https://docs.kali.org/downloading/kali-linux-live-usb-persistence">https://docs.kali.org/downloading/kali-linux-live-usb-persistence</a></p>
+<p><a
+href="https://kali.training/topic/adding-persistence-to-the-live-iso/">https://kali.training/topic/adding-persistence-to-the-live-iso/</a></p>
+<p><a
+href="https://null-byte.wonderhowto.com/how-to/install-kali-live-usb-drive-with-persistence-optional-0162253/">https://null-byte.wonderhowto.com/how-to/install-kali-live-usb-drive-with-persistence-optional-0162253/</a></p>
+<p><span class="math inline">\space</span></p>
+<hr>
+
+<div class="footer">
+
+    <p>
+        Miraç Lütfullah Gülgönül
+        <br>
+        <a class="fa-solid fa-globe" style="text-decoration:none" href="https://mlg556.github.io"></a>
+        &nbsp
+        <a class="fa-regular fa-envelope" style="text-decoration:none" href="mailto:miraclgulgonul@gmail.com"></a>
+        &nbsp
+        <a class="fa-brands fa-linkedin" style="text-decoration:none" href="https://www.linkedin.com/in/mira%C3%A7-g%C3%BClg%C3%B6n%C3%BCl-b787841b5/"></a> 
+    </p>
+
+
+</div>
+
+</body>
+</html>

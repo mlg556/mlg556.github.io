@@ -1,12 +1,11 @@
-+++
-title = "Bruteforce WPS with Reaver and pixiewps"
-date = 2019-02-05T17:58:00+03:00
-categories = ["GNULinux"]
-+++
+---
+title: "Bruteforce WPS with Reaver and pixiewps"
+date: 05 Febuary 2019
+---
 
 About four years ago a security engineer by the name of Dominique Bongard [tweeted this](https://web.archive.org/web/20160801084256/https://twitter.com/Reversity/status/490978005859454978):
 
-![](images/tweet.png)
+![](images/tweet.png){ width=40% }
 
 His words convey his surprise; imagine mine when I found out that my recently-bought router was susceptible to the very same vulnerability: which allowed the WPA key to be cracked in a matter of _seconds_. This post will show you how.
 
@@ -36,17 +35,17 @@ I will be using this community fork of [reaver](https://github.com/t6x/reaver-wp
 
 Enter `airmon-ng` to list the network adapters attached to your computer. My system has two adapters attached, one is the built-in _Broadcom_ on my MacBook; and the other one is the _Atheros_ chipset in the _tp-link TL-WN722N_ WiFi adapter. I will be using the second one, `wlan1`.
 
-![](images/mon0.png)
+![](images/mon0.png){ width=60% }
 
 The command `airmon-ng start wlan1` will put the selected interface on *monitor mode*, and rename it as `wlan1mon`.
 
-![](images/mon1.png)
+![](images/mon1.png){ width=60% }
 
 # Scanning
 
 Enter `wash -i wlan1mon` to see the WiFi access points in your range. As you can see, my router has a MAC address `E4:FB:5D:8C:4A:ED` on `Ch 1`, with the chipset vendor _Realtek_. Note that the majority of the routers around share the same chipset, which suggests that they are also vulnerable.
 
-![](images/wash.png)
+![](images/wash.png){ width=60% }
 
 # Brute-force
 
@@ -58,11 +57,11 @@ Don't forget to replace `wlan1mon` with your monitoring mode interface, `E4:FB:5
 
 If luck is on your side, or the router is vulnerable, or you are just fast with the arrow up and Enter keys; the command will succeed and you will get the WPS pin. The chances are sometimes you will get stuck on the `[+] Sending EAPOL START request` phase. You can either try the command again, or maybe [change your MAC address](https://github.com/alobbs/macchanger). Also make sure to be as close as possible to the router in question.
 
-![](images/wps.png)
+![](images/wps.png){ width=60% }
 
 After finding the WPS pin of the router (in a crazy short time like 6ms), you can now ask the router to give up its WPA key. This is done again with `reaver` by simply erasing the `-K` option for `pixiedust` and add the pin number via `-p PIN`. Noting the pin number `10666197`, executing `reaver -i wlan1mon -b E4:FB:5D:8C:4A:ED -vvNwL -c 1 -p 10666197` will yield the WPA key.
 
-![](images/fin.png)
+![](images/fin.png){ width=60% }
 
 ## Countermeasures
 
@@ -71,3 +70,5 @@ Apparently some vendor companies have implemented measures such as rate limiting
 > Having demonstrated the insecurity of WPS, I went into the Linksys' administrative interface and turned WPS off. Then, I relaunched Reaver, figuring that surely setting the router to manual configuration would block the attacks at the door. But apparently Reaver didn't get the memo, and the Linksys' WPS interface still responded to its queries—once again coughing up the password and SSID.
 
 > In a phone conversation, Craig Heffner said that the inability to shut this vulnerability down is widespread. He and others have found it to occur with every Linksys and Cisco Valet wireless access point they've tested. "On all of the Linksys routers, you cannot manually disable WPS," he said. While the Web interface has a radio button that allegedly turns off WPS configuration, "it's still on and still vulnerable."
+
+$\space$

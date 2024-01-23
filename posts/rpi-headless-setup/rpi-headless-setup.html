@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2019-06-25" />
+  <title>Raspberry Pi Headless Setup</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+      html, body {
+          margin-top: 1%;
+          margin-left: 10%;
+          margin-right: 10%;
+          background-color: #fbfbfb;
+          color: #403f52;
+          font-family: 'KaTeX_SansSerif';
+          font-size: 18px;
+      }
+
+      img {
+          max-width: 80%;
+      }
+
+      figcaption{
+          font-style: italic;
+      }
+
+      pre code {
+          display:inline-block;
+          font-size: 14px;
+          margin: 10px 10px 10px 10px;
+      }
+
+      code {
+          display:inline-block;
+          font-size: 14px;
+      }
+
+      .footer {
+          text-align: center;
+          margin-top: 1%;
+          margin-bottom: 1%;
+      }
+
+      .date {
+          font-style: italic;
+      }
+
+      a { color: inherit; }
+  </style>
+
+  <script src="https://kit.fontawesome.com/fa8004ee4c.js" crossorigin="anonymous"></script>
+
+  <h1>
+      <a href="/index.html" style="text-decoration:none">Miraç Lütfullah Gülgönül</a>
+  </h1>
+
+  <hr>
+
+  <script defer=""
+  src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Raspberry Pi Headless Setup</h1>
+<p class="date">25 June 2019</p>
+</header>
+<p>This post is about how to setup your <em>Raspberry Pi</em> in a
+headless configuration, so you can plug it in to your main computer and
+SSH into it. I will be using macOS Mojave 10.14.4 and a <a
+href="https://www.raspberrypi.org/products/raspberry-pi-zero-w/">Raspberry
+Pi Zero W</a>, but most of this should work on any <em>*nix</em> system
+and any relatively new Raspberry Pi.</p>
+<h1 id="installing-the-os">Installing the OS</h1>
+<p>You will first download the image file for <em>Raspbian</em>, and
+then burn it into an SD card (minimum of 8 GB should be fine) which your
+Raspberry Pi will boot from.</p>
+<p>Here is the download page for <a
+href="https://www.raspberrypi.org/downloads/raspbian/">Raspbian OS</a>,
+since this is a headless setup, you will install the <em>Lite</em>
+version: which is lightweight and does not have a desktop included.
+After downloading the <code>.zip</code> file, extract it to a
+<code>.img</code> and burn this disk image to the SD card using <a
+href="https://www.balena.io/etcher/">balenaEtcher</a>. You <em>can</em>
+use <code>dd</code> if you want, but I have found <em>Etcher</em> to be
+faster and more reliable.</p>
+<h1 id="enabling-ssh-and-internet-sharing">Enabling SSH and Internet
+Sharing</h1>
+<p>After the burning process is complete, take out the SD card and plug
+it again. You will see a partition named <code>boot</code> show up: we
+are going to edit some files here to enable SSH and the ability to share
+your computer’s internet connection with the Raspberry Pi.</p>
+<p>On a terminal, <code>cd</code> into this partition.</p>
+<ul>
+<li><p>First create an empty file named <code>ssh</code> via
+<code>touch ssh</code>.</p></li>
+<li><p>After this, open the file named <code>config.txt</code> and at
+the end of this file append the parameter
+<code>dtoverlay=dwc2</code>.</p></li>
+<li><p>Finally, open the file named <code>cmdline.txt</code>, and after
+parameter <code>rootwait</code>, add
+<code>modules-load=dwc2,g_ether</code>. Be careful with the spaces: the
+parameter <code>modules-load=dwc2,g_ether</code> must have spaces at the
+beginning and the end, separating it from other parameters, but should
+contain no spaces itself.</p></li>
+</ul>
+<p>Now on your Macbook, go to
+<code>System Preferences &gt; Sharing</code>, enable the tick of
+<code>Internet Sharing</code>. When you connect your Pi, check the tick
+on <code>RNDIS/Ethernet Gadget</code>. It should look something like
+this:</p>
+<p><img src="images/internet_sharing.png" /></p>
+<h1 id="enabling-ssh-root-login">Enabling SSH Root Login</h1>
+<p>Now that we have enabled SSH, you can plug in the SD card to your
+Raspberry Pi, and connect it via USB. You can then SSH into it by
+<code>ssh pi@raspberrypi.local</code> with password
+<code>raspberry</code>. Once you are logged in you can:</p>
+<ul>
+<li><code>sudo passwd root</code> to change the root user password.</li>
+<li>edit the file<code>/etc/ssh/sshd_config</code> and change
+<code>PermitRootLogin</code> to <code>yes</code>.</li>
+</ul>
+<p>After this, reboot the machine by <code>sudo reboot</code>. Give it a
+few seconds to boot-up, and then SSH into the root user by
+<code>ssh root@raspberrypi.local</code>, entering the password you had
+set.</p>
+<h1 id="creating-new-user">Creating New User</h1>
+<p>Now that you have root access, you can add/remove users easily.</p>
+<ul>
+<li>First remove the default user <code>pi</code> and its home directory
+by <code>userdel -r pi</code>.</li>
+<li>Enter <code>useradd -m NEW_USER</code> to create a new user with
+home directory replacing <code>NEW_USER</code>.</li>
+<li>Enter <code>passwd NEW_USER</code> to set a password for the
+user.</li>
+<li>For some reason, the new user is initialised to use the
+<code>sh</code> shell. We want to change this to <code>bash</code> by
+<code>usermod --shell /bin/bash NEW_USER</code></li>
+<li>Finally, add your new user to the <code>sudoers</code> list by
+<code>adduser NEW_USER sudo</code></li>
+</ul>
+<h1 id="changing-device-name">Changing Device Name</h1>
+<p>The default device name is <code>raspberrypi</code>, which can cause
+confusion if there are multiple Pi’s at play. To change this,
+(preferably while still logged in to the root user):</p>
+<ul>
+<li>Enter <code>hostname NEW_HOSTNAME</code> to change the
+hostname.</li>
+<li>On most systems, you also have to edit the files at
+<code>/etc/hostname</code> and <code>/etc/hosts</code> to reflect this
+change. Simply replace every <code>raspberrypi</code> with
+<code>NEW_HOSTNAME</code>.</li>
+</ul>
+<h1 id="enabling-ssh-login-without-password">Enabling SSH Login Without
+Password</h1>
+<p>Since you will presumably be SSH’ing into your Pi from the same
+computer all the time, it becomes cumbersome after a while to enter the
+password. To go around this, we will create a public/private RSA keypair
+which will allow us to authenticate our computer to the Pi without
+entering the password each time.</p>
+<ul>
+<li><p>On your computer, and with the Pi connected, run
+<code>ssh-keygen</code> to generate this pair (the default path for the
+generated file is <code>~/.ssh/id_rsa</code>, which works just
+fine).</p></li>
+<li><p>To copy this pair to your Pi, enter
+<code>ssh-copy-id -i NEW_USER@NEW_HOSTNAME.local</code> for the regular
+user and <code>ssh-copy-id -i root@NEW_HOSTNAME.local</code> again for
+the root user.</p></li>
+</ul>
+<p>Now, you can SSH into the Pi from your computer anytime without
+entering the user passwords.</p>
+<p><span class="math inline">\space</span></p>
+<hr>
+
+<div class="footer">
+
+    <p>
+        Miraç Lütfullah Gülgönül
+        <br>
+        <a class="fa-solid fa-globe" style="text-decoration:none" href="https://mlg556.github.io"></a>
+        &nbsp
+        <a class="fa-regular fa-envelope" style="text-decoration:none" href="mailto:miraclgulgonul@gmail.com"></a>
+        &nbsp
+        <a class="fa-brands fa-linkedin" style="text-decoration:none" href="https://www.linkedin.com/in/mira%C3%A7-g%C3%BClg%C3%B6n%C3%BCl-b787841b5/"></a> 
+    </p>
+
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2019-02-02" />
+  <title>Web Scraping with Python3 and Selenium</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #f8f8f8; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ef2929; } /* Alert */
+    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #204a87; } /* Attribute */
+    code span.bn { color: #0000cf; } /* BaseN */
+    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4e9a06; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #8f5902; font-style: italic; } /* Comment */
+    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+    code span.dt { color: #204a87; } /* DataType */
+    code span.dv { color: #0000cf; } /* DecVal */
+    code span.er { color: #a40000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #0000cf; } /* Float */
+    code span.fu { color: #204a87; font-weight: bold; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+    code span.ot { color: #8f5902; } /* Other */
+    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+    code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+    code span.ss { color: #4e9a06; } /* SpecialString */
+    code span.st { color: #4e9a06; } /* String */
+    code span.va { color: #000000; } /* Variable */
+    code span.vs { color: #4e9a06; } /* VerbatimString */
+    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+      html, body {
+          margin-top: 1%;
+          margin-left: 10%;
+          margin-right: 10%;
+          background-color: #fbfbfb;
+          color: #403f52;
+          font-family: 'KaTeX_SansSerif';
+          font-size: 18px;
+      }
+
+      img {
+          max-width: 80%;
+      }
+
+      figcaption{
+          font-style: italic;
+      }
+
+      pre code {
+          display:inline-block;
+          font-size: 14px;
+          margin: 10px 10px 10px 10px;
+      }
+
+      code {
+          display:inline-block;
+          font-size: 14px;
+      }
+
+      .footer {
+          text-align: center;
+          margin-top: 1%;
+          margin-bottom: 1%;
+      }
+
+      .date {
+          font-style: italic;
+      }
+
+      a { color: inherit; }
+  </style>
+
+  <script src="https://kit.fontawesome.com/fa8004ee4c.js" crossorigin="anonymous"></script>
+
+  <h1>
+      <a href="/index.html" style="text-decoration:none">Miraç Lütfullah Gülgönül</a>
+  </h1>
+
+  <hr>
+
+  <script defer=""
+  src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Web Scraping with Python3 and Selenium</h1>
+<p class="date">02 February 2019</p>
+</header>
+<p><a href="https://eksisozluk.com">Ekşi Sözlük</a> (or “sourtimes”) is
+an attempt at a <em>dictionary</em> or a <em>holy source of
+information</em> where users can create articles or post entries just
+about anything which comes to mind. It was created at 1999 by <a
+href="https://twitter.com/esesci">Sedat ‘ssg’ Kapanoğlu</a> with
+inspiration from <a
+href="https://en.wikipedia.org/wiki/The_Hitchhiker%27s_Guide_to_the_Galaxy">Douglas
+Adams’ The Hitchhiker’s Guide to the Galaxy</a>. It is currently the
+most active “dictionary” style page in Turkey, so an interesting place
+to look from the perspective of data science.</p>
+<p>Somewhere around the last two years, they have blocked access without
+cookies, so a simple python <code>request</code> will result in an
+aborted connection.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">import</span> requests <span class="im">as</span> req</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> r <span class="op">=</span> req.get(<span class="st">&#39;https://www.eksisozluk.com&#39;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    (...)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    requests.exceptions.<span class="pp">ConnectionError</span>: (<span class="st">&#39;Connection aborted.&#39;</span>, RemoteDisconnected(<span class="st">&#39;Remote end closed connection without response&#39;</span>))</span></code></pre></div>
+<p>This is why we will use <code>selenium</code> to automate a
+“headless” Google Chrome instance to scrape data from the website. We
+will be looking at a single article, and the number of entries entered
+by date. The point of interests are the dates in which the numebr of
+entries are the highest. They are likely to coincide with real-life
+events.</p>
+<h1 id="requirements">Requirements</h1>
+<h2 id="google-chrome">Google Chrome</h2>
+<p>In this post I will be automating a Google Chrome browser instance.
+You can obviously choose another browser like Safari or Mozilla, but I
+have found that Chrome has the most intuitive support for browser
+automation. It can be downloaded from <a
+href="https://www.google.com/chrome/">the official webpage</a>.</p>
+<h2 id="selenium">Selenium</h2>
+<p><a href="https://selenium-python.readthedocs.io">Selenium</a> is a
+toolkit to automate browsers. Since we will be using <em>Python</em>, we
+will need the <em>Python 3 API</em>. This package can be installed via
+<code>pip install selenium</code>.</p>
+<h2 id="chromedriver">chromedriver</h2>
+<p>To automate Google Chrome using Selenium, you will also need the
+<code>chromedriver</code> binary. The latest releases can be found at
+their <a href="http://chromedriver.chromium.org/downloads">downloads
+page</a>. After extracting the zip file, you will have to put the
+<code>chromedriver</code> binary somewhere in your <code>$PATH</code>
+(for example <code>usr/local/bin</code>).</p>
+<h2 id="beautiful-soup">Beautiful Soup</h2>
+<p><a href="https://www.crummy.com/software/BeautifulSoup/">Beautiful
+Soup</a> is an all-powerful parser which we will use to parse HTML data.
+It can be installed via <code>pip install beautifulsoup4</code>.</p>
+<h2 id="matplotlib">matplotlib</h2>
+<p><a href="https://matplotlib.org">matplotlib</a> is an awesome 2D
+plotting library which we will use to visualize the data. It can
+similarly be installed via <code>pip install matplotlib</code>.</p>
+<h2 id="adjusttext">adjustText</h2>
+<p>We will use this little library to make annotations look prettier in
+matplotlib (they tend to infuriatingly overlap). It can be installed via
+<code>pip install adjustText</code>, see the <a
+href="https://github.com/Phlya/adjustText">GitHub page</a> for more
+information.</p>
+<h1 id="code">Code</h1>
+<p>Ekşi Sözlük has “articles” and “entries”. We will scrape the date
+data from the pages, to see when an article had the most entries written
+to it. I will not go through all the code line by line, but some of the
+more crucial concepts.</p>
+<p>To automate a “headless” Google Chrome browser instance, we will need
+the absolute paths of the Google Chrome binary and the
+<code>chromedriver</code> binary. On a macOS system, the Google Chrome
+binary will likely to be located inside the application:
+<code>"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"</code>
+The <code>chromedriver</code> binary is wherever you have copied it in
+the installation step.</p>
+<p>The code for a simple automation is as follows:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> selenium <span class="im">import</span> webdriver</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> selenium.webdriver.chrome.options <span class="im">import</span> Options</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">&#39;SOME.URL&#39;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>binary_path <span class="op">=</span> <span class="st">&quot;/Applications/Google Chrome.app/Contents/MacOS/Google Chrome&quot;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>chromedriver_path <span class="op">=</span> <span class="st">&quot;SOME/PATH&quot;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>chrome_options <span class="op">=</span> Options()</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>chrome_options.add_argument(<span class="st">&quot;--headless&quot;</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>chrome_options.binary_location <span class="op">=</span> binary_path</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>driver <span class="op">=</span> webdriver.Chrome(executable_path<span class="op">=</span>chromedriver_path,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                          options<span class="op">=</span>chrome_options)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>driver.get(url)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(driver.page_source)</span></code></pre></div>
+<p>This will print the html source of the URL.</p>
+<p>In this particular example, after some exploration, I have seen that
+Ekşi Sözlük formats the entry dates in the form of
+<code>&lt;a class="entry-date permalink" href="/entry/1"&gt;15.02.1999&lt;/a&gt;</code>.
+To extract this using BeautifulSoup, you can do:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>content <span class="op">=</span> driver.page_source</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>soup <span class="op">=</span> BeautifulSoup(content, <span class="st">&#39;html.parser&#39;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>html_dates.append(soup.find_all(<span class="st">&quot;a&quot;</span>, class_<span class="op">=</span><span class="st">&#39;entry-date permalink&#39;</span>))</span></code></pre></div>
+<p>To extract the real “date” from this string, I have used
+<code>regex</code>. Noting that the date format is in the form
+<code>\d\d.\d\d.\d\d\d\d</code>, you can do a <code>re.findall()</code>
+to get the exact date part. (See <a
+href="https://docs.python.org/3/howto/regex.html">Regular Expression
+HOWTO</a>).</p>
+<p>After creating a list of the dates, you can count their number of
+occurrences with a <code>Counter(list)</code>. To find the most N
+occurrences, use <code>most_common(N)</code>. Finally you can create an
+<code>OrderedDict</code> from this <code>Counter</code> object to be
+able to iterate over it. (Don’t forget to import them from
+<code>collections</code>).</p>
+<p>To create <code>datetime</code> objects from the string elements of
+this dictionary, you can use
+<code>datetime.datetime.strptime(date, '%d.%m.%Y')).</code> And then to
+convert it to a <code>date</code> object, simply add a
+<code>.date()</code>. (See <a
+href="https://docs.python.org/3/library/datetime.html#module-datetime">datetime
+— Basic date and time types</a>). So this will look like:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> datetime <span class="im">as</span> dt</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> date <span class="kw">in</span> dates_string:</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    x.append(dt.datetime.strptime(date, <span class="st">&#39;</span><span class="sc">%d</span><span class="st">.%m.%Y&#39;</span>).date())</span></code></pre></div>
+<p>Once you have a <code>x</code> list and an <code>entries</code> list
+which has the number of entries entered on that date, you can finally
+plot it using matplotlib.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.dates <span class="im">as</span> mdates</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> adjustText <span class="im">import</span> adjust_text</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>plt.plot(x, entries, <span class="st">&#39;.&#39;</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>plt.gca().xaxis.set_major_formatter(mdates.DateFormatter(<span class="st">&#39;</span><span class="sc">%d</span><span class="st">/%m/%Y&#39;</span>))</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>plt.gcf().autofmt_xdate()</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<p>Lastly, to be able to annotate the top N occurences (points of
+interest) we will use the result of the <code>most_common()</code>
+method.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>top_count <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>texts <span class="op">=</span> []</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>counted_dates <span class="op">=</span> Counter(dates)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>top <span class="op">=</span> counted_dates.most_common(top_count)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(top_count):</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    top_x, top_y <span class="op">=</span> top[i]</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    texts.append(plt.text(mdates.date2num(dt.datetime.strptime(<span class="bu">str</span>(top[i][<span class="dv">0</span>]), <span class="st">&#39;</span><span class="sc">%d</span><span class="st">.%m.%Y&#39;</span>).date()),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>                          top[i][<span class="dv">1</span>], <span class="bu">str</span>(top[i][<span class="dv">0</span>]) <span class="op">+</span> <span class="st">&#39;, &#39;</span> <span class="op">+</span> <span class="bu">str</span>(top[i][<span class="dv">1</span>]), ha<span class="op">=</span><span class="st">&#39;right&#39;</span>, va<span class="op">=</span><span class="st">&#39;top&#39;</span>))</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>adjust_text(texts)</span></code></pre></div>
+<h1 id="example">Example</h1>
+<p>Running this script with <a
+href="https://eksisozluk.com/python--109286">the article for python</a>.
+We get the following graph:</p>
+<p><img src="images/python.png" /></p>
+<p>Sadly, the peaks of this particular graph do not correspond to
+real-life important events (I had thought about the Python 3 release at
+3 December 2008, for example). The peak at 29.03.2018 for 40 entries
+corresponds to a beef between multiple users, and the one at 31.12.2009
+with 20 entries correspond to a discussion about <a
+href="http://wiki.c2.com/?PythonWhiteSpaceDiscussion">Python’s usage of
+whitespace</a>. Regardless, it was still a nice exercise.</p>
+<h1 id="downloads">Downloads</h1>
+<p><a href="files/eksi.py">eksi.py</a></p>
+<p><span class="math inline">\space</span></p>
+<hr>
+
+<div class="footer">
+
+    <p>
+        Miraç Lütfullah Gülgönül
+        <br>
+        <a class="fa-solid fa-globe" style="text-decoration:none" href="https://mlg556.github.io"></a>
+        &nbsp
+        <a class="fa-regular fa-envelope" style="text-decoration:none" href="mailto:miraclgulgonul@gmail.com"></a>
+        &nbsp
+        <a class="fa-brands fa-linkedin" style="text-decoration:none" href="https://www.linkedin.com/in/mira%C3%A7-g%C3%BClg%C3%B6n%C3%BCl-b787841b5/"></a> 
+    </p>
+
+
+</div>
+
+</body>
+</html>

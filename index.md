@@ -14,6 +14,20 @@ I also write blog posts now and then:
 
 - [A Stationary Charged Particle in a Gravitational Field](posts\a-stationary-charged-particle-in-a-gravitational-field\a-stationary-charged-particle-in-a-gravitational-field.html)
 
+- [A Story of Charged Equal Spheres](posts\a-story-of-charged-equal-spheres\a-story-of-charged-equal-spheres.html)
+
+- [Acoustics of Rectification and Clipping](posts\acoustics-of-rectification-and-clipping\acoustics-of-rectification-and-clipping.html)
+
+- [Bruteforce WPS with Reaver and pixiewps](posts\bruteforce-wps-with-reaver-and-pixiewps\bruteforce-wps-with-reaver-and-pixiewps.html)
+- [Collatz Conjecture with Python](posts\collatz-conjecture-with-python3\collatz-conjecture-with-python3.html)
+- [Kali GNU/Linux Live USB with Persistence](posts\kali-gnulinux-live-usb-with-persistence\kali-gnulinux-live-usb-with-persistence.html)
+- [Raspberry Pi Headless Setup](posts\rpi-headless-setup\rpi-headless-setup.html)
+- [USB Rubber Ducky with Arduino Micro](posts\usb-rubber-ducky-with-arduino-micro\usb-rubber-ducky-with-arduino-micro.html)
+- [VHDL Simulation Workflow in macOS](posts\vhdl-sim-workflow-in-macos\vhdl-sim-workflow-in-macos.html)
+- [Web Scraping with Python3 and Selenium](posts\web-scraping-with-python3-and-selenium\web-scraping-with-python3-and-selenium.html)
+
 
 <!-- trick it into loading katex so i can use the fonts here as well. -->
 $\space$
+
+<!-- { width=25% } -->

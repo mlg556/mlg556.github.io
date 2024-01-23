@@ -1,8 +1,7 @@
-+++
-title = "Kali GNU/Linux Live USB with Persistence"
-date = 2019-02-04T23:12:08+03:00
-categories = ["GNULinux"]
-+++
+---
+title: "Kali GNU/Linux Live USB with Persistence"
+date: 04 February 2019
+---
 
 In this post I will show you how to setup a Kali GNU/Linux Live system with _persistence_ on a USB drive, so that you can carry it around anywhere and boot from it whenever you want to. The _persistence_ feature will allow the system to be saved and persist through different boot-ups. As the [official documentation](https://docs.kali.org/downloading/kali-linux-live-usb-persistence) suggests: _" (...) the preservation of data on the “Kali Live” USB drive — across reboots of “Kali Live”. This can be an extremely useful enhancement, and enables you to retain documents, collected testing results, configurations, etc., when running Kali Linux “Live” from the USB drive, even across different systems."_
 
@@ -54,15 +53,15 @@ will start flashing the iso file to your selected drive; and show you a progress
 
 After the flash process is complete, you will boot to your USB by rebooting your MacBook. Make sure to hold the OPTION KEY - ⌥ while your computer is starting up to enter the [Startup Manager](https://support.apple.com/en-us/HT202796). You will be presented with disks to boot from. The exact names on your screen _might_ vary, but the Kali GNU/Linux USB is likely to be named *EFI Boot*.
 
-![](images/boot.png)
+![](images/boot.png){ width=50% }
 
 Booting from your Kali GNU/Linux USB drive, you will be presented with the Kali boot up screen. From this screen choose *Live system (persistence, check kali.org/prst)*.
 
-![](images/persis.png)
+![](images/persis.png){ width=50% }
 
 On _XFCE_, you will presented with the login screen below. The default user is `root` with the password `toor`; so you can log in with those.
 
-![](images/root.png)
+![](images/root.png){ width=50% }
 
 ## Partitioning
 
@@ -80,24 +79,23 @@ As you can see, the Kali GNU/Linux _.iso_ file takes about 3GB, while the rest i
 
 ![](images/parted2.png)
 
-
 ## Persistence
 
 Now that we have created the partition, we can finally setup _persistence_. Noting the number of the partition we have just created (which was `3` in my case), the command `mkfs.ext4 -L persistence /dev/sdb3` will create a [EXT4](https://opensource.com/article/17/5/introduction-ext4-filesystem) filesystem in the partition, and label it. The command `e2label /dev/sdb3 persistence` will label the filesystem again as *persistence*. (Make sure to replace `/dev/sdbX` with your partition's number in these commands.)
 
 As the last step, we will have to create a _persistence.conf_ file in the USB drive. To do so, you have to create a mounting point with the command `mkdir -p /mnt/kali`. Then mount your partition with the command `mount /dev/sdb3 /mnt/kali`. The command `echo "/ union" > /mnt/kali/persistence.conf` will create the config file containing the line _"/ union"_. You are finally done! Upon reboot, you will have a ready-to-rock Kali GNU/Linux Live system.
 
-## Extras
+# Extras
 
-# Wi-Fi
+## Wi-Fi
 
 If you are using the Kali GNU/Linux Live system on a MacBook, you will notice that the system will not automatically recognize the built-in Wi-Fi driver. This because the _Broadcom_ chip on your MacBook has a proprietary driver which is not installed on Kali GNU/Linux by default. If you want to be able to use the built-in Wi-Fi driver, entering `sudo apt install broadcom-sta-dkms` will download and install the driver. To remove possible conflictions with other drivers, enter `modprobe -r b44 b43 b43legacy ssb brcmsmac`. Finally, the command `modprobe wl` should initialise the driver.
 
-# Bluetooth
+## Bluetooth
 
 Fortunately the driver for the built-in Bluetooth chip on most MacBooks is already installed by default. To enable _Bluetooth_ on a _XFCE_ system, enter `sudo apt install bluetooth blueman`. Then enter `/etc/init.d/bluetooth start` to start the _Bluetooth_ service. The command `blueman-manager` will open the Bluetooth manager so that you can connect your devices.
 
-## Resources
+# Resources
 
 I would like to extend my gratitude towards the authors of the following website articles.
 
@@ -106,3 +104,5 @@ I would like to extend my gratitude towards the authors of the following website
 [https://kali.training/topic/adding-persistence-to-the-live-iso/](https://kali.training/topic/adding-persistence-to-the-live-iso/)
 
 [https://null-byte.wonderhowto.com/how-to/install-kali-live-usb-drive-with-persistence-optional-0162253/](https://null-byte.wonderhowto.com/how-to/install-kali-live-usb-drive-with-persistence-optional-0162253/)
+
+$\space$

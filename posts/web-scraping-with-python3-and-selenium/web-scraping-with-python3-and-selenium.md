@@ -1,8 +1,7 @@
-+++
-title = "Web Scraping with Python3 and Selenium"
-date = 2019-02-02T17:00:23+03:00
-categories = ["Python"]
-+++
+---
+title: "Web Scraping with Python3 and Selenium"
+date: 02 February 2019
+---
 
 [Ekşi Sözlük](https://eksisozluk.com) (or "sourtimes") is an attempt at a *dictionary* or a *holy source of information* where users can create articles or post entries just about anything which comes to mind. It was created at 1999 by [Sedat 'ssg' Kapanoğlu](https://twitter.com/esesci) with inspiration from [Douglas Adams' The Hitchhiker's Guide to the Galaxy](https://en.wikipedia.org/wiki/The_Hitchhiker%27s_Guide_to_the_Galaxy). It is currently the most active "dictionary" style page in Turkey, so an interesting place to look from the perspective of data science.
 
@@ -17,7 +16,7 @@ Somewhere around the last two years, they have blocked access without cookies, s
 
 This is why we will use `selenium` to automate a "headless" Google Chrome instance to scrape data from the website. We will be looking at a single article, and the number of entries entered by date. The point of interests are the dates in which the numebr of entries are the highest. They are likely to coincide with real-life events.
 
-# Installations
+# Requirements
 
 ## Google Chrome
 
@@ -134,6 +133,8 @@ Running this script with [the article for python](https://eksisozluk.com/python-
 
 Sadly, the peaks of this particular graph do not correspond to real-life important events (I had thought about the Python 3 release at 3 December 2008, for example). The peak at 29.03.2018 for 40 entries corresponds to a beef between multiple users, and the one at 31.12.2009 with 20 entries correspond to a discussion about [Python's usage of whitespace](http://wiki.c2.com/?PythonWhiteSpaceDiscussion). Regardless, it was still a nice exercise.
 
-## Downloads
+# Downloads
 
 [eksi.py](files/eksi.py)
+
+$\space$

