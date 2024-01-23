@@ -27,7 +27,7 @@ for post in posts:
     
 content = """
 ---
-title: Index
+title: Posts
 ---
 
 """

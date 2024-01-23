@@ -1,6 +1,6 @@
 
 ---
-title: Index
+title: Posts
 ---
 
 - [8051 Assembly Workflow in macOS](posts\8051-assembly-workflow-in-macos\8051-assembly-workflow-in-macos.html)
