@@ -1,1 +1,0 @@
-pandoc -s hello.md -t html5 --katex --css style.css --highlight-style tango -A footer.html -H header.html -o hello.html
