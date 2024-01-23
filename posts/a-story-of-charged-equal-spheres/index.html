@@ -1,0 +1,173 @@
+<p>+++ title = “A Story of Charged Equal Spheres” date =
+2019-02-07T10:30:42+03:00 categories = [“Physics”, “Mathematics”] draft
+= false +++</p>
+<h1 id="problem">Problem</h1>
+<p>Imagine three conductive spheres <span
+class="math inline"><em>A</em>, <em>B</em></span> and <span
+class="math inline"><em>C</em></span> each having charges of
+respectively $ 3q, 4q, 5q $.</p>
+<p>{{&lt; figure src=“images/ch0.png” width=“350”&gt;}}</p>
+<p>We know that if we connect all three spheres together, their charges
+will be the same value: which is the arithmetic mean of the system. So $
+= 4 $.</p>
+<p>{{&lt; figure src=“images/ch1.png” width=“350”&gt;}}</p>
+<p>Now imagine we do not connect all three together, but only two at
+each time, alternating between the first two and the last two (i.e. $
+AB, BC, AB, BC … $). Surprisingly, if you continue this process <em>ad
+infinitum</em>, the charge of each sphere will converge into the
+arithmetic mean - even though all three spheres never touch each other
+at any moment.</p>
+<p>This seemed intuitive to me, but I have decided to check it
+numerically with a botched up script:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> random <span class="im">import</span> randint</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mover(spheres, move):</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> move <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        avg <span class="op">=</span> (spheres[<span class="dv">0</span>] <span class="op">+</span> spheres[<span class="dv">1</span>]) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        spheres[<span class="dv">0</span>] <span class="op">=</span> avg</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        spheres[<span class="dv">1</span>] <span class="op">=</span> avg</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        avg <span class="op">=</span> (spheres[<span class="dv">1</span>] <span class="op">+</span> spheres[<span class="dv">2</span>]) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        spheres[<span class="dv">1</span>] <span class="op">=</span> avg</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        spheres[<span class="dv">2</span>] <span class="op">=</span> avg</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>move <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>sph0 <span class="op">=</span> randint(<span class="op">-</span><span class="dv">10</span>, <span class="op">+</span><span class="dv">10</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>sph1 <span class="op">=</span> randint(<span class="op">-</span><span class="dv">10</span>, <span class="op">+</span><span class="dv">10</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>sph2 <span class="op">=</span> randint(<span class="op">-</span><span class="dv">10</span>, <span class="op">+</span><span class="dv">10</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>spheres <span class="op">=</span> [sph0, sph1, sph2]</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(spheres)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">100</span>):</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    mover(spheres, move)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    move <span class="op">=</span> <span class="bu">int</span>(<span class="kw">not</span> move)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(spheres)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Avg: &quot;</span> <span class="op">+</span> <span class="bu">str</span>((sph0 <span class="op">+</span> sph1 <span class="op">+</span> sph2) <span class="op">/</span> <span class="dv">3</span>))</span></code></pre></div>
+<p>Here are some results to convince you:</p>
+<pre><code>[-7, -6, 0]
+[-6.5, -6.5, 0]
+[-6.5, -3.25, -3.25]
+[-4.875, -4.875, -3.25]
+[-4.875, -4.0625, -4.0625]
+[-4.46875, -4.46875, -4.0625]
+[-4.46875, -4.265625, -4.265625]
+[-4.3671875, -4.3671875, -4.265625]
+[-4.3671875, -4.31640625, -4.31640625]
+[-4.341796875, -4.341796875, -4.31640625]
+[-4.341796875, -4.3291015625, -4.3291015625]
+[-4.33544921875, -4.33544921875, -4.3291015625]
+[-4.33544921875, -4.332275390625, -4.332275390625]
+[-4.3338623046875, -4.3338623046875, -4.332275390625]
+[-4.3338623046875, -4.33306884765625, -4.33306884765625]
+(...)
+[-4.333333333333334, -4.333333333333334, -4.333333333333334]
+Avg: -4.333333333333333```
+
+[-4, 10, -1]
+[3.0, 3.0, -1]
+[3.0, 1.0, 1.0]
+[2.0, 2.0, 1.0]
+[2.0, 1.5, 1.5]
+[1.75, 1.75, 1.5]
+[1.75, 1.625, 1.625]
+[1.6875, 1.6875, 1.625]
+[1.6875, 1.65625, 1.65625]
+[1.671875, 1.671875, 1.65625]
+[1.671875, 1.6640625, 1.6640625]
+[1.66796875, 1.66796875, 1.6640625]
+[1.66796875, 1.666015625, 1.666015625]
+[1.6669921875, 1.6669921875, 1.666015625]
+[1.6669921875, 1.66650390625, 1.66650390625]
+[1.666748046875, 1.666748046875, 1.66650390625]
+[1.666748046875, 1.6666259765625, 1.6666259765625]
+[1.66668701171875, 1.66668701171875, 1.6666259765625]
+[1.66668701171875, 1.666656494140625, 1.666656494140625]
+[1.6666717529296875, 1.6666717529296875, 1.666656494140625]
+(...)
+[1.6666666666666665, 1.6666666666666665, 1.6666666666666665]
+Avg: 1.6666666666666667</code></pre>
+<p>After convincing myself that this is indeed the case, I have decided
+to come up with an analytical proof to show that the following relation
+holds:</p>
+<p><span class="math inline">$\lim_{n\to\infty} {Q_A(n) = Q_B(n) =
+Q_C(n)} = \frac{Q_A + Q_B + Q_C}{3}$</span></p>
+<p>where <span class="math inline"><em>n</em></span> is the number of
+steps this procedure is repeated, <span
+class="math inline"><em>Q</em>(<em>n</em>)</span> is the charge of any
+sphere at the step $ n $ and $ Q_{A, B, C} $ are the initial charges of
+the respective spheres. By running a similar python script but utilising
+symbolic math with <code>sympy</code>, we can see how the charge of the
+middle sphere <span class="math inline"><em>B</em></span> changes with $
+n $.</p>
+<pre><code>n = 1 +++ a/2 + b/2
+n = 2 +++ a/4 + b/4 + c/2
+n = 3 +++ 3*a/8 + 3*b/8 + c/4
+n = 4 +++ 5*a/16 + 5*b/16 + 3*c/8
+n = 5 +++ 11*a/32 + 11*b/32 + 5*c/16
+n = 6 +++ 21*a/64 + 21*b/64 + 11*c/32
+n = 7 +++ 43*a/128 + 43*b/128 + 21*c/64
+n = 8 +++ 85*a/256 + 85*b/256 + 43*c/128
+n = 9 +++ 171*a/512 + 171*b/512 + 85*c/256</code></pre>
+<p>By some Googling, I have found that the sequence
+<code>1 - 1 - 3 - 5 - 11 - 21 - 43 - 85 - 171 ...</code> is called the
+<a href="https://oeis.org/A001045">Jacobsthal sequence</a>. The <a
+href="https://en.wikipedia.org/wiki/Jacobsthal_number">Wikipedia
+page</a> sums it up as: “<em>in simple terms, the sequence starts with 0
+and 1, then each following number is found by adding the number before
+it to twice the number before that.</em>”</p>
+<p>It would seem by inspection that the charge of the middle sphere
+<span class="math inline"><em>B</em></span> can be written as:</p>
+<p><span class="math display">$$
+Q_B(n) = \frac{J(n)}{2^n}a +\frac{J(n)}{2^n}b + \frac{J(n-1)}{2^{n-1}}c
+$$</span></p>
+<p>At this point I ran out of my wits and my <code>sympy</code> skills.
+So using the formula $ J(n) = 2^{n-1} - J(n-1) J(n-1) = 2^{n-1} - J(n) $
+and substituting $ J(n) $ with the closed form $ J(n) = $ in
+<em>MATLAB</em>:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode octave"><code class="sourceCode octave"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>syms <span class="bu">J</span>(n)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>syms a b c</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">J</span>(n) <span class="op">=</span> (((<span class="fl">2</span><span class="op">^</span>n) <span class="op">-</span> (<span class="op">-</span><span class="fl">1</span>)<span class="op">^</span>n)) <span class="op">/</span> <span class="fl">3</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>expr <span class="op">=</span> (((<span class="bu">J</span>(n)) <span class="op">/</span> (<span class="fl">2</span><span class="op">^</span>n)) <span class="op">*</span> a) <span class="op">+</span> (((<span class="bu">J</span>(n)) <span class="op">/</span> (<span class="fl">2</span><span class="op">^</span>n)) <span class="op">*</span> b) <span class="op">+</span> ((<span class="fl">2</span><span class="op">^</span>(n<span class="op">-</span><span class="fl">1</span>) <span class="op">-</span> <span class="bu">J</span>(n)) <span class="op">/</span> (<span class="fl">2</span><span class="op">^</span>(n<span class="op">-</span><span class="fl">1</span>))) <span class="op">*</span> c <span class="op">;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>simp_expr <span class="op">=</span> simplify(expr<span class="op">,</span> <span class="st">&#39;Steps&#39;</span><span class="op">,</span> <span class="fl">10</span>)<span class="op">;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>simp_expr</span></code></pre></div>
+<p>We get: <span class="math display">$$
+\frac{a}{3}+\frac{b}{3}+\frac{c}{3}-\frac{{\left(-1\right)}^n a}{3 \cdot
+2^n}-\frac{{\left(-1\right)}^n b}{3 \cdot
+2^n}+\frac{2{\left(-1\right)}^n c}{3 \cdot 2^n}
+$$</span></p>
+<p>We finally have the <span
+class="math inline">$\frac{a}{3}+\frac{b}{3}+\frac{c}{3}$</span> we are
+looking for, and the right hand side converges to <span
+class="math inline">0</span>, as <span
+class="math inline">$\lim_{n\to\infty} (\frac{-1}{2})^n = 0$</span>.</p>
+<h1 id="convergence-rate">Convergence Rate</h1>
+<p>This proof was about the special case <span
+class="math inline"><em>N</em> = 3</span> spheres, but I am guessing it
+can be extended to any finite number of spheres as long as no sphere is
+left unconnected. Also the convergence rate to the arithmetic mean
+probably is <em>slower</em> as the number of spheres increase. To get a
+sense of the convergence rate in the numerical results, I will calculate
+the <a
+href="http://mathworld.wolfram.com/StandardDeviation.html">standard
+deviation</a> of the sphere charges at step <span
+class="math inline"><em>N</em></span> to see how quickly it decreases.
+The script I wrote checks when the standard deviation is <span
+class="math inline">0</span> and reports the number of steps it took.
+Running it a few times, it seems that for the three sphere case, the
+standard deviation converges to <span class="math inline">0</span> at
+about <span class="math inline">55 − 60</span> steps. For the case of 10
+spheres, the script ran for about 15 mins and the standard deviation
+failed to converge to <code>0</code> (of course checking equalities in
+floating-point arithmetic is a bit sloppy) after 8 million steps; so we
+can empirically conclude that the convergence rate indeed decreases for
+larger number of spheres.</p>
+<h1 id="downloads">Downloads</h1>
+<p><a href="files/avg.m">avg.m</a></p>
+<p><a href="files/sym_avg.py">sym_avg.py</a></p>
+<p><a href="files/avg.py">avg.py</a></p>
+<p><a href="files/avg_conv.py">avg_conv.py</a></p>
+<p><a href="files/avg10.py">avg10.py</a></p>
+<p><a href="files/avg10_conv.py">avg10_conv.py</a></p>

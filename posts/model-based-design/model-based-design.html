@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2017-11-05" />
+  <title>Model Based Design with Simulink and DEVKIT-MPC5744P</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #f8f8f8; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ef2929; } /* Alert */
+    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #204a87; } /* Attribute */
+    code span.bn { color: #0000cf; } /* BaseN */
+    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4e9a06; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #8f5902; font-style: italic; } /* Comment */
+    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+    code span.dt { color: #204a87; } /* DataType */
+    code span.dv { color: #0000cf; } /* DecVal */
+    code span.er { color: #a40000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #0000cf; } /* Float */
+    code span.fu { color: #204a87; font-weight: bold; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+    code span.ot { color: #8f5902; } /* Other */
+    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+    code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+    code span.ss { color: #4e9a06; } /* SpecialString */
+    code span.st { color: #4e9a06; } /* String */
+    code span.va { color: #000000; } /* Variable */
+    code span.vs { color: #4e9a06; } /* VerbatimString */
+    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+      html, body {
+          margin-top: 1%;
+          margin-left: 10%;
+          margin-right: 10%;
+          background-color: #fbfbfb;
+          color: #403f52;
+          font-family: 'KaTeX_SansSerif';
+          font-size: 18px;
+      }
+
+      img {
+          max-width: 80%;
+      }
+
+      figcaption{
+          font-style: italic;
+      }
+
+      pre code {
+          display:inline-block;
+          font-size: 14px;
+          margin: 10px 10px 10px 10px;
+      }
+
+      .footer {
+          text-align: center;
+          margin-top: 1%;
+          margin-bottom: 1%;
+      }
+
+      .date {
+          font-style: italic;
+      }
+
+      a { color: inherit; }
+  </style>
+
+  <script src="https://kit.fontawesome.com/fa8004ee4c.js" crossorigin="anonymous"></script>
+
+  <h1>
+      <a href="/index.html" style="text-decoration:none">Miraç Lütfullah Gülgönül</a>
+  </h1>
+
+  <hr>
+
+  <script defer=""
+  src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Model Based Design with Simulink and
+DEVKIT-MPC5744P</h1>
+<p class="date">5 November 2017</p>
+</header>
+<h1 id="introduction">Introduction</h1>
+<p>In my internship at BMC Power, my main project was to generate
+CAM/CRANK signals to emulate a running engine, using the NXP
+DEVKIT-MPC5744 and Simulink Embedded Coder. DEVKIT-MPC5744 is a
+development board for the MPC5744 chip, which is used in <em>automotive
+and industrial functional safety and motor control applications</em>. To
+achieve this, I used the <a
+href="https://www.nxp.com/design/design-center/software/automotive-software-and-tools/model-based-design-toolbox-mbdt:MBDT">NXP
+Model-Based Design Toolbox (MBDT)</a>.</p>
+<figure>
+<img src="images/kit.jpg" style="width:50.0%"
+alt="The NXP MPC5744P Development Board" />
+<figcaption aria-hidden="true">The NXP MPC5744P Development
+Board</figcaption>
+</figure>
+<h1 id="main-project">Main Project</h1>
+<p>My supervisor explained that my main project was to generate
+cam/crank signals to feed them to the ECU. When a motor is running, the
+cam and crank shafts rotate in a relationship. There are sensors
+attached to the ends of these shafts to measure their rotation speed and
+angle. These sensors usually work with induction, when a gear tooth
+passes by the sensor in high speeds, it generates a readable voltage.
+This results in a periodic waveform with peaks corresponding to every
+tooth head. The ECU can then calculate the rotation frequency and angle
+of cam/crank shafts; allowing it to know the exact instantaneous
+position of the gears. The ECU ultimately uses this data to determine
+and synchronize cylinder injections, spark timing and fuel delivery
+amounts; which are crucially time-sensitive to ensure maximum motor
+efficiency. After getting familiar with the board enough to generate
+these waveforms, they are then to be fed into a test ECU; tricking it to
+believe that these waveforms are actually coming from real sensors
+situated on a working engine.</p>
+<h2 id="hello-world">Hello World</h2>
+<p>To begin, I coded a <em>“Hello World!”</em> equivalent in a
+development board in C. Here is my first code of a blinking blue LED. It
+is downloaded to the board via NXP’s own IDE, <em>S32 Design
+Studio</em>. Figure 6 shows the ON and OFF states of the LED. Here is
+the C code for reference:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;derivative.h&quot;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MAXCNT </span><span class="dv">424242</span><span class="pp"> </span><span class="co">// count limit.</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">extern</span> <span class="dt">void</span> xcptn_xmpl<span class="op">(</span><span class="dt">void</span><span class="op">);</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">volatile</span> <span class="dt">int</span> counter <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> <span class="co">// initialize counter.</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    xcptn_xmpl <span class="op">();</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    SIUL2<span class="op">.</span>MSCR<span class="op">[</span><span class="dv">45</span><span class="op">].</span>B<span class="op">.</span>OBE <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> <span class="co">// init LED.</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span><span class="op">(;;)</span> <span class="op">{</span>      </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        counter<span class="op">++;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span><span class="op">(</span>counter <span class="op">==</span> MAXCNT<span class="op">){</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>            SIUL2<span class="op">.</span>GPDO<span class="op">[</span><span class="dv">45</span><span class="op">].</span>R <span class="op">^=</span> <span class="dv">1</span><span class="op">;</span> <span class="co">// if counter reaches limit, switch LED and reset counter.</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>            counter <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<figure>
+<img src="images/led.jpeg" style="width:50.0%"
+alt="ON/OFF states of blue LED." />
+<figcaption aria-hidden="true">ON/OFF states of blue LED.</figcaption>
+</figure>
+<h2 id="using-adc">Using ADC</h2>
+<figure>
+<img src="images/adc.png" style="width:60.0%"
+alt="The model for reading the pot value." />
+<figcaption aria-hidden="true">The model for reading the pot
+value.</figcaption>
+</figure>
+<p>After doing a sanity-check on the board, my first project on SIMULINK
+was to make a program which takes the built-in pot as an analog input,
+converts it to digital, and shows the digital output value via a
+debugger tool called FreeMASTER. The built-in pot is connected to the
+pin PE12. By routing this as the input of the 12-bit ADC, I am able to
+read the pot’s value as an unsigned integer between 0 and 4096. I then
+observe and record this value using FreeMASTER. Figure 7 shows the
+model, and Figure 8 shows the value observed in FreeMASTER, changing
+while turning the pot. In my internship, I have heavily used the
+software FreeMASTER, so it is best to explain it in detail. While
+generating C-code from the SIMULINK blocks, you can configure the coder
+to also enable the FreeMASTER debug option, so the board outputs the
+real-time values of the signals out the serial ports. Normally you would
+connect these serial ports to your computer via a serial-USB converter
+(like CP2102), but since this is a development kit; I can get these
+signals directly from the USB interface. In FreeMASTER, I can choose
+which signals to “watch”, can display them using a scope, etc… So in
+case when one wants to monitor internal signal values in real time; this
+is really handy.</p>
+<figure>
+<img src="images/pot.png" style="width:60.0%"
+alt="The pot value changing with rotation." />
+<figcaption aria-hidden="true">The pot value changing with
+rotation.</figcaption>
+</figure>
+<h2 id="sine-wave-generation">Sine Wave Generation</h2>
+<figure>
+<img src="images/sinegen.png" style="width:60.0%"
+alt="The model for variable frequency sine wave." />
+<figcaption aria-hidden="true">The model for variable frequency sine
+wave.</figcaption>
+</figure>
+<p>My next project was, using the uint16 (16-bit unsigned integer) value
+out of the pot, to output a sine signal with varying frequency depending
+on the pot value. After looking into the documentation, I added the sine
+wave generator in the MBDToolbox and connected the output of the pot
+(multiplied by 10) into the frequency input of this sine wave generator
+block. I probed output sine signal using the oscilloscope.</p>
+<figure>
+<img src="images/sineosc0.png" style="width:60.0%"
+alt="The output observed on the oscilloscope with pot at max value." />
+<figcaption aria-hidden="true">The output observed on the oscilloscope
+with pot at max value.</figcaption>
+</figure>
+<figure>
+<img src="images/sineosc1.png" style="width:60.0%"
+alt="The output observed on the oscilloscope with pot at a medium value." />
+<figcaption aria-hidden="true">The output observed on the oscilloscope
+with pot at a medium value.</figcaption>
+</figure>
+<h2 id="pwm-signal-generation">PWM Signal Generation</h2>
+<figure>
+<img src="images/potpwm.png" style="width:60.0%"
+alt="The model for variable frequency PWM signal." />
+<figcaption aria-hidden="true">The model for variable frequency PWM
+signal.</figcaption>
+</figure>
+<p>My next project was to generate a square wave output with varying
+frequency depending on the pot value. For this, I used the built-in PWM
+(Pulse Width Modulation) module, which allowed me to specify duty cycle
+and frequency as input ports. Connecting the output of pot to the
+frequency value similarly resulted in the correct waveform.</p>
+<figure>
+<img src="images/potpwm1.png" style="width:60.0%"
+alt="The output observed on the oscilloscope with pot at max value." />
+<figcaption aria-hidden="true">The output observed on the oscilloscope
+with pot at max value.</figcaption>
+</figure>
+<figure>
+<img src="images/potpwm0.png" style="width:60.0%"
+alt="The output observed on the oscilloscope with pot at a medium value." />
+<figcaption aria-hidden="true">The output observed on the oscilloscope
+with pot at a medium value.</figcaption>
+</figure>
+<h2 id="crankcam-signal-generation">Crank/Cam Signal Generation</h2>
+<p>My next project was to design a square waveform with two “missing”
+peaks at the end of each period. This is required because the crankshaft
+sensor detects the teeth of the gear passing in front of it, and the
+gear has two consecutive teeth missing. This allows the ECU to know the
+exact position of the gear, and therefore the position of the crank mill
+- since the RPM is known. The last 2 missing teeth act as a marker. By
+examining the documentation from DELPHI corporation, which is the
+designer of the ECU we are going to test; I observed that the exact
+correlation between the crank/cam signals is as follows: as can be seen
+in Figure 15, the crankshaft gear has 60 teeth in total. But at the end
+of each 18 teeth, there are two teeth missing. So the signal is in the
+form of 18 peaks followed by two missing peaks. The camshaft signal is a
+little bit different. It has 7 peaks in 3 revolutions (720 degrees) of
+the crankshaft signal. The first 6 teeth are evenly spaced in the
+missing teeth of the crankshaft, the 7th, however, is 15 degrees before
+the first tooth. This results in an interesting waveform.</p>
+<figure>
+<img src="images/crankcamdoc0.png" style="width:60.0%"
+alt="The crank/cam shafts gear configurations." />
+<figcaption aria-hidden="true">The crank/cam shafts gear
+configurations.</figcaption>
+</figure>
+<figure>
+<img src="images/crankcamdoc1.png" style="width:60.0%"
+alt="The resultant crank/cam signal waveforms corresponding to this configuration." />
+<figcaption aria-hidden="true">The resultant crank/cam signal waveforms
+corresponding to this configuration.</figcaption>
+</figure>
+<h3 id="method-1">Method 1</h3>
+<figure>
+<img src="images/crankcam0.png" style="width:60.0%"
+alt="The model for crank/cam signal generation." />
+<figcaption aria-hidden="true">The model for crank/cam signal
+generation.</figcaption>
+</figure>
+<p>The PWM module in the toolbox does not have output ports so that I
+can modify the signal; it directly outputs the PWM signal out the board
+ports. So I had to come up with a way to generate the square signal from
+scratch so that it lacks the two wave peaks. As can be seen in Figure
+17, I achieved this by creating an array consisting of 1’s and 0’s where
+the 1’s correspond to signals peaks and 0’s to zeroes. Then I used a
+selector to select the elements from this array consecutively. The
+selector block has an “index” input which dictates which index the
+selector should pick out of the array. I drove this index input with a
+counter block, which counts from 0 to the last index of the array, so
+that the selector block selects each element of the array in order, one
+by one. This counter has an input port called “increment”; which I set
+to be triggered at every rising edge. This way I can control the exact
+frequency of the counter; thus the waveform. This increment port is then
+finally driven by a pulse generator; acting as the clock.</p>
+<p>Figure 18 shows the observed waveforms of CAM (cyan) and CRANK
+(yellow) signals. As can be seen, the signals are in accordance with the
+configuration specified in the documents, where at each crank signal
+missing tooth period there is a cam signal peak, and there is also one
+extra peak 15 degrees before the last. The period of the crank signal is
+1.6 ms, because the pulse generator clock is set to 0.8ms (since the
+selector block selects peaks <em>and</em> zeros, the period is
+doubled.). Figure 19 shows the CAM signal peak lining with the missing
+teeth. Figure 20 shows the 6th tooth just before the last.</p>
+<figure>
+<img src="images/crankcamosc0.png" style="width:60.0%"
+alt="Crank and cam signals, whole period." />
+<figcaption aria-hidden="true">Crank and cam signals, whole
+period.</figcaption>
+</figure>
+<figure>
+<img src="images/crankcamosc1.png" style="width:60.0%"
+alt="Crank and cam signals, zoomed at the missing teeth." />
+<figcaption aria-hidden="true">Crank and cam signals, zoomed at the
+missing teeth.</figcaption>
+</figure>
+<figure>
+<img src="images/crankcamosc2.png" style="width:60.0%"
+alt="Crank and cam signals, zoomed at the last two teeth." />
+<figcaption aria-hidden="true">Crank and cam signals, zoomed at the last
+two teeth.</figcaption>
+</figure>
+<h3 id="method-2">Method 2</h3>
+<figure>
+<img src="images/crankcammod0.png" style="width:60.0%"
+alt="Model for crank/cam signal generation with PIT block." />
+<figcaption aria-hidden="true">Model for crank/cam signal generation
+with PIT block.</figcaption>
+</figure>
+<figure>
+<img src="images/crankcammod1.png" style="width:60.0%"
+alt="Model for crank/cam signal generation with PIT block, subsystem." />
+<figcaption aria-hidden="true">Model for crank/cam signal generation
+with PIT block, subsystem.</figcaption>
+</figure>
+<p>As another approach, I decided to use a PIT
+(Periodic-Interrupt-Timer) block to achieve more sensitive timings. A
+PIT block generates a “function-call” trigger event precisely at an
+interval of the provided time period. Using this “function-call” signal
+you can trigger a block or subsystem. I had to remove the pulse
+generator, replace the counter with a “trigger-less” version, and put
+the whole system in a “triggered subsystem” to be operated by the output
+of the PIT block. Setting the PIT interval to 0.8ms gave me a 1.6ms
+cam/crank waveform at the output (again, since the selector block
+selects peaks <em>and</em> zeros). The waveforms are the same, of
+course; it is, however, a better approach to use the built-in hardware
+timers for time-sensitive operations.</p>
+<h3 id="dc-offset-removal">DC Offset Removal</h3>
+<figure>
+<img src="images/circ.jpg" style="width:50.0%"
+alt="The circuit on breadboard designed to eliminate the DC offset." />
+<figcaption aria-hidden="true">The circuit on breadboard designed to
+eliminate the DC offset.</figcaption>
+</figure>
+<p>After generating the required waveforms, there was another problem.
+The output of the real engine sensors was with zero-crossings, and the
+ECU operated on these zero-crossings, not edge detection. However, our
+board has only digital output pins; this means a voltage value of either
+0 or 3.3V; and so the waves did not cross zero. I had to pull the
+waveform down by -1.5V, or in other words, I had to eliminate a 1.5V DC
+offset. I achieved this via an HPF (High Pass Filter). If one imagines
+the DC offset as an infinitely low-frequency AC component, then it
+follows that an HPF would eliminate <em>most</em> of this component. Of
+course, the simplest HPF design is a capacitor in series with a
+resistor. Figure 23 shows the circuit on the breadboard. Using low
+valued capacitors, (22uF), I have managed to achieve correct and sharp
+zero-crossings; also the signal looked much more like real-world data
+than clean square waves due to the charge/discharge cycle introduced by
+the capacitors. Figures 24 and 25 show the modified CRANK CAM signals.
+Being convinced that these waveforms were acceptable; we moved on to
+test them on the ECU.</p>
+<figure>
+<img src="images/dc0.png" style="width:60.0%"
+alt="The crank/cam modified signals." />
+<figcaption aria-hidden="true">The crank/cam modified
+signals.</figcaption>
+</figure>
+<figure>
+<img src="images/dc1.png" style="width:60.0%"
+alt="The crank/cam modified signals, zoomed in." />
+<figcaption aria-hidden="true">The crank/cam modified signals, zoomed
+in.</figcaption>
+</figure>
+<h3 id="ecu-testing">ECU Testing</h3>
+<p>The testing ECU is manufactured by DELPHI. It is fed by a 24V source,
+drawing a maximum current of 20A. The ECU utilizes a CAN
+(Controller-Area-Network) interface output which is a digital bus
+containing data such as engine RPM (Revolutions Per Minute), system
+state, current levels… To monitor this data; a CANusb interface (Figure
+27) converter is used to connect the ECU to the monitoring PC. In the
+monitoring computer, there is a program named HLERC (High-Level External
+Remote Control) to monitor the data coming from the CAN interface; which
+is in turn coming from the ECU.</p>
+<p>The ECU has two sensor inputs for Crank and Cam signals (Figure 28);
+which are connected to the MPC5744P board generating the waveforms. We
+also connected a fuel injection cylinder to the ECU as <em>Cylinder
+1</em>; where the ECU will trigger the cylinder according to the
+RPM.</p>
+<figure>
+<img src="images/canusb.jpg" style="width:50.0%"
+alt="The CANusb converter module." />
+<figcaption aria-hidden="true">The CANusb converter module.</figcaption>
+</figure>
+<figure>
+<img src="images/crankcamsens.jpg" style="width:50.0%"
+alt="Crank and Cam signal sensor input cables" />
+<figcaption aria-hidden="true">Crank and Cam signal sensor input
+cables</figcaption>
+</figure>
+<p>After checking the connections and making sure that the signals fed
+to the ECU (Figure 29) are in correct shape, especially the
+zero-crossings, we powered up the ECU. The generated crank signal has a
+period of 1.6 ms, which is 625Hz. The ECU calculates the RPM by looking
+at the crank signal. A crank signal of 625Hz means 625 teeth pass every
+second, 37500 teeth pass every minute, with 60 teeth in a gear, this
+gives us 625 RPM. Looking at the screenshot (Figure 30), we see that the
+ECU registers both crank and cam signals, measuring an RPM of 693.</p>
+<figure>
+<img src="images/crankcamecu.png" style="width:60.0%"
+alt="The CAM/CRANK signals fed into the ECU." />
+<figcaption aria-hidden="true">The CAM/CRANK signals fed into the
+ECU.</figcaption>
+</figure>
+<figure>
+<img src="images/hlercSS.jpg" style="width:60.0%"
+alt="Screenshot of the HLERC program, reading both crank/cam signals and 693 RPM." />
+<figcaption aria-hidden="true">Screenshot of the HLERC program, reading
+both crank/cam signals and 693 RPM.</figcaption>
+</figure>
+<p>After observing that the ECU correctly registers the waveforms, we
+sent to the ECU, NCV (Nozzle-Control-Valve) pulse values. These pulses
+determine the injection timings and periods of the injector. When these
+were set, we were ecstatic to hear the clicking sounds from the
+injector. By connecting a current probe to its feeding cable, we
+observed that the ECU sent periodic bursts of 18A to the injector; to
+trigger fuel injection. Figure 31 shows these injector trigger pulses
+sent by the ECU (green) and the crank signal (cyan). Also, we can
+observe on Figure 32 that these bursts are sent every two full rotations
+of the crankshaft; which agrees with the theory.</p>
+<figure>
+<img src="images/ncv.png" style="width:40.0%"
+alt="Entering NCV pulse duration and angle values." />
+<figcaption aria-hidden="true">Entering NCV pulse duration and angle
+values.</figcaption>
+</figure>
+<figure>
+<img src="images/inj.png" style="width:60.0%"
+alt="The injector trigger pulses sent by the ECU and fed crank signal." />
+<figcaption aria-hidden="true">The injector trigger pulses sent by the
+ECU and fed crank signal.</figcaption>
+</figure>
+<figure>
+<img src="images/injper.png" style="width:60.0%"
+alt="The injector trigger pulses sent by the ECU and fed crank signal, whole period." />
+<figcaption aria-hidden="true">The injector trigger pulses sent by the
+ECU and fed crank signal, whole period.</figcaption>
+</figure>
+<h3 id="ecu-testing-variable-frequency">ECU Testing (Variable
+Frequency)</h3>
+<figure>
+<img src="images/clock0.png" style="width:60.0%"
+alt="The variable frequency clock subsystem model." />
+<figcaption aria-hidden="true">The variable frequency clock subsystem
+model.</figcaption>
+</figure>
+<p>The crank/cam signal waveforms we had generated did not need to have
+a variable frequency, but I thought it would be more interesting if I
+could connect it to the pot and hear the injection frequency and RPM go
+up as I increased the frequency of the cam/crank signals. The default
+SIMULINK blocks did not have the option to specify frequency as an input
+port; nor did the PIT block included in the toolbox. After examining one
+of the default clock blocks, I have seen that it was not so hard to
+modify it to accept frequency as an input. The idea behind this clock
+fascinated me with its simplicity and elegance; and warrants further
+explanation. As can be seen in Figure 34, the idea is based on feeding a
+constant value of ‘1’, and subtracting the result of the operation from
+this constant in a feedback loop. The memory block is initialized as
+‘0’, so the initial output of the system is <code>1 - 0 = 1</code>. This
+output <code>1</code> is fed back into the system as a subtraction, so
+now the operation is <code>1 - 1 = 0</code>. Again, this output is fed
+back into the system, so the operation is <code>1 - 0 = 1</code>. We can
+see how it alternates between 1 and 0. To control this oscillation, one
+can introduce a delay, so that the transition between 1 and 0 is timed.
+This delay block is in the unit of “sample time”, and it, luckily, can
+be set from outside. The last block is a “memory”, to ensure that the
+system starts properly by setting an initial value of 0.</p>
+<figure>
+<img src="images/crankcamfreq.png" style="width:60.0%"
+alt="The model for variable frequency cam/crank signal generation." />
+<figcaption aria-hidden="true">The model for variable frequency
+cam/crank signal generation.</figcaption>
+</figure>
+<p>Figure 35 shows the final model, where the pot value is read; divided
+into 300, and fed into the clock frequency; the rest of the circuit is
+the same. This allows me to generate the crank/cam signals with
+instantaneous variable frequency depending on the current position of
+the pot; thus simulating a gas pedal. Figures 36 and 38 show different
+RPM values observed by the ECU when crank signal frequency is changed;
+which in turn depends on the position of the pot. Figures 37 and 39 show
+the crank signal waveforms at those RPM values</p>
+<figure>
+<img src="images/crankcamfreqss0.png" style="width:60.0%"
+alt="Screenshot of HLERC program, at 1659 RPM." />
+<figcaption aria-hidden="true">Screenshot of HLERC program, at 1659
+RPM.</figcaption>
+</figure>
+<figure>
+<img src="images/crankcamfreqosc0.png" style="width:60.0%"
+alt="Crank signal frequency on the oscilloscope, 1647 Hz." />
+<figcaption aria-hidden="true">Crank signal frequency on the
+oscilloscope, 1647 Hz.</figcaption>
+</figure>
+<figure>
+<img src="images/crankcamfreqss1.png" style="width:60.0%"
+alt="Screenshot of HLERC program, at 2590 RPM." />
+<figcaption aria-hidden="true">Screenshot of HLERC program, at 2590
+RPM.</figcaption>
+</figure>
+<figure>
+<img src="images/crankcamfreqosc1.png" style="width:60.0%"
+alt="Crank signal frequency on the oscilloscope, 2508 Hz." />
+<figcaption aria-hidden="true">Crank signal frequency on the
+oscilloscope, 2508 Hz.</figcaption>
+</figure>
+<h1 id="other-projects">Other Projects</h1>
+<p>After correctly tricking the ECU into thinking that a motor is
+present, and thus concluding the main project, my supervisor Ahmet Bey
+gave and taught me some more projects and concepts to study further into
+the field of automotive, and model-based design.</p>
+<h2 id="silpilhil">SIL/PIL/HIL</h2>
+<p>We decided to look at the philosophies and the concepts behind SIL
+(Software-In-The-Loop), PIL (Processor-In-The-Loop) and HIL
+(Hardware-In-The-Loop); using the MPC5744P board and SIMULINK.</p>
+<h3 id="sil-software-in-the-loop">SIL (Software-In-The-Loop)</h3>
+<p>SIL is the first step towards building a program to implement it in
+hardware. Instead of directly downloading it into the hardware, you
+download it into a virtual version. The real hardware is emulated as a
+software block, and the code is downloaded to it. This helps you to see
+the problems which may arise, for example, incompatibility issues
+between your code and the hardware it is to run on. I have tested this
+using the already made model which generates cam and crank signals. The
+difference is that, however, no piece of code is sent to the board; the
+entire process is run on the host computer. I decided to implement the
+<strong>cam signal generation</strong> part as a SIL block. This means
+that the rest of the model will run as a normal SIMULINK simulation,
+while C code will be generated for the CAM part, and be “downloaded”
+into an emulated virtual version of the board MPC5744P. Figure 40 shows
+the model to generate the cam/crank signals, but the CAM signal
+generation section is modeled into SIL action. Figure 41 shows the
+resulting waveforms on the <em>Scope</em> block; as expected, the
+signals are generated without error.</p>
+<figure>
+<img src="sil.png" style="width:60.0%" alt="The SIL test model." />
+<figcaption aria-hidden="true">The SIL test model.</figcaption>
+</figure>
+<figure>
+<img src="images/silscope.png" style="width:60.0%"
+alt="Crank (yellow) and Cam (cyan) signals observed at the simulation scope." />
+<figcaption aria-hidden="true">Crank (yellow) and Cam (cyan) signals
+observed at the simulation scope.</figcaption>
+</figure>
+<h3 id="pil-processor-in-the-loop">PIL (Processor-In-The-Loop)</h3>
+<p>PIL is the second step. In this step <em>only the processor</em> of
+the hardware/board is used. The difference from downloading it onto the
+machine is that the code is not written on the board’s memory
+(flash/SRAM) and no input/output pins are used. This step is to ensure
+that the target processor is compatible with the code, without utilizing
+and involving other parts of the board. I used the same model, just
+changed the block to a PIL version. The process required additional
+compilers and commands, but I have finally got it to work. The results
+are identical to the SIL model. Figure 42 shows the model, and Figure 43
+shows the observed waveforms.</p>
+<h3 id="hil-hardware-in-the-loop">HIL (Hardware-In-The-Loop)</h3>
+<p>HIL is the last step. The code gets downloaded onto the board’s
+memory and all hardware components are used. I already demonstrated that
+the crank/cam signal generation model works on the MPC5744P board, so
+repetition is unnecessary.</p>
+<figure>
+<img src="images/pil.png" style="width:60.0%"
+alt="The PIL test model." />
+<figcaption aria-hidden="true">The PIL test model.</figcaption>
+</figure>
+<figure>
+<img src="images/pilscope.png" style="width:60.0%"
+alt="Crank (yellow) and Cam (cyan) signals." />
+<figcaption aria-hidden="true">Crank (yellow) and Cam (cyan)
+signals.</figcaption>
+</figure>
+<h2 id="frequency-measurement">Frequency Measurement</h2>
+<p>My next project was to design a model which reads a periodic signal
+from the input ports and calculates the frequency. I developed two
+methods for this, utilizing the hardware timer module <em>“eTimer”</em>
+for the purpose.</p>
+<h3 id="method-1-1">Method 1</h3>
+<figure>
+<img src="images/freqdecmod.png" style="width:60.0%"
+alt="The model for frequency measuring, Method 1." />
+<figcaption aria-hidden="true">The model for frequency measuring, Method
+1.</figcaption>
+</figure>
+<p>The first method counts the number of rising edges constantly, and
+each second; takes the difference between the consecutive two values.
+This gives me a 1-second resolution, which is acceptable; but the number
+of rising edges keeps increasing while the program is running, which is
+not desirable. The eTimer module generates a trigger each time a
+“capture” event occurs, and this capture event is defined as a rising
+edge detected on the input. This trigger is connected to a counter,
+which increments the value every time it is triggered.</p>
+<h3 id="method-2-1">Method 2</h3>
+<figure>
+<img src="images/freqdecmod2.png" style="width:60.0%"
+alt="The model for frequency measuring, Method 2." />
+<figcaption aria-hidden="true">The model for frequency measuring, Method
+2.</figcaption>
+</figure>
+<p>The second method is more straightforward, it uses the FIFO (First-In
+First-Out) register of the eTimer module, which stores the “time” value
+of each capture event. This “time” value is not in seconds, because it
+is a built-in counter value run by the system clock (divided by a 128
+pre-scale factor). This counter is programmed to reset at each capture
+event; so all I had to do was to take this counter value and convert it
+so seconds. This is easily done by multiplying it with a factor of
+<em>“128/160e+6”</em> corresponding to the pre-scale factor and inherent
+frequency of the system clock. The last step was to invert it, to the
+output frequency.</p>
+<h3 id="test">Test</h3>
+<p>Since I had already developed a variable frequency PWM generator, I
+tested my frequency calculator models with it. I scoped the output
+frequency using FreeMASTER.</p>
+<figure>
+<img src="images/freqdecosc.png" style="width:60.0%"
+alt="The signal frequency measured by the oscilloscope, 4459 Hz." />
+<figcaption aria-hidden="true">The signal frequency measured by the
+oscilloscope, 4459 Hz.</figcaption>
+</figure>
+<figure>
+<img src="images/freqdec.png" style="width:60.0%"
+alt="The signal frequency measured by the program, 4456 Hz." />
+<figcaption aria-hidden="true">The signal frequency measured by the
+program, 4456 Hz.</figcaption>
+</figure>
+<figure>
+<img src="images/freqdecosc1.png" style="width:60.0%"
+alt="The signal frequency measured by the oscilloscope, 14750 Hz." />
+<figcaption aria-hidden="true">The signal frequency measured by the
+oscilloscope, 14750 Hz.</figcaption>
+</figure>
+<figure>
+<img src="images/freqdec1.png" style="width:60.0%"
+alt="The signal frequency measured by the program, 14709 Hz." />
+<figcaption aria-hidden="true">The signal frequency measured by the
+program, 14709 Hz.</figcaption>
+</figure>
+<h2 id="can-bus-communication">CAN Bus Communication</h2>
+<p>My next project was to understand the concepts behind the CAN
+(Controller Area Network) Bus interface. Quoting from the Texas
+Instruments application report: <em>“The CAN bus was developed by BOSCH
+as a multi-master, message broadcast system that specifies a maximum
+signaling rate of 1 megabit per second (bps). Unlike a traditional
+network such as USB or Ethernet, CAN does not send large blocks of data
+point-to-point from node A to node B under the supervision of a central
+bus master. In a CAN network, many short messages like temperature or
+RPM are broadcast to the entire network, which provides for data
+consistency in every node of the system.”</em> This method of
+communications is used widely in the automobile industry, especially
+between the ECU and the other systems of the car. I used this standard
+to enable communications and send data between the two MPC5744P
+development boards. Figure 50 shows the example of sent data on the
+oscilloscope. Figure 51 shows a typical CAN bus signal example, taken
+from the Texas Instruments community blog. As can be seen, the interface
+works by differential voltage between the HIGH and LOW pins. This
+eliminates the noise which can be caused from external electromagnetic
+fields, which are especially abundant inside a working vehicle.</p>
+<figure>
+<img src="images/canosc0.png" style="width:60.0%"
+alt="Example waveform of a CAN bus signal. HIGH is in yellow and LOW is in cyan." />
+<figcaption aria-hidden="true">Example waveform of a CAN bus signal.
+HIGH is in yellow and LOW is in cyan.</figcaption>
+</figure>
+<figure>
+<img src="images/canbus.jpg" style="width:40.0%"
+alt="Typical characteristics of a CAN bus signal" />
+<figcaption aria-hidden="true">Typical characteristics of a CAN bus
+signal</figcaption>
+</figure>
+<p>Figure 52 shows the configuration where I connected two boards
+together with one as the transmitter and the other as a receiver. Every
+CAN bus connection must be terminated with a 60<span
+class="math inline">\Omega</span> or 120<span
+class="math inline">\Omega</span> resistor, I utilised 47+10<span
+class="math inline">\Omega</span> in series.</p>
+<figure>
+<img src="images/boards.jpg" style="width:60.0%"
+alt="The physical connections between the two boards, with the termination circuit on the breadboard." />
+<figcaption aria-hidden="true">The physical connections between the two
+boards, with the termination circuit on the breadboard.</figcaption>
+</figure>
+<h3 id="sending-static-messages">Sending Static Messages</h3>
+<p>Figure 53 shows the transmitter model. The CAN bus transmitter block
+requires an array of 8 uint8 values, each set to the constant
+<em>42</em> with a multiplexer. The message is sent via the board’s
+transreceiver pin with the ID of <em>1010</em>.</p>
+<p>Figure 54 shows the receiver model. Set with the same ID, the
+receiver outputs the message, (again, as an array of 8 uint values), the
+sender’s ID, ID type and the timestamp of the sent message. The message
+is processed through a <em>demux</em> to read the individual elements of
+the array. These values are then monitored via FreeMASTER.</p>
+<figure>
+<img src="images/cantransmit.png" style="width:60.0%"
+alt="The model for the transmitter board." />
+<figcaption aria-hidden="true">The model for the transmitter
+board.</figcaption>
+</figure>
+<figure>
+<img src="images/canreceivemod.png" style="width:60.0%"
+alt="The model for the receiver board." />
+<figcaption aria-hidden="true">The model for the receiver
+board.</figcaption>
+</figure>
+<p>The results can be seen in Figure 55. The constant message “42” has
+successfully arrived at the receiver with the correct ID and every
+element of the array keeps the constant value.</p>
+<figure>
+<img src="images/canreceive.png" style="width:60.0%"
+alt="The received message, screenshot from FreeMASTER" />
+<figcaption aria-hidden="true">The received message, screenshot from
+FreeMASTER</figcaption>
+</figure>
+<h3 id="sending-dynamic-messages">Sending Dynamic Messages</h3>
+<p>The next step was to transmit dynamically changing values since this
+is the usage scenario of the CAN bus interface; it is more significant
+and realistic. I have designed a model to transmit the value of the pot
+read from the ADC to the other board in real-time. The blocks remain the
+same, with the constant parts replaced by the output of the ADC; as done
+in previous projects. The results are again captured by FreeMASTER. As
+can be seen in Figures 56 and 57, the value of the message ranges from 0
+to 255; as one would expect from a uint8 data type; and changes as the
+pot is rotated. This shows that almost instantaneous communication can
+be established between the different nodes of a CAN bus; which
+demonstrates why this method is heavily used inside vehicles between
+different modules.</p>
+<figure>
+<img src="images/canreceivepot.png" style="width:60.0%"
+alt="The received pot value, with pot turned to maximum." />
+<figcaption aria-hidden="true">The received pot value, with pot turned
+to maximum.</figcaption>
+</figure>
+<figure>
+<img src="images/canreceivepot1.png" style="width:60.0%"
+alt="The received pot value, with pot turned to a intermediate value." />
+<figcaption aria-hidden="true">The received pot value, with pot turned
+to a intermediate value.</figcaption>
+</figure>
+<h1 id="conclusions">Conclusions</h1>
+<p>It must be said that this internship was very instructive and
+educational. Apart from the technical gainings, which increased my
+familiarity with MATLAB, SIMULINK, model-based design, SIL/PIL/HIL
+processes, and programming microcontrollers; I have learned much about
+the current situation of the automotive industry in our country. I have
+observed and identified problems which I feel the need to share. One is
+the scarcity of engine part manufacturers in the country: to buy a
+simple fuel injector cylinder, a company has to go through complex
+legal/bureaucratic procedures to import it from countries such as
+Germany, USA, Italy… This obviously and sorely undermines any efforts to
+independently develop motor technologies. Another interesting thing I
+noticed was the lack of electrical know-how in the industry. Most of the
+engineers in this industry are of mechanical or industrial engineering
+origin; which are not familiar with the electronic control and microchip
+components required to build an engine. As the industry looks upon these
+things as magical black-boxes which they simply plug in; there is a
+significant need for more electrical engineers and people with this sort
+of technical know-how. Perhaps I will shape my career choices towards
+this industry, I am not sure but it certainly seems attractive to aid
+the country’s independent engine development sector in an important
+way.</p>
+<h1 id="works-cited">Works Cited</h1>
+<ul>
+<li><p><a
+href="http://www.ti.com/lit/an/sloa101b/sloa101b.pdf">Corrigan, Steve.
+“Introduction to the Controller Area Network (CAN).” <em>Texas
+Instruments Application Report</em></a></p></li>
+<li><p><a
+href="https://e2e.ti.com/blogs_/b/industrial_strength/archive/2015/06/04/what-do-can-bus-signals-look-like">Griffith,
+John. “What do CAN bus signals look like?” <em>TI E2E Community
+Forum</em></a></p></li>
+<li><p><a href="https://www.nxp.com/docs/en/data-sheet/MPC5744P.pdf">NXP
+Semiconductors. “MPC5744P Data Sheet.”</a></p></li>
+</ul>
+<p>Also, every <em>.slx</em> model that I designed is available on my
+GitHub repo: <a
+href="https://github.com/mlg556/EEE299SLXMODELS">EEE299SLXMODELS</a></p>
+<hr>
+
+<div class="footer">
+
+    <p>
+        Miraç Lütfullah Gülgönül
+        <br>
+        <a class="fa-solid fa-globe" style="text-decoration:none" href="https://mlg556.github.io"></a>
+        &nbsp
+        <a class="fa-regular fa-envelope" style="text-decoration:none" href="mailto:miraclgulgonul@gmail.com"></a>
+        &nbsp
+        <a class="fa-brands fa-linkedin" style="text-decoration:none" href="https://www.linkedin.com/in/mira%C3%A7-g%C3%BClg%C3%B6n%C3%BCl-b787841b5/"></a> 
+    </p>
+
+
+</div>
+
+</body>
+</html>

@@ -25,24 +25,21 @@ for post in posts:
 
 # write index.md
     
-content = """
----
-title: Posts
----
+# content = """
+# # Posts
 
-"""
+# """
 
-for p in posts_metadata:
-    content += f"- [{p[0]}]({p[2]})\n\n"
+# for p in posts_metadata:
+#     content += f"- [{p[0]}]({p[2]})\n\n"
 
-content += "<!-- trick it into loading katex so i can use the fonts here as well. -->\n"
-content += "$\space$"
+# content += "<!-- trick it into loading katex so i can use the fonts here as well. -->\n"
+# content += "$\space$"
 
-with open("index.md", "w+") as f:
-    f.write(content)
+# with open("index.md", "w+") as f:
+#     f.write(content)
 
-# build index.md to index.html
-# pandoc -s index.md -t html5 --katex --css style.css -A footer.html -H header.html -o index.html
+# # build index.md to index.html
 pandoc = ["pandoc", "-s", "index.md", "-t", "html5", "--katex", "--css", "style.css", "-A", "footer.html", "-H", "header.html", "-o", "index.html"]
 sbp.check_call(pandoc)
 
