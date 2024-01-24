@@ -4,6 +4,11 @@ Hello! I'm Miraç, a recent Electrical and Electronics Engineering graduate from
 You can check out some of the projects I did in my internships and courses:
 
 - [Internship: Model Based Design with Simulink and DEVKIT-MPC5744P](posts\model-based-design\model-based-design.html)
+  
+- [Internship: Modeling a Telecommunications System in MATLAB](posts\modeling-a-telecom-system\modeling-a-telecom-system.html)
+
+- [Internship: PID Control Ball&Beam System in Simulink](posts\ball-beam-simulink\ball-beam-simulink.html)
+  
 - [Term Project: Guitar Tuner](posts\guitar-tuner-term-project\guitar-tuner-term-project.html)
 
 I also write blog posts now and then:

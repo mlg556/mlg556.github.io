@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2019-11-15" />
+  <title>PID Control Ball&amp;Beam System in Simulink</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #f8f8f8; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ef2929; } /* Alert */
+    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #204a87; } /* Attribute */
+    code span.bn { color: #0000cf; } /* BaseN */
+    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4e9a06; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #8f5902; font-style: italic; } /* Comment */
+    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+    code span.dt { color: #204a87; } /* DataType */
+    code span.dv { color: #0000cf; } /* DecVal */
+    code span.er { color: #a40000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #0000cf; } /* Float */
+    code span.fu { color: #204a87; font-weight: bold; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+    code span.ot { color: #8f5902; } /* Other */
+    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+    code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+    code span.ss { color: #4e9a06; } /* SpecialString */
+    code span.st { color: #4e9a06; } /* String */
+    code span.va { color: #000000; } /* Variable */
+    code span.vs { color: #4e9a06; } /* VerbatimString */
+    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+      html, body {
+          margin-top: 1%;
+          margin-left: 10%;
+          margin-right: 10%;
+          background-color: #fbfbfb;
+          color: #403f52;
+          font-family: 'KaTeX_SansSerif';
+          font-size: 18px;
+      }
+
+      img {
+          max-width: 80%;
+      }
+
+      figcaption{
+          font-style: italic;
+      }
+
+      pre code {
+          display:inline-block;
+          font-size: 14px;
+          margin: 10px 10px 10px 10px;
+      }
+
+      code {
+          display:inline-block;
+          font-size: 14px;
+      }
+
+      .footer {
+          text-align: center;
+          margin-top: 1%;
+          margin-bottom: 1%;
+      }
+
+      .date {
+          font-style: italic;
+      }
+
+      a { color: inherit; }
+  </style>
+
+  <script src="https://kit.fontawesome.com/fa8004ee4c.js" crossorigin="anonymous"></script>
+
+  <h1>
+      <a href="/index.html" style="text-decoration:none">Miraç Lütfullah Gülgönül</a>
+  </h1>
+
+  <hr>
+
+  <script defer=""
+  src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">PID Control Ball&amp;Beam System in Simulink</h1>
+<p class="date">15 November 2019</p>
+</header>
+<p>As a side project, I designed, simulated and implemented a PID
+(Proportional-Integral-Derivative) control system for a ball/beam
+configuration.</p>
+<h1 id="theory">Theory</h1>
+<h2 id="pid-controller">PID Controller</h2>
+<p>A PID controller is a system which takes the error <span
+class="math inline">e(t)</span> (i.e. how far away the system is from
+the desired state) and outputs a control signal. This control signal has
+the form(5): <span class="math display">
+C(s) = K_p.e(t) + K_i . {\int_0^te(t)dt} + K_d . \frac{de(t)}{dt}
+</span> where <span class="math inline">C(s)</span> is the control
+signal, <span class="math inline">e(t)</span> is the error-signal and
+<span class="math inline">K_p, K_i, K_d</span> are the corresponding
+coefficients which determine the controllers’ behaviour. Intuitively,
+the <em>proportional</em> term adjusts the control signal according to
+how big the error is, the <em>integral</em> term adjusts the signal
+according to the past of the error, and the <em>derivative</em> term
+adjusts it according to how much the error has changed. Control and
+stability of the system is achieved by carefully tuning these parameters
+to meet desired operation.</p>
+<figure>
+<img src="rsrc/pid_diagram.png" style="width:40.0%"
+alt="The diagram representation of a PID controller." />
+<figcaption aria-hidden="true">The diagram representation of a PID
+controller.</figcaption>
+</figure>
+<h2 id="the-ballbeam-system">The Ball/Beam System</h2>
+<figure>
+<img src="rsrc/bb0.png" style="width:40.0%"
+alt="The diagram of the ball/beam system." />
+<figcaption aria-hidden="true">The diagram of the ball/beam
+system.</figcaption>
+</figure>
+<p>The ball/beam system consists of a spherical ball rolling on the beam
+without slipping by the force of gravity. The center of the beam is
+connected to an actuator which applies torque to control the position of
+the ball. This system is interesting because it is open-loop unstable,
+meaning that without a closed-loop feedback control unit it is unstable.
+For any non-zero angle <span class="math inline">\theta</span> of the
+beam, the balls position diverges to infinity.</p>
+<p>The ball is a sphere with mass <span class="math inline">M</span> and
+radius <span class="math inline">R</span>, <span
+class="math inline">\theta(t)</span> denotes the angle of the beam and
+<span class="math inline">\rho(t)</span> denotes the position of the
+ball.</p>
+<p>I developed the physical model of the system using <em>Lagrangian
+mechanics</em>. Since the parameters <span class="math inline">\theta
+(t)</span> and <span class="math inline">\rho (t)</span> uniquely define
+the configuration(3), they are the <em>generalised coordinates</em>. The
+<em>Lagrangian</em> of the system is defined as: <span
+class="math display">
+L = K - U \qquad (1)
+</span> where <span class="math inline">K</span> is the kinetic energy
+and <span class="math inline">U</span> is the potential energy of the
+system.</p>
+<p>The kinetic energy of the ball is <span class="math display">
+K = K_{rot} + K_{tra} = \frac{1}{2}J\omega ^2 + \frac{1}{2}M v^2 \qquad
+(2)
+</span> where <span class="math inline">J</span> is the moment of
+inertia, <span class="math inline">\omega</span> is the angular velocity
+and <span class="math inline">v</span> is the translational velocity of
+the ball.</p>
+<p>The representation of <span class="math inline">v</span> in terms of
+the generalised coordinates is <span class="math inline">v =
+\sqrt{\dot\rho^2 + (\rho\dot\theta)^2}</span>.</p>
+<p>Substituting this and <span class="math inline">\omega^2 = (v/R)^2 =
+(\dot \rho/R)^2</span> into <span class="math inline">(2)</span> yields:
+<span class="math display">
+K = \frac{1}{2}J\frac{\dot\rho^2}{R^2} + \frac{1}{2}M\dot\rho^2 +
+\frac{1}{2}M\rho^2 \dot \theta^2 = \frac{1}{2}\left(
+M+\frac{J}{R^2}\right)\dot\rho^2 + \frac{1}{2}M\rho^2 \dot \theta^2
+\qquad (3)
+</span> The potential energy <span class="math inline">U</span> of the
+ball is written as: <span class="math display">
+U = Mg\rho sin\theta \qquad (4)
+</span> Substituting <span class="math inline">(3)</span> and <span
+class="math inline">(4)</span> into equation <span
+class="math inline">(1)</span> yields: <span class="math display">
+L = \frac{1}{2}\left( M+\frac{J}{R^2}\right)\dot\rho^2 +
+\frac{1}{2}M\rho^2 \dot \theta^2 - Mg \rho sin\theta \qquad (5)
+</span> The <em>Euler-Lagrange equation</em> is defined as(4): <span
+class="math display">
+\frac{d}{dt}\left( \frac{\partial
+L}{\partial\dot\rho}\right)=\frac{\partial L}{\partial \rho} \qquad (6)
+</span> Each expression is calculated as follows: <span
+class="math display">
+\frac{\partial L}{\partial \dot\rho} = \frac{\partial
+\left[\frac{1}{2}\left( M+\frac{J}{R^2}\right)\dot\rho^2 +
+\frac{1}{2}M\rho^2 \dot \theta^2 - Mg \rho
+sin\theta\right]}{\partial\dot \rho} = \left( M+\frac{J}{R^2} \right)
+\dot \rho \qquad (7)
+</span></p>
+<p><span class="math display">
+\frac{d}{dt}\left( \frac{\partial L}{\partial\dot\rho}\right) =
+\frac{d}{dt}\left[\left( M+\frac{J}{R^2} \right) \dot \rho \right] =
+\left( M+\frac{J}{R^2} \right) \ddot \rho \qquad (8)
+</span></p>
+<p><span class="math display">
+\frac{\partial L}{\partial \rho} = \frac{\partial\left[\frac{1}{2}\left(
+M+\frac{J}{R^2}\right)\dot\rho^2 + \frac{1}{2}M\rho^2 \dot \theta^2 - Mg
+\rho sin\theta \right]}{\partial \rho} = M\rho\dot\theta^2 - Mgsin\theta
+\qquad (9)
+</span></p>
+<p>Substituting <span class="math inline">(8)</span> and <span
+class="math inline">(9)</span> into <span class="math inline">(6)</span>
+gives the governing equation: <span class="math display">
+\left( M+\frac{J}{R^2} \right) \ddot \rho = M\rho\dot\theta^2 -
+Mgsin\theta \qquad (10)
+</span> Solving for <span class="math inline">\ddot \rho</span>: <span
+class="math display">
+\ddot \rho = \frac{m\rho\dot\theta^2 - Mgsin\theta}{\left(
+M+\frac{J}{R^2} \right)} \qquad (11)
+</span></p>
+<h1 id="modeling">Modeling</h1>
+<p>To model this system I used Simulink. One can theoretically use
+<em>Simscape</em> to model the system physically without calculating the
+governing equation; but since I already had the equation I simply built
+a model using the <em>Derivative, Integrator and Function</em>
+blocks.</p>
+<figure>
+<img src="rsrc/bb_model.png" style="width:70.0%"
+alt="Simulink model for the ball/beam system." />
+<figcaption aria-hidden="true">Simulink model for the ball/beam
+system.</figcaption>
+</figure>
+<p>The system takes beam angle <span class="math inline">\theta</span>
+<code>Theta</code> as input and outputs the position of the ball <span
+class="math inline">\rho</span> <code>rho</code>. The <em>MATLAB
+Function</em> block simply represents the governing equation <span
+class="math inline">(11)</span>:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode octave"><code class="sourceCode octave"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span> rho_dotdot <span class="op">=</span> fcn(rho<span class="op">,</span> Theta<span class="op">,</span> Theta_dot<span class="op">,</span> g<span class="op">,</span> <span class="bu">J</span><span class="op">,</span> M<span class="op">,</span> R)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>rho_dotdot <span class="op">=</span> ((M<span class="op">*</span>rho<span class="op">*</span>Theta_dot<span class="op">^</span><span class="fl">2</span>) <span class="op">-</span> (M<span class="op">*</span>g<span class="op">*</span><span class="fu">sin</span>(Theta))) <span class="op">/</span> <span class="op">...</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                        (M <span class="op">+</span> (<span class="bu">J</span><span class="op">/</span>(R<span class="op">^</span><span class="fl">2</span>)))<span class="op">;</span></span></code></pre></div>
+<p>Also, to model the system more accurately to the real world, I
+simulated the servo motor which will be used in the experiment as well.
+The servo motor takes a PWM(Pulse Width Modulation) signal and rotates
+the shaft to an angle which is calculated as a function of the duty
+cycle of the PWM signal. The angle of the servo shaft is then measured
+and sent to the <code>ball/beam</code> block which outputs the position
+of the ball.</p>
+<figure>
+<img src="rsrc/servo.png" style="width:70.0%"
+alt="Simulink model for the servo motor." />
+<figcaption aria-hidden="true">Simulink model for the servo
+motor.</figcaption>
+</figure>
+<h1 id="simulation">Simulation</h1>
+<p>After modeling the physical and electrical components of the system,
+I simulated it with Simulink. As was discussed in the <em>Theory</em>
+section, without any control element the position <span
+class="math inline">\rho</span> diverges; this can be seen in Figure
+32.</p>
+<figure>
+<img src="rsrc/openloop_model.png" style="width:70.0%"
+alt="Simulink model for the non-controlled open loop system." />
+<figcaption aria-hidden="true">Simulink model for the non-controlled
+open loop system.</figcaption>
+</figure>
+<figure>
+<img src="rsrc/openloop.png" style="width:70.0%"
+alt="Plot for the position of the ball versus time." />
+<figcaption aria-hidden="true">Plot for the position of the ball versus
+time.</figcaption>
+</figure>
+<p>To control and regulate the position of the ball, I utilised a PID
+controller.</p>
+<figure>
+<img src="rsrc/pid.png" style="width:70.0%"
+alt="Simulink diagram of the whole system including the PID controller." />
+<figcaption aria-hidden="true">Simulink diagram of the whole system
+including the PID controller.</figcaption>
+</figure>
+<p>Figure 33 shows the Simulink diagram for the whole simulation system.
+The output of the PID controller is a value between <span
+class="math inline">[-60, 60]</span> to represent the angle <span
+class="math inline">\theta</span>, the <code>map</code> block converts
+this value to the duty cycle to be sent to the servo motor. The servo
+expects a 50Hz PWM signal with the duty cycle value of <span
+class="math inline">\%5</span> representing the leftmost angle and <span
+class="math inline">\%10</span> representing the rightmost. The current
+position of the ball <span class="math inline">\rho</span> is subtracted
+from the desired value to find the error <span
+class="math inline">e</span>, which is then fed into the PID controller.
+Since the widely-known <em>Ziegler-Nichols Method</em> does not work
+inherently unstable processes, I decided to manually tune the
+parameters. By trial and error, I found parameters <span
+class="math inline">P=200, I=1, D= 150</span> to be acceptable in
+aspects of rise-time, steady-state error and overshoot.</p>
+<figure>
+<img src="rsrc/step.png" style="width:50.0%"
+alt="Step response of the controlled system." />
+<figcaption aria-hidden="true">Step response of the controlled
+system.</figcaption>
+</figure>
+<p>Figure 34 shows the step response of the controlled system, where
+<code>des</code> is the <em>desired</em> step signal and
+<code>real</code> is the real-time position of the ball. As can be seen,
+the rising time is about <em>2 seconds</em> with an overshoot of less
+than <em>2 mm</em>.</p>
+<figure>
+<img src="rsrc/sysres.png" style="width:50.0%"
+alt="The system response to a complicated signal." />
+<figcaption aria-hidden="true">The system response to a complicated
+signal.</figcaption>
+</figure>
+<p>Figure 35 shows the system response to a more complicated input
+signal. As can be seen, the system relatively successfully follows the
+desired position, with overshoots happening because of large
+transitions. These overshoots can be minimised at the cost of increased
+rising-time by increasing the <span class="math inline">D</span>
+coefficient. In general, effects of modifying the coefficients
+independently is described as(6):</p>
+<figure>
+<img src="rsrc/table.png" style="width:50.0%"
+alt="Effects of increasing a parameter independently" />
+<figcaption aria-hidden="true">Effects of <em>increasing</em> a
+parameter independently</figcaption>
+</figure>
+<h1 id="hardware-implementation">Hardware Implementation</h1>
+<p>To implement this system I needed an actuator to control the angle
+and a sensor to measure the balls current position. I used a MG 995
+high-power servo motor for the actuator. A servo motor is a motor whose
+shaft angle can be controlled by a PWM signal. With a frequency of 50
+Hz, a %7.5 duty-cycle corresponds to the neutral position whereas %5 and
+%10 correspond to the maximum angles.</p>
+<figure>
+<img src="rsrc/mg995.jpg" style="width:30.0%"
+alt="The servo motor used." />
+<figcaption aria-hidden="true">The servo motor used.</figcaption>
+</figure>
+<p>As a sensor, after experimenting with various options such as
+ultrasonic and laser <em>ToF</em> <em>(Time of Flight)</em> sensors, I
+decided on a linear touch potentiometer called <em>SoftPot</em>(7).</p>
+<figure>
+<img src="rsrc/pot.jpeg" alt="Softpot linear potentiometer." />
+<figcaption aria-hidden="true">Softpot linear
+potentiometer.</figcaption>
+</figure>
+<p>It is a “linear soft membrane potentiometer used for tracking
+position and acquiring the preferred output in a variety of
+applications(7)”. The softpot is connected as shown in Figure 39. The
+version I bought is <span class="math inline">200 mm</span> long with a
+resistance of <span class="math inline">20k\Omega</span>.</p>
+<figure>
+<img src="rsrc/softpot.png" style="width:30.0%"
+alt="The connections of SoftPot." />
+<figcaption aria-hidden="true">The connections of SoftPot.</figcaption>
+</figure>
+<p>The output voltage at the <code>DATA</code> pin varies linearly from
+<span class="math inline">0V</span> to <span
+class="math inline">5V</span> according to where the potentiometer is
+pressed on. I can directly use this voltage to determine the position of
+the ball.</p>
+<p>As a micro controller I used the NXP <em>DEVKIT-MPC5744P</em> which
+is a development board for the 32-bit <em>MPC5744P</em> MCU. The main
+reasons I used this particular unit is that it has an extensive
+<em>Model-Based Design Toolbox</em> for <em>Simulink</em> and it
+features a 12-bit ADC and 16-bit hardware PWM which have a degree of
+precision required by the control system I designed.</p>
+<figure>
+<img src="rsrc/mpc.jpeg" style="width:50.0%"
+alt="The DEVKIT-MPC5744P board." />
+<figcaption aria-hidden="true">The DEVKIT-MPC5744P board.</figcaption>
+</figure>
+<h2 id="experiment-setup">Experiment Setup</h2>
+<p>Figures 41 and 42 show the hardware implementation setup. A wooden
+canal is constructed so that the steel ball can move on top of the beam.
+The softpot is glued to the base so that it can measure the ball’s
+position. The board is powered externally since the built-in voltage
+regulator cannot handle the high current required by the high power
+servo motor. A 100ohm resistor is placed between the PWM output and the
+servo motor control signal to act as a current-limiter.</p>
+<figure>
+<img src="rsrc/set1.jpeg" style="width:50.0%"
+alt="Experiment setup, 1." />
+<figcaption aria-hidden="true">Experiment setup, 1.</figcaption>
+</figure>
+<figure>
+<img src="rsrc/set0.jpeg" style="width:50.0%"
+alt="Experiment setup, 2." />
+<figcaption aria-hidden="true">Experiment setup, 2.</figcaption>
+</figure>
+<h2 id="simulink-model">Simulink Model</h2>
+<figure>
+<img src="rsrc/simu.png" alt="The Simulink model for the experiment." />
+<figcaption aria-hidden="true">The Simulink model for the
+experiment.</figcaption>
+</figure>
+<p>The position of the ball is read from the SoftPot via the ADC which
+is then mapped into a range of <span class="math inline">[-100,
++100]</span>. The desired position value <span
+class="math inline">0</span> gets subtracted from this value and fed
+into the PID controller. The PID controller outputs a value in the range
+<span class="math inline">[-45, +45]</span> representing the angle <span
+class="math inline">\theta</span> which is then mapped into the duty
+cycle value in the range <span class="math inline">[0.06, 0.09]</span>
+for the outermost angles of the servo motor. This duty cycle value is
+fed into the PWM generator which outputs a <span class="math inline">50
+Hz</span> PWM signal with the given pulse-width.</p>
+<h2 id="results">Results</h2>
+<p>I used an oscilloscope to make sure that the PWM signal was in the
+correct form. As can be seen on Figure 44, it is indeed a 50Hz signal
+with the duty-cycle in the range <span class="math inline">[0.06,
+0.09]</span>.</p>
+<figure>
+<img src="rsrc/pwm_osc.png" style="width:50.0%" alt="The PWM signal." />
+<figcaption aria-hidden="true">The PWM signal.</figcaption>
+</figure>
+<p>Using FreeMASTER, which is a real-time debug software for the board,
+I observed the values for the ADC, the angle output of the PID, the
+duty-cycle and the current position of the ball.</p>
+<figure>
+<img src="rsrc/freemaster0.png" alt="Values observed from FreeMASTER" />
+<figcaption aria-hidden="true">Values observed from
+FreeMASTER</figcaption>
+</figure>
+<p>By plotting the position of the ball, I could observe the
+characteristics of the designed control system.</p>
+<figure>
+<img src="rsrc/freemasterosc.png"
+alt="The real-time position of the ball." />
+<figcaption aria-hidden="true">The real-time position of the
+ball.</figcaption>
+</figure>
+<p>As can be seen on Figure 46, when the ball is dropped at -70mm, the
+position gets corrected to stabilise around the middle of the beam.
+There are steady-state oscillations probably caused by the servo motor
+or the inaccuracies of the sensor.</p>
+<p>The video of the experiment can be found at:
+https://youtu.be/lyxPgjbJB_w</p>
+<hr>
+
+<div class="footer">
+
+    <p>
+        Miraç Lütfullah Gülgönül
+        <br>
+        <a class="fa-solid fa-globe" style="text-decoration:none" href="https://mlg556.github.io"></a>
+        &nbsp
+        <a class="fa-regular fa-envelope" style="text-decoration:none" href="mailto:miraclgulgonul@gmail.com"></a>
+        &nbsp
+        <a class="fa-brands fa-linkedin" style="text-decoration:none" href="https://www.linkedin.com/in/mira%C3%A7-g%C3%BClg%C3%B6n%C3%BCl-b787841b5/"></a> 
+    </p>
+
+
+</div>
+
+</body>
+</html>

@@ -180,7 +180,7 @@ We decided to look at the philosophies and the concepts behind SIL (Software-In-
 
 SIL is the first step towards building a program to implement it in hardware. Instead of directly downloading it into the hardware, you download it into a virtual version. The real hardware is emulated as a software block, and the code is downloaded to it. This helps you to see the problems which may arise, for example, incompatibility issues between your code and the hardware it is to run on. I have tested this using the already made model which generates cam and crank signals. The difference is that, however, no piece of code is sent to the board; the entire process is run on the host computer. I decided to implement the **cam signal generation** part as a SIL block. This means that the rest of the model will run as a normal SIMULINK simulation, while C code will be generated for the CAM part, and be "downloaded" into an emulated virtual version of the board MPC5744P. Figure 40 shows the model to generate the cam/crank signals, but the CAM signal generation section is modeled into SIL action. Figure 41 shows the resulting waveforms on the *Scope* block; as expected, the signals are generated without error.
 
-![The SIL test model.](sil.png){ width=60% }
+![The SIL test model.](images/sil.png){ width=60% }
 
 ![Crank (yellow) and Cam (cyan) signals observed at the simulation scope.](images/silscope.png){ width=60% }
 

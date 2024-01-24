@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2019-11-05" />
+  <title>Modeling a Telecommunications System in MATLAB</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #f8f8f8; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ef2929; } /* Alert */
+    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #204a87; } /* Attribute */
+    code span.bn { color: #0000cf; } /* BaseN */
+    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4e9a06; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #8f5902; font-style: italic; } /* Comment */
+    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+    code span.dt { color: #204a87; } /* DataType */
+    code span.dv { color: #0000cf; } /* DecVal */
+    code span.er { color: #a40000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #0000cf; } /* Float */
+    code span.fu { color: #204a87; font-weight: bold; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+    code span.ot { color: #8f5902; } /* Other */
+    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+    code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+    code span.ss { color: #4e9a06; } /* SpecialString */
+    code span.st { color: #4e9a06; } /* String */
+    code span.va { color: #000000; } /* Variable */
+    code span.vs { color: #4e9a06; } /* VerbatimString */
+    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+      html, body {
+          margin-top: 1%;
+          margin-left: 10%;
+          margin-right: 10%;
+          background-color: #fbfbfb;
+          color: #403f52;
+          font-family: 'KaTeX_SansSerif';
+          font-size: 18px;
+      }
+
+      img {
+          max-width: 80%;
+      }
+
+      figcaption{
+          font-style: italic;
+      }
+
+      pre code {
+          display:inline-block;
+          font-size: 14px;
+          margin: 10px 10px 10px 10px;
+      }
+
+      code {
+          display:inline-block;
+          font-size: 14px;
+      }
+
+      .footer {
+          text-align: center;
+          margin-top: 1%;
+          margin-bottom: 1%;
+      }
+
+      .date {
+          font-style: italic;
+      }
+
+      a { color: inherit; }
+  </style>
+
+  <script src="https://kit.fontawesome.com/fa8004ee4c.js" crossorigin="anonymous"></script>
+
+  <h1>
+      <a href="/index.html" style="text-decoration:none">Miraç Lütfullah Gülgönül</a>
+  </h1>
+
+  <hr>
+
+  <script defer=""
+  src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Modeling a Telecommunications System in MATLAB</h1>
+<p class="date">5 November 2019</p>
+</header>
+<p>Using MATLAB/Simulink, one is able to design and simulate a complete
+communications system including various components. A theoretical
+communication system can be described as a block diagram:</p>
+<figure>
+<img src="rsrc/a0.png" style="width:50.0%"
+alt="The anatomy of a digital communications system." />
+<figcaption aria-hidden="true">The anatomy of a digital communications
+system.</figcaption>
+</figure>
+<h1 id="the-transmitter">The Transmitter</h1>
+<p>The transmitter consists of a signal source which generates random
+bitstream, a modulator to map this bitstream into complex
+<em>symbols</em>, pulse-shaping to filter this digital signal, and
+optionally an up-converter to embed these symbols into a carrier
+frequency.</p>
+<h2 id="signal-source">Signal Source</h2>
+<p>When designing a communications system, it is often good practice to
+test it with a random message. I generated a random bitstream (a random
+message of <code>1</code>s and <code>0</code>s) and visualised the first
+50 bits as follows:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode octave"><code class="sourceCode octave"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>numBits <span class="op">=</span> <span class="fl">100000</span><span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>txBits  <span class="op">=</span> <span class="fu">randi</span>([<span class="fl">0</span> <span class="fl">1</span>]<span class="op">,</span> numBits<span class="op">,</span> <span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">stairs</span>(txBits(<span class="fl">1</span><span class="op">:</span><span class="fl">50</span>)<span class="op">,</span> <span class="st">&#39;bo-&#39;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>([<span class="fl">0</span> <span class="fl">50</span> <span class="op">-</span><span class="fl">0.5</span> <span class="fl">1.5</span>])<span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">&#39;\bfRandom bit stream&#39;</span>)<span class="op">;</span></span></code></pre></div>
+<figure>
+<img src="rsrc/msg0.png" style="width:50.0%"
+alt="The plot of the first 50 elements of the random bitstream." />
+<figcaption aria-hidden="true">The plot of the first 50 elements of the
+random bitstream.</figcaption>
+</figure>
+<h2 id="digital-modulator">Digital Modulator</h2>
+<p>To modulate the bitstream into <em>symbols</em>, I used
+<em>QPSK(Quadrature Phase Shift Keying)</em> modulation. This modulation
+technique transmits 2 bits per symbols, so it maps each 2 bits of the
+incoming bitstream into a corresponding <em>symbol</em>. As the name
+suggests, the modulator modulates the phase of the carrier signal into 4
+distinct phases. For instance, <code>00</code> corresponds to a phase
+shift of <span class="math inline">\pi/4</span> and <code>01</code> to a
+phase shift of <span class="math inline">3\pi/4</span>.</p>
+<figure>
+<img src="rsrc/qpsk.jpg" style="width:50.0%"
+alt="The corresponding phase shifts(3)." />
+<figcaption aria-hidden="true">The corresponding phase
+shifts(3).</figcaption>
+</figure>
+<p>To better represent these phase shifts, I used a <em>constellation
+diagram</em>. Each phase shift is represented on the complex coordinate
+system, so they can be represented as a complex <em>symbol</em> in the
+form of <span class="math inline">a+bj</span>.</p>
+<figure>
+<img src="rsrc/qpsk_c.png" style="width:30.0%"
+alt="The constellation diagram for QPSK." />
+<figcaption aria-hidden="true">The constellation diagram for
+QPSK.</figcaption>
+</figure>
+<p>In MATLAB, I can do this via system objects as:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode octave"><code class="sourceCode octave"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>hMod <span class="op">=</span> comm.QPSKModulator<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>hMod.BitInput <span class="op">=</span> <span class="fu">true</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>txSymbols <span class="op">=</span> hMod(txBits)<span class="op">;</span></span></code></pre></div>
+<p>The variable <code>txSymbols</code> now holds the complex
+<em>symbols</em> generated by the modulator. Here are the the first 5
+elements:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode octave"><code class="sourceCode octave"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;</span> txSymbols(<span class="fl">1</span><span class="op">:</span><span class="fl">5</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ans</span> <span class="op">=</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">-</span><span class="fl">0.7071</span> <span class="op">-</span> <span class="fl">0.7071i</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">-</span><span class="fl">0.7071</span> <span class="op">+</span> <span class="fl">0.7071i</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fl">0.7071</span> <span class="op">-</span> <span class="fl">0.7071i</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">-</span><span class="fl">0.7071</span> <span class="op">+</span> <span class="fl">0.7071i</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">-</span><span class="fl">0.7071</span> <span class="op">-</span> <span class="fl">0.7071i</span></span></code></pre></div>
+<p>However, it is better to use a constellation diagram to visualise
+these symbols. This is done by:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode octave"><code class="sourceCode octave"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>hConst <span class="op">=</span> comm.ConstellationDiagram<span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>hConst.ReferenceConstellation <span class="op">=</span> [<span class="fl">1</span><span class="op">+</span><span class="fl">1j</span> <span class="op">-</span><span class="fl">1</span><span class="op">+</span><span class="fl">1j</span> <span class="op">-</span><span class="fl">1</span><span class="op">-</span><span class="fl">1j</span> <span class="fl">1</span><span class="op">-</span><span class="fl">1j</span>]<span class="op">/</span><span class="fu">sqrt</span>(<span class="fl">2</span>)<span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>hConst(txSymbols)</span></code></pre></div>
+<figure>
+<img src="rsrc/cons0.png" style="width:50.0%"
+alt="The constellation diagram of the symbols." />
+<figcaption aria-hidden="true">The constellation diagram of the
+symbols.</figcaption>
+</figure>
+<p>As can be seen in <em>Figure 6</em>, each two bits of the message is
+mapped to one of the 4 symbols; which are complex numbers with magnitude
+<span class="math inline">1</span> and have a phase shift of <span
+class="math inline">\pi/2</span> between them.</p>
+<h2 id="pulse-shaping">Pulse Shaping</h2>
+<p>To transmit these symbols, one first needs to pass them through a
+filter. This is because currently these symbols represent rectangular
+pulses which have a relatively large bandwidth (they require high
+frequencies to represent). This requirement of a high bandwidth can
+cause what is called <em>ISI (Intersymbol interference)</em>. To
+eliminate these high range of frequencies, I used a <em>raised cosine
+filter</em>. A particular type of this filter, called the
+<em>square-root raised cosine filter</em> can be described as:</p>
+<p><span class="math display">
+H_{SQRC}(f) = 0 \text{  for  } |f| &gt; \frac{1+\beta}{2T}
+</span></p>
+<p>where <span class="math inline">H_{SQRC}(f)</span> is the frequency
+response of the filter and T is the symbol interval (the time duration
+allotted to each symbol transmission). The parameter <span
+class="math inline">\beta</span> is called the <em>rolloff factor</em>.
+It allows a compromise between filter length and filter bandwidth. For
+instance, <span class="math inline">\beta = 0</span> offers the
+narrowest bandwidth (but the slowest rate of decay in the time domain)
+whereas <span class="math inline">\beta = 1</span> offers the largest
+bandwidth (but with the fastest rate of decay in the time domain).</p>
+<figure>
+<img src="rsrc/rcf.png"
+alt="Frequency response of raised-cosine filter with various roll-off factors \beta" />
+<figcaption aria-hidden="true">Frequency response of raised-cosine
+filter with various roll-off factors <span
+class="math inline">\beta</span></figcaption>
+</figure>
+<p>By the <em>Nyquist - Shannon Theorem</em>, the sampling rate should
+be at least twice the highest frequency component. This means that for
+<span class="math inline">\beta = 1</span> where the bandwidth has a
+maximum value of <span class="math inline">1/T</span>, one must utilise
+a minimum sampling rate of <span class="math inline">2/T</span>. In
+practice, however, oversampling is preferred with a <em>up-sample
+factor</em> of 8-10.</p>
+<p>In MATLAB, I applied a <em>raised cosine filter</em> using:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode octave"><code class="sourceCode octave"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>hTxFilter <span class="op">=</span> comm.RaisedCosineTransmitFilter<span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>hTxFilter.RolloffFactor <span class="op">=</span> <span class="fl">0.25</span><span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>hTxFilter.FilterSpanInSymbols <span class="op">=</span> <span class="fl">22</span><span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>hTxFilter.OutputSamplesPerSymbol <span class="op">=</span> upsampleFactor<span class="op">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> coeffs(hTxFilter)<span class="op">;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>hTxFilter.Gain <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="fu">sum</span>(b.Numerator) <span class="op">*</span> upsampleFactor<span class="op">;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>txFiltered <span class="op">=</span> hTxFilter(txSymbols)<span class="op">;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>fvtool(hTxFilter<span class="op">,</span> <span class="st">&#39;Fs&#39;</span><span class="op">,</span> sampleRate)</span></code></pre></div>
+<figure>
+<img src="rsrc/rcf_mg.png"
+alt="The magnitude response of the applied filter" />
+<figcaption aria-hidden="true">The magnitude response of the applied
+filter</figcaption>
+</figure>
+<p>The magnitude response in <em>Figure 9</em> shows that this filter
+eliminates most of the high frequency, thus reducing the bandwidth
+required. To visualise the signal after it has passed the <em>pulse
+shaping</em> stage, I used an a <em>constellation diagram</em>, <em>eye
+diagram</em> and a <em>spectrum analyser</em>.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode octave"><code class="sourceCode octave"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>hConst.SamplesPerSymbol <span class="op">=</span> <span class="fl">8</span><span class="op">;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>release(hConst)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>hConst(txFiltered)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>groupDelay <span class="op">=</span> order(hTxFilter)<span class="op">/</span><span class="fl">2</span><span class="op">;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>hEye <span class="op">=</span> comm.EyeDiagram<span class="op">;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>hEye.DisplayMode <span class="op">=</span> <span class="st">&#39;Line plot&#39;</span><span class="op">;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>hEye.SampleRate <span class="op">=</span> sampleRate<span class="op">;</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>hEye.SamplesPerSymbol <span class="op">=</span> upsampleFactor<span class="op">;</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>hEye.YLimits <span class="op">=</span> [<span class="op">-</span><span class="fl">1.5</span> <span class="fl">1.5</span>]<span class="op">;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>hEye.TracesToDisplay <span class="op">=</span> <span class="fl">80</span><span class="op">;</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>hEye.ShowImaginaryEye <span class="op">=</span> <span class="fu">true</span><span class="op">;</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>hEye(txFiltered(groupDelay<span class="op">+</span><span class="fl">1</span> <span class="op">:</span> <span class="cf">end</span>))<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode octave"><code class="sourceCode octave"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>hSpectrum <span class="op">=</span> dsp.SpectrumAnalyzer(<span class="op">...</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;SampleRate&#39;</span><span class="op">,</span> sampleRate<span class="op">,</span> <span class="op">...</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;SpectrumType&#39;</span><span class="op">,</span> <span class="st">&#39;Power density&#39;</span><span class="op">,</span> <span class="op">...</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;PlotAsTwoSidedSpectrum&#39;</span><span class="op">,</span> <span class="fu">true</span><span class="op">,</span> <span class="op">...</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;RBWSource&#39;</span><span class="op">,</span> <span class="st">&#39;Property&#39;</span><span class="op">,</span> <span class="op">...</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;RBW&#39;</span><span class="op">,</span> <span class="fl">50</span><span class="op">,</span> <span class="op">...</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;SpectralAverages&#39;</span><span class="op">,</span> <span class="fl">10</span><span class="op">,</span> <span class="op">...</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;Window&#39;</span><span class="op">,</span> <span class="st">&#39;Hamming&#39;</span><span class="op">,</span> <span class="op">...</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;OverlapPercent&#39;</span><span class="op">,</span> <span class="fl">20</span><span class="op">,</span> <span class="op">...</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;ReducePlotRate&#39;</span><span class="op">,</span> <span class="fu">false</span>)<span class="op">;</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    hSpectrum(txFiltered)<span class="op">;</span></span></code></pre></div>
+<p>The constellation diagram shows the “reference constellation” and
+where the symbols are actually mapped to. Notice that the symbols around
+the theoretical points, because the filter introduced additional
+noise.</p>
+<figure>
+<img src="rsrc/cons1.png" style="width:50.0%"
+alt="The constellation diagram for the filtered signal" />
+<figcaption aria-hidden="true">The constellation diagram for the
+filtered signal</figcaption>
+</figure>
+<p>The eye diagram acts like a constantly triggered oscilloscope,
+overlaying many traces of the signal to see its characteristics. It is
+primarily used to detect <em>ISI</em>, among many other signal quality
+parameters.</p>
+<p>Finally, I analysed the spectrum of the filtered signal. It looks
+similar to the frequency response of the filter.</p>
+<figure>
+<img src="rsrc/eye0.png" style="width:60.0%"
+alt="The eye diagram of the filtered signal" />
+<figcaption aria-hidden="true">The eye diagram of the filtered
+signal</figcaption>
+</figure>
+<figure>
+<img src="rsrc/freq0.png" style="width:60.0%"
+alt="The spectrum of the filtered signal." />
+<figcaption aria-hidden="true">The spectrum of the filtered
+signal.</figcaption>
+</figure>
+<h2 id="up-conversion">Up-Conversion</h2>
+<p>To be able to transmit these filter symbols (the <em>complex baseband
+signal</em>) in the real world, one needs to embed them into a
+high-frequency carrier signal. This process is called
+<em>up-conversion</em> and can be visualised as follows:</p>
+<figure>
+<img src="rsrc/upc.png" style="width:60.0%"
+alt="The diagram of quadrature up-conversion." />
+<figcaption aria-hidden="true">The diagram of quadrature
+up-conversion.</figcaption>
+</figure>
+<p>Let the <em>complex baseband signal</em> be represented as <span
+class="math inline">z[n] = i[n] + jq[n]</span>. We can separate these
+signals <span class="math inline">i[n]</span> and <span
+class="math inline">q[n]</span> and convert them into their continuous
+counterparts <span class="math inline">i(t)</span> and <span
+class="math inline">q(t)</span> respectively. These are then multiplied
+by <span class="math inline">cos</span> and <span
+class="math inline">sin</span> signals with the carrier frequency,
+finally summing them to make up the resignal <span
+class="math inline">s(t)</span> which is going to be transmitted, also
+called <em>real bandpass signal</em>.</p>
+<p>The code I used to generate this real bandpass signal is:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode octave"><code class="sourceCode octave"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fc   <span class="op">=</span> <span class="fl">100e3</span><span class="op">;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>n    <span class="op">=</span> (<span class="fl">0</span> <span class="op">:</span> (<span class="fu">length</span>(txFiltered) <span class="op">-</span> <span class="fl">1</span>))<span class="op">&#39;;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>LO   <span class="op">=</span> <span class="fu">exp</span>(<span class="fl">1i</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">*</span> <span class="bu">pi</span> <span class="op">*</span> fc <span class="op">*</span> n <span class="op">/</span> sampleRate)<span class="op">;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>txRF <span class="op">=</span> <span class="fu">real</span>(txFiltered <span class="op">.*</span> LO)<span class="op">;</span></span></code></pre></div>
+<figure>
+<img src="rsrc/txRF.png" alt="The real bandpass signal." />
+<figcaption aria-hidden="true">The real bandpass signal.</figcaption>
+</figure>
+<h1 id="the-receiver">The Receiver</h1>
+<p>While I have generated the <em>real bandpass signal</em> for
+illustrative purposes, there is actually no need to convert the complex
+symbols (the <em>complex baseband signal</em>) to its analog real
+bandpass counterpart in simulation. Running the simulations with the
+complex symbol values is much more efficient since one does not need a
+high frequency carrier signal which is computationally expensive.</p>
+<p>The receiver part is mostly the reverse of the receiver part. The
+incoming <em>complex baseband signal</em> is filtered again by the
+matched <em>square root raised cosine filter</em> and then downsampled
+to directly yield the complex symbols. These symbols are then given to
+the demodulator, which outputs the 2-bit values of each corresponding
+symbol. This system can be visualised as:</p>
+<figure>
+<img src="rsrc/recv.png" alt="The diagram of the receiver system." />
+<figcaption aria-hidden="true">The diagram of the receiver
+system.</figcaption>
+</figure>
+<p>This is the code I used to implement the receiver system.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode octave"><code class="sourceCode octave"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>hRxFilter <span class="op">=</span> comm.RaisedCosineReceiveFilter<span class="op">;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>hRxFilter.RolloffFactor <span class="op">=</span> <span class="fl">0.25</span><span class="op">;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>hRxFilter.FilterSpanInSymbols <span class="op">=</span> <span class="fl">22</span><span class="op">;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>hRxFilter.InputSamplesPerSymbol <span class="op">=</span> upsampleFactor<span class="op">;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> coeffs(hRxFilter)<span class="op">;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>hRxFilter.Gain <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="fu">sum</span>(b.Numerator)<span class="op">;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>rxSymbols <span class="op">=</span> hRxFilter(txFiltered)<span class="op">;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>release(hConst)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>groupDelay <span class="op">=</span> order(hTxFilter)<span class="op">/</span><span class="fl">2</span> <span class="op">+</span> order(hRxFilter)<span class="op">/</span><span class="fl">2</span><span class="op">;</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>hConst(rxSymbols(groupDelay<span class="op">+</span><span class="fl">1</span> <span class="op">:</span> <span class="cf">end</span>))<span class="op">;</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>hDemod <span class="op">=</span> comm.QPSKDemodulator(<span class="st">&#39;BitOutput&#39;</span><span class="op">,</span><span class="fu">true</span>)<span class="op">;</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>rxBits <span class="op">=</span> hDemod(rxSymbols)<span class="op">;</span></span></code></pre></div>
+<h2 id="bit-error-rate-ber-calculation">Bit Error Rate (BER)
+Calculation</h2>
+<p>I compared the received and the message bits:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode octave"><code class="sourceCode octave"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>groupDelay <span class="op">=</span> order(hTxFilter)<span class="op">/</span><span class="fl">2</span> <span class="op">+</span> order(hRxFilter)<span class="op">/</span><span class="fl">2</span><span class="op">;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>filtDelay  <span class="op">=</span> (groupDelay<span class="op">/</span>upsampleFactor)<span class="op">*</span>bitsPerSymbol<span class="op">;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">figure</span>(<span class="fl">1</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">subplot</span>(<span class="fl">2</span><span class="op">,</span><span class="fl">1</span><span class="op">,</span><span class="fl">1</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">stairs</span>(txBits(<span class="fl">1</span><span class="op">:</span><span class="fl">50</span>)<span class="op">,</span> <span class="st">&#39;bo-&#39;</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>([<span class="fl">0</span> <span class="fl">50</span> <span class="op">-</span><span class="fl">0.5</span> <span class="fl">1.5</span>])<span class="op">;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">&#39;\bfTx bits&#39;</span>)<span class="op">;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">subplot</span>(<span class="fl">2</span><span class="op">,</span><span class="fl">1</span><span class="op">,</span><span class="fl">2</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">stairs</span>(rxBits(filtDelay<span class="op">+</span><span class="fl">1</span> <span class="op">:</span> filtDelay<span class="op">+</span><span class="fl">50</span>)<span class="op">,</span> <span class="st">&#39;bo-&#39;</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>([<span class="fl">0</span> <span class="fl">50</span> <span class="op">-</span><span class="fl">0.5</span> <span class="fl">1.5</span>])<span class="op">;</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span>(<span class="st">&#39;\bfRx bits&#39;</span>)<span class="op">;</span></span></code></pre></div>
+<figure>
+<img src="rsrc/RxTx.png"
+alt="The comparison of transmitted and received bits." />
+<figcaption aria-hidden="true">The comparison of transmitted and
+received bits.</figcaption>
+</figure>
+<p>As <em>Figure 16</em> shows, the transmitted and the received bits
+match perfectly. In general, one can quantify the quality of the
+transmission by calculating <em>Bit Error Rate(BER)</em>. This is simply
+a measure of how many bits were transmitted wrong, divided by the total
+number of bits transmitted.</p>
+<p>By compensating for the fiter delays, I calculated the <em>BER</em>
+as follows:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode octave"><code class="sourceCode octave"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>delay <span class="op">=</span> finddelay(txBits<span class="op">,</span>rxBits)<span class="op">;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>hErrorRate <span class="op">=</span> comm.ErrorRate(<span class="st">&#39;ReceiveDelay&#39;</span><span class="op">,</span>delay)<span class="op">;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>BER <span class="op">=</span> hErrorRate(txBits<span class="op">,</span>rxBits)</span></code></pre></div>
+<p>This yields the output:</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode octave"><code class="sourceCode octave"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>BER <span class="op">=</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>           <span class="fl">0</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>           <span class="fl">0</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>       <span class="fl">99956</span></span></code></pre></div>
+<p>By the documentation, the class <code>comm.ErrorRate()</code> returns
+a “three element vector consisting of the error rate, followed by the
+number of errors detected and the total number of samples compared”.
+Since this was a noiseless transmission (I haven’t modeled the channel),
+the <em>BER</em> is <span class="math inline">0</span>.</p>
+<h1 id="modeling-noise-awgn-additive-white-gaussian-noise">Modeling
+Noise: AWGN (Additive White Gaussian Noise)</h1>
+<p>In wireless communication systems, the main source of noise is
+“addition of random signals arising from the vibration of atoms in the
+receiver electronics(3)”; which can be modeled with a mathematical
+construct called <em>AWGN (Additive White Gaussian Noise</em>). The
+noise is “additive”, because it is “added” to the transmitted signal:
+this property is reflected in <em>Figure 17</em> as <span
+class="math inline">r(t) = s(t) + n(t)</span>, where <span
+class="math inline">r(t)</span> is the received signal, <span
+class="math inline">s(t)</span> is the transmitted signal and <span
+class="math inline">n(t)</span> is the noise.</p>
+<figure>
+<img src="rsrc/awgndiag.png" style="width:40.0%"
+alt="The additive property of AWGN" />
+<figcaption aria-hidden="true">The additive property of
+<em>AWGN</em></figcaption>
+</figure>
+<p>It is termed “white” because it has a frequency-wise flat power
+spectrum density <em>(PSD)</em>. This means that it has a uniform power
+across the whole frequency band.</p>
+<figure>
+<img src="rsrc/awgnfreq.png" style="width:50.0%"
+alt="The Power Spectrum Density of AWGN." />
+<figcaption aria-hidden="true">The Power Spectrum Density of
+AWGN.</figcaption>
+</figure>
+<p><em>Gaussian</em> refers to the probably distribution of the each
+noise sample: they are more likely to have closer to zero values, and
+the distribution has a zero mean: so the average of a large number of
+noise samples tends towards zero.</p>
+<figure>
+<img src="rsrc/awgnpdf.png" style="width:50.0%"
+alt="The probability distribution function (PDF) of the noise." />
+<figcaption aria-hidden="true">The probability distribution function
+<em>(PDF)</em> of the noise.</figcaption>
+</figure>
+<p>To model AWGN effects on a communication channel, I utilised a
+<code>AWGNChannel</code> system object:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode octave"><code class="sourceCode octave"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>hAWGN <span class="op">=</span> comm.AWGNChannel(<span class="st">&#39;EbNo&#39;</span><span class="op">,</span> EbNo<span class="op">,</span> <span class="op">...</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                         <span class="st">&#39;BitsPerSymbol&#39;</span><span class="op">,</span> bitsPerSymbol<span class="op">,</span> <span class="op">...</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                         <span class="st">&#39;SamplesPerSymbol&#39;</span><span class="op">,</span> upsampleFactor)<span class="op">;</span></span></code></pre></div>
+<p><span class="math inline">E_b/N_0</span> is the ratio of the energy
+per <em>bit</em> over noise power density. <span
+class="math inline">E_b</span> corresponds to the energy of each bit the
+transmitter sends, whereas <span class="math inline">N_0</span>
+corresponds to the noise energy per bit. This ratio is useful to
+determine a “normalised” SNR (Signal to Noise) ratio, independent from
+the bandwidth. This method helps compare the “BER performance” of
+different modulation and encoding schemes.</p>
+<h2 id="ber-analysis">BER Analysis</h2>
+<p>To measure the effectiveness of this communication scheme which uses
+QPSK modulation and square-root raised cosine filter in the presence of
+noise, I calculated the BER of the system in different
+<code>EbNo</code>’s from <span class="math inline">0 dB</span> to <span
+class="math inline">6dB</span> and plotted them on a <em>semi-log</em>
+scale. This is known as a <em>BER Curve</em> and is an important metric
+in measuring and comparing different communication systems. To achieve
+this I wrote a function called <code>qpskAWGN</code> which takes the
+<code>EbNo</code> and <code>totalBits</code> as inputs, transmits the
+message in <span class="math inline">100.000</span> bit packages and
+calculates the <em>BER</em> for the given <code>EbNo</code>. Here are
+the relevant parts of this function:</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode octave"><code class="sourceCode octave"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span> ErrorRate <span class="op">=</span> qpskAWGNFcn(EbNo<span class="op">,</span> totalBits)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>(<span class="op">...</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>numBitsPerLoop <span class="op">=</span> <span class="fl">1e5</span><span class="op">;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>BER            <span class="op">=</span> <span class="fu">zeros</span>(<span class="fl">3</span><span class="op">,</span><span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> BER(<span class="fl">3</span>) <span class="op">&lt;</span> totalBits</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    txBits <span class="op">=</span> <span class="fu">randi</span>([<span class="fl">0</span> <span class="fl">1</span>]<span class="op">,</span> numBitsPerLoop<span class="op">,</span> <span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    txSymbols <span class="op">=</span> hMod(txBits)<span class="op">;</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    txFiltered <span class="op">=</span> hTxFilter(txSymbols)<span class="op">;</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    txNoisy <span class="op">=</span> hAWGN(txFiltered)<span class="op">;</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    rxSymbols <span class="op">=</span> hRxFilter(txNoisy)<span class="op">;</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    rxBits <span class="op">=</span> hDemod(rxSymbols)<span class="op">;</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    BER <span class="op">=</span> hErrorRate(txBits<span class="op">,</span> rxBits)<span class="op">;</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>ErrorRate <span class="op">=</span> BER(<span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<p>Then a main script calls this function for <code>EbNo</code> values
+between <code>0</code> and <code>6dB</code>.</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode octave"><code class="sourceCode octave"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>EbNoVector <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">6</span><span class="op">;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>BERuncoded <span class="op">=</span> <span class="fu">zeros</span>(<span class="fl">1</span><span class="op">,</span> <span class="fu">length</span>(EbNoVector))<span class="op">;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>numBitsPerSimulation <span class="op">=</span> <span class="fl">1e6</span><span class="op">;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ix <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(EbNoVector)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    EbNo <span class="op">=</span> EbNoVector(ix)<span class="op">;</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">disp</span>(EbNo)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    BER <span class="op">=</span> myqpskAWGNFcn(EbNo<span class="op">,</span> numBitsPerSimulation)<span class="op">;</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    BERuncoded(ix) <span class="op">=</span> BER(<span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="fu">semilogy</span>(EbNoVector<span class="op">,</span> BERuncoded<span class="op">,</span> <span class="st">&#39;-*&#39;</span>)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="fu">grid</span> on</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="fu">xlabel</span>(<span class="st">&#39;Eb/No (dB)&#39;</span>)<span class="op">;</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ylabel</span>(<span class="st">&#39;BER&#39;</span>)<span class="op">;</span></span></code></pre></div>
+<p>The resulting plot is shown in Figure 20.</p>
+<figure>
+<img src="rsrc/ber0.png"
+alt="BER curve of QPSK modulation with SQRC filter." />
+<figcaption aria-hidden="true">BER curve of QPSK modulation with SQRC
+filter.</figcaption>
+</figure>
+<h1 id="channel-coding">Channel Coding</h1>
+<p>Channel coding is a technique used to improve the BER, i.e. to reduce
+the number of bits which are wrongly interpreted on the receiver side.
+This is done by generating extra bits and appending them to the packet
+sent. This redundant information about the data itself (such as
+checksums, message length…) is then used by the receiver to infer the
+contents of the received message and correct if any bits are wrong.
+Several coding techniques can be seen below.</p>
+<figure>
+<img src="rsrc/coding.png" style="width:50.0%"
+alt="Various channel coding techniques." />
+<figcaption aria-hidden="true">Various channel coding
+techniques.</figcaption>
+</figure>
+<h2 id="convolutional-code">Convolutional Code</h2>
+<p>Especially in wireless communication one of the most popular coding
+schemes is <em>convolutional code.</em> The important idea in
+convolutional coding is that each output bit of the channel encoder will
+depend on the current input bit and previous input bits. This introduces
+a “memory” in the encoder system: which can be exploited by the channel
+decoder to reduce the number of bit errors and improve the <em>BER</em>.
+A convolutional coding scheme is implemented by placing flip-flops in
+series to create a shift register and then summing chosen signals from
+the configuration to determine the output code. The number of flip-flops
+and the place of these “taps” is what characterises the implementation.
+As an example I used the 1/3 convolutional encoder used in the LTE
+physical layer standard(9), by the specification <em>3GPP TS
+36.212</em>.</p>
+<figure>
+<img src="rsrc/lte.png" alt="The convolutional encoder used in LTE." />
+<figcaption aria-hidden="true">The convolutional encoder used in
+LTE.</figcaption>
+</figure>
+<p>Since <span class="math inline">G_0 = 133_7 = 1011011_2</span>, this
+means that the first bit of the output is the sum of the 1. 3. 4. 6. 7.
+pins because the <code>1</code>s correspond the “taps”. This can be
+visualised as follows:</p>
+<figure>
+<img src="rsrc/taps.png" alt="The tap locations." />
+<figcaption aria-hidden="true">The tap locations.</figcaption>
+</figure>
+<p>The “rate” is <span class="math inline">1/3</span> because for each
+input bit 3 output bits are produced in the encoder. This has a negative
+effect on data rate because now more bits are needed to send each
+message, however this also reduces BER and thus the tradeoff is
+justified. This shift register corresponds to a logical Mealy type
+finite state machine because the output bits depend on the input
+<em>and</em> the current state.</p>
+<p>Apart from a state diagram, a <em>Trellis diagram</em> is also used
+to visualise the FSM. For instance, using a simpler encoder as shown in
+Figure 24:</p>
+<figure>
+<img src="rsrc/fsm.png" style="width:50.0%" alt="A simple encoder." />
+<figcaption aria-hidden="true">A simple encoder.</figcaption>
+</figure>
+<p>Given an input bitstream <code>[ 1 0 1 1 1 0 0 ]</code> the
+<em>Trellis diagram</em> for this encoder is:</p>
+<figure>
+<img src="rsrc/trellis.png" style="width:70.0%"
+alt="Trellis diagram for the encoder." />
+<figcaption aria-hidden="true">Trellis diagram for the
+encoder.</figcaption>
+</figure>
+<p>The Trellis diagram helps to visualise the operation of the encoder.
+Looking at the diagram we can see that for this particular 7-bit input
+stream the 14-bit output is
+<code>[ 1 1 1 0 0 0 0 1 1 0 0 1 1 1 ]</code>.</p>
+<h2 id="viterbi-algorithm">Viterbi Algorithm</h2>
+<p>Decoding the convolutional code is conceptually more difficult than
+encoding it. A commonly used technique is called the <em>Viterbi
+algorithm</em>. Basically it includes the same FSM used in encoding the
+message to decode it. It finds the most likely input data which could
+generate the received codeword. Since the decoder does not directly know
+the states of the encoder but its outputs, it has to infer which states
+would produce this output. Mathematically, the received codeword is the
+<em>observation</em> and the original message is the <em>hidden
+state</em>.</p>
+<h2 id="matlab-code">MATLAB Code</h2>
+<p>The convolutional encoder is coded using the system object:</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode octave"><code class="sourceCode octave"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>hConvCoder <span class="op">=</span> comm.ConvolutionalEncoder( <span class="op">...</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;TrellisStructure&#39;</span><span class="op">,</span> poly2trellis(<span class="fl">7</span><span class="op">,</span> [<span class="fl">133</span> <span class="fl">171</span> <span class="fl">165</span>])<span class="op">,</span> <span class="op">...</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;TerminationMethod&#39;</span><span class="op">,</span> <span class="st">&#39;Terminated&#39;</span>)<span class="op">;</span></span></code></pre></div>
+<p>The octal representations <span class="math inline">133_7, 171_7,
+165_7</span> are used to construct the encoder, as per the LTE
+specifications. Setting the <code>'TerminationMethod'</code> to
+<code>'Terminated'</code> tells the encoder to add extra bits to return
+all the flip-flops to <code>0</code>.</p>
+<h2 id="ber-analysis-1">BER Analysis</h2>
+<p>Using a similar setup to the previous section (with a main script
+calling the two functions with and without Convolutional coding), I
+compared the two BER curves.</p>
+<figure>
+<img src="rsrc/conv_plot.png"
+alt="BER curves of communications with and without Convolutional coding." />
+<figcaption aria-hidden="true">BER curves of communications with and
+without Convolutional coding.</figcaption>
+</figure>
+<p>As can be seen, at lower SNR values (where the noise is strong),
+Convolutional coding yields better results. At <span
+class="math inline">(E_b/N_0)_{dB} = 0</span>, where <span
+class="math inline">P_S</span> is signal power and <span
+class="math inline">P_N</span> is noise power, <span
+class="math inline">0 dB = log_{10}1 =
+10.log_{10}(\frac{P_S}{P_N})</span> which implies <span
+class="math inline">\frac{P_S}{P_N} = 1</span>. This means the power of
+the noise per bit is equally strong as the power of the signal per bit.
+We see that at this point the <em>BER</em> without Convolutional coding
+is <span class="math inline">0.3</span> where as with Convolutional
+coding it is <span class="math inline">0.07</span>. Without
+Convolutional coding, <span class="math inline">30</span> out of <span
+class="math inline">100</span> bits are received wrong, compared to
+<span class="math inline">7</span> bits with the Convolutional coding.
+This is a serious increase in terms of saving power, increasing
+effective distance and the reliability of communication in general.</p>
+<hr>
+
+<div class="footer">
+
+    <p>
+        Miraç Lütfullah Gülgönül
+        <br>
+        <a class="fa-solid fa-globe" style="text-decoration:none" href="https://mlg556.github.io"></a>
+        &nbsp
+        <a class="fa-regular fa-envelope" style="text-decoration:none" href="mailto:miraclgulgonul@gmail.com"></a>
+        &nbsp
+        <a class="fa-brands fa-linkedin" style="text-decoration:none" href="https://www.linkedin.com/in/mira%C3%A7-g%C3%BClg%C3%B6n%C3%BCl-b787841b5/"></a> 
+    </p>
+
+
+</div>
+
+</body>
+</html>
