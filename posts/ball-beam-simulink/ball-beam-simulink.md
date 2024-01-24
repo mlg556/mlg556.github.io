@@ -106,7 +106,7 @@ After modeling the physical and electrical components of the system, I simulated
 
 To control and regulate the position of the ball, I utilised a PID controller. 
 
-![Simulink diagram of the whole system including the PID controller.](rsrc/pid.png){ width=70% }
+![Simulink diagram of the whole system including the PID controller.](rsrc/pid.png){ width=60% }
 
 Figure 33 shows the Simulink diagram for the whole simulation system. The output of the PID controller is a value between $[-60, 60]$ to represent the angle $\theta$, the `map` block converts this value to the duty cycle to be sent to the servo motor. The servo expects a 50Hz PWM signal with the duty cycle value of $\%5$ representing the leftmost angle and $\%10$ representing the rightmost. The current position of the ball $\rho$ is subtracted from the desired value to find the error $e$, which is then fed into the PID controller. Since the widely-known *Ziegler-Nichols Method* does not work inherently unstable processes, I decided to manually tune the parameters. By trial and error, I found parameters $P=200, I=1, D= 150$ to be acceptable in aspects of rise-time, steady-state error and overshoot.
 
