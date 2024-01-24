@@ -7,7 +7,7 @@ date: 5 November 2017
 
 In my internship at BMC Power, my main project was to generate CAM/CRANK signals to emulate a running engine, using the NXP DEVKIT-MPC5744 and Simulink Embedded Coder. DEVKIT-MPC5744 is a development board for the MPC5744 chip, which is used in *automotive and industrial functional safety and motor control applications*. To achieve this, I used the [NXP Model-Based Design Toolbox (MBDT)](https://www.nxp.com/design/design-center/software/automotive-software-and-tools/model-based-design-toolbox-mbdt:MBDT).
 
-![The NXP MPC5744P Development Board](images/kit.jpg){ width=50% }
+![NXP DEVKIT-MPC5744 Development Board](images/kit.jpg){ width=50% }
 
 # Main Project
 
