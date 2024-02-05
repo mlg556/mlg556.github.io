@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2024-02-03" />
+  <title>Analyzing Gene Functions in Arabidopsis Thaliana</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {  background-color: #f8f8f8; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ef2929; } /* Alert */
+    code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #204a87; } /* Attribute */
+    code span.bn { color: #0000cf; } /* BaseN */
+    code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4e9a06; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #8f5902; font-style: italic; } /* Comment */
+    code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+    code span.dt { color: #204a87; } /* DataType */
+    code span.dv { color: #0000cf; } /* DecVal */
+    code span.er { color: #a40000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #0000cf; } /* Float */
+    code span.fu { color: #204a87; font-weight: bold; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+    code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+    code span.ot { color: #8f5902; } /* Other */
+    code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+    code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+    code span.ss { color: #4e9a06; } /* SpecialString */
+    code span.st { color: #4e9a06; } /* String */
+    code span.va { color: #000000; } /* Variable */
+    code span.vs { color: #4e9a06; } /* VerbatimString */
+    code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+      html, body {
+          margin-top: 1%;
+          margin-left: 10%;
+          margin-right: 10%;
+          background-color: #fbfbfb;
+          color: #403f52;
+          font-family: 'KaTeX_SansSerif';
+          font-size: 18px;
+      }
+
+      img {
+          max-width: 80%;
+      }
+
+      figcaption{
+          font-style: italic;
+      }
+
+      pre code {
+          display:inline-block;
+          font-size: 14px;
+          margin: 10px 10px 10px 10px;
+      }
+
+      code {
+          display:inline-block;
+          font-size: 14px;
+      }
+
+      .footer {
+          text-align: center;
+          margin-top: 1%;
+          margin-bottom: 1%;
+      }
+
+      .date {
+          font-style: italic;
+      }
+
+      a { color: inherit; }
+
+      /* tables */
+
+      table {
+          border-collapse: collapse;
+          border-spacing: 0;
+          border: 1px solid #cbcbcb;
+          table-layout: auto;
+      }   
+
+      tr, td, th {
+          border-left: 1px solid #cbcbcb; /* inner column border */
+          border-bottom: 1px solid #cbcbcb;
+          padding: 2px 5px;
+          font-size: 14px;
+      }
+
+      thead {
+          background-color: #e0e0e0;
+          color: #000;
+      }
+      
+  </style>
+
+  <script src="https://kit.fontawesome.com/fa8004ee4c.js" crossorigin="anonymous"></script>
+
+  <h1>
+      <a href="/index.html" style="text-decoration:none">Miraç Lütfullah Gülgönül</a>
+  </h1>
+
+  <hr>
+
+  <script defer=""
+  src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Analyzing Gene Functions in Arabidopsis Thaliana</h1>
+<p class="date">03 February 2024</p>
+</header>
+<p><a href="https://www.arabidopsis.org/">The Arabidopsis Information
+Resource (TAIR)</a> maintains a database of genetic and molecular
+biology data for the model higher plant Arabidopsis thaliana. We can do
+all sorts of analyses with this data, but in this post we will focus on
+looking at gene functions. You can download the annotation data
+(ATH_GO_GOSLIM.txt.gz) from the TAIR site, but I also included it in my
+Github repo <a
+href="https://github.com/mlg556/arabidopsis">mlg556/arabidopsis</a>, so
+you can just clone that.</p>
+<p>First let’s import the libraries. We will use <a
+href="https://pandas.pydata.org/">pandas</a> for reading/analyzing the
+data, and <code>zipfile</code> to extract the data file, which is
+archived. You can simply install pandas via
+<code>pip install pandas</code>, and <code>zipfile</code> is a built-in
+python library.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> zipfile</span></code></pre></div>
+<p>We extract the archived file <code>ATH_GO_GOSLIM.txt.gz</code> to
+<code>ATH_GO_GOSLIM.txt</code>. Note that although the extension
+<code>.gz</code> suggests Gzip/7zip file, we need a regular zip
+extractor.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract txt, file extension is erroneously gz, but its actually a zip file</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>fname <span class="op">=</span> <span class="st">&quot;ATH_GO_GOSLIM.txt&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>fname_gz <span class="op">=</span> <span class="ss">f&quot;</span><span class="sc">{</span>fname<span class="sc">}</span><span class="ss">.gz&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> zipfile.ZipFile(fname_gz, <span class="st">&#39;r&#39;</span>) <span class="im">as</span> z:</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    z.extractall(<span class="st">&quot;.&quot;</span>)</span></code></pre></div>
+<p>The resulting file is txt file using ’ as a delimiter. The column
+header names is absent, but we can read that from the companion file
+<code>ATH_GO.README.txt</code>, which I also included in the repo. To
+read the data into a pandas dataframe, I used <code>read_csv</code>. We
+specify the separator with <code>sep="\t"</code>, and the column names.
+We need skip the first 4 rows because they are comments:</p>
+<pre><code>!Project_name: The Arabidopsis Information Resource (TAIR)
+!URL: http://www.arabidopsis.org
+!Contact Email: curator@arabidopsis.org
+!Last Updated: 2023-12-01</code></pre>
+<p>Finally we print the dataframe see what it looks like</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># column data from from ATH_GO.README.txt</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>columns <span class="op">=</span> [</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;locus_name&quot;</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;tair_acc&quot;</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;obj_name&quot;</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;rel_type&quot;</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;go_term&quot;</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;go_id&quot;</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;tair_id&quot;</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;aspect&quot;</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;go_slim&quot;</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;evidence_code&quot;</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;evidence_desc&quot;</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;evidence_with&quot;</span>,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;reference&quot;</span>,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;annotator&quot;</span>,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;date&quot;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co"># read into dataframe</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>df0 <span class="op">=</span> pd.read_csv(fname, sep<span class="op">=</span><span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>, names<span class="op">=</span>columns, skiprows<span class="op">=</span>[<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>])</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>df0</span></code></pre></div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th>
+</th>
+<th>
+locus_name
+</th>
+<th>
+tair_acc
+</th>
+<th>
+obj_name
+</th>
+<th>
+rel_type
+</th>
+<th>
+go_term
+</th>
+<th>
+go_id
+</th>
+<th>
+tair_id
+</th>
+<th>
+aspect
+</th>
+<th>
+go_slim
+</th>
+<th>
+evidence_code
+</th>
+<th>
+evidence_desc
+</th>
+<th>
+evidence_with
+</th>
+<th>
+reference
+</th>
+<th>
+annotator
+</th>
+<th>
+date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+0
+</th>
+<td>
+AT1G01010
+</td>
+<td>
+locus:2200935
+</td>
+<td>
+AT1G01010
+</td>
+<td>
+acts upstream of or within
+</td>
+<td>
+defense response to other organism
+</td>
+<td>
+GO:0098542
+</td>
+<td>
+46569
+</td>
+<td>
+P
+</td>
+<td>
+response to stress
+</td>
+<td>
+IEA
+</td>
+<td>
+traceable computational prediction
+</td>
+<td>
+AGI_LocusCode:AT2G43510|AGI_LocusCode:AT4G1473…
+</td>
+<td>
+Publication:501796011|PMID:34562334
+</td>
+<td>
+klaasvdp
+</td>
+<td>
+2022-11-14
+</td>
+</tr>
+<tr>
+<th>
+1
+</th>
+<td>
+AT1G01010
+</td>
+<td>
+locus:2200935
+</td>
+<td>
+AT1G01010
+</td>
+<td>
+acts upstream of or within
+</td>
+<td>
+response to oxidative stress
+</td>
+<td>
+GO:0006979
+</td>
+<td>
+6625
+</td>
+<td>
+P
+</td>
+<td>
+response to stress
+</td>
+<td>
+IEA
+</td>
+<td>
+traceable computational prediction
+</td>
+<td>
+AGI_LocusCode:AT5G19875
+</td>
+<td>
+Publication:501796011|PMID:34562334
+</td>
+<td>
+klaasvdp
+</td>
+<td>
+2022-11-14
+</td>
+</tr>
+<tr>
+<th>
+2
+</th>
+<td>
+AT1G01010
+</td>
+<td>
+locus:2200935
+</td>
+<td>
+AT1G01010
+</td>
+<td>
+acts upstream of or within
+</td>
+<td>
+response to abscisic acid
+</td>
+<td>
+GO:0009737
+</td>
+<td>
+11395
+</td>
+<td>
+P
+</td>
+<td>
+response to chemical
+</td>
+<td>
+IEA
+</td>
+<td>
+traceable computational prediction
+</td>
+<td>
+AGI_LocusCode:AT4G27410
+</td>
+<td>
+Publication:501796011|PMID:34562334
+</td>
+<td>
+klaasvdp
+</td>
+<td>
+2022-11-14
+</td>
+</tr>
+<tr>
+<th>
+3
+</th>
+<td>
+AT1G01010
+</td>
+<td>
+locus:2200935
+</td>
+<td>
+AT1G01010
+</td>
+<td>
+acts upstream of or within
+</td>
+<td>
+response to lipid
+</td>
+<td>
+GO:0033993
+</td>
+<td>
+28865
+</td>
+<td>
+P
+</td>
+<td>
+response to chemical
+</td>
+<td>
+IEA
+</td>
+<td>
+traceable computational prediction
+</td>
+<td>
+AGI_LocusCode:AT4G27410|AGI_LocusCode:AT2G0299…
+</td>
+<td>
+Publication:501796011|PMID:34562334
+</td>
+<td>
+klaasvdp
+</td>
+<td>
+2022-11-14
+</td>
+</tr>
+<tr>
+<th>
+4
+</th>
+<td>
+AT1G01010
+</td>
+<td>
+locus:2200935
+</td>
+<td>
+AT1G01010
+</td>
+<td>
+acts upstream of or within
+</td>
+<td>
+oxoacid metabolic process
+</td>
+<td>
+GO:0043436
+</td>
+<td>
+21524
+</td>
+<td>
+P
+</td>
+<td>
+other cellular processes
+</td>
+<td>
+IEA
+</td>
+<td>
+traceable computational prediction
+</td>
+<td>
+AGI_LocusCode:AT5G63790
+</td>
+<td>
+Publication:501796011|PMID:34562334
+</td>
+<td>
+klaasvdp
+</td>
+<td>
+2022-11-14
+</td>
+</tr>
+<tr>
+<th>
+…
+</th>
+<td>
+…
+</td>
+<td>
+…
+</td>
+<td>
+…
+</td>
+<td>
+…
+</td>
+<td>
+…
+</td>
+<td>
+…
+</td>
+<td>
+…
+</td>
+<td>
+…
+</td>
+<td>
+…
+</td>
+<td>
+…
+</td>
+<td>
+…
+</td>
+<td>
+…
+</td>
+<td>
+…
+</td>
+<td>
+…
+</td>
+<td>
+…
+</td>
+</tr>
+<tr>
+<th>
+456201
+</th>
+<td>
+YAK
+</td>
+<td>
+gene:1945468
+</td>
+<td>
+YAK
+</td>
+<td>
+is active in
+</td>
+<td>
+cellular_component
+</td>
+<td>
+GO:0005575
+</td>
+<td>
+163
+</td>
+<td>
+C
+</td>
+<td>
+unknown cellular components
+</td>
+<td>
+ND
+</td>
+<td>
+‘Unknown’ cellular component
+</td>
+<td>
+NONE
+</td>
+<td>
+Communication:1345790
+</td>
+<td>
+TAIR
+</td>
+<td>
+2022-02-01
+</td>
+</tr>
+<tr>
+<th>
+456202
+</th>
+<td>
+YAK
+</td>
+<td>
+gene:1945468
+</td>
+<td>
+YAK
+</td>
+<td>
+enables
+</td>
+<td>
+molecular_function
+</td>
+<td>
+GO:0003674
+</td>
+<td>
+3226
+</td>
+<td>
+F
+</td>
+<td>
+unknown molecular functions
+</td>
+<td>
+ND
+</td>
+<td>
+‘Unknown’ molecular function
+</td>
+<td>
+NaN
+</td>
+<td>
+Communication:1345790
+</td>
+<td>
+TAIR
+</td>
+<td>
+2006-10-20
+</td>
+</tr>
+<tr>
+<th>
+456203
+</th>
+<td>
+YI
+</td>
+<td>
+gene:1945470
+</td>
+<td>
+YI
+</td>
+<td>
+involved in
+</td>
+<td>
+biological_process
+</td>
+<td>
+GO:0008150
+</td>
+<td>
+5239
+</td>
+<td>
+P
+</td>
+<td>
+unknown biological processes
+</td>
+<td>
+ND
+</td>
+<td>
+‘Unknown’ biological process
+</td>
+<td>
+NONE
+</td>
+<td>
+Communication:1345790
+</td>
+<td>
+TAIR
+</td>
+<td>
+2022-02-01
+</td>
+</tr>
+<tr>
+<th>
+456204
+</th>
+<td>
+YI
+</td>
+<td>
+gene:1945470
+</td>
+<td>
+YI
+</td>
+<td>
+is active in
+</td>
+<td>
+cellular_component
+</td>
+<td>
+GO:0005575
+</td>
+<td>
+163
+</td>
+<td>
+C
+</td>
+<td>
+unknown cellular components
+</td>
+<td>
+ND
+</td>
+<td>
+‘Unknown’ cellular component
+</td>
+<td>
+NONE
+</td>
+<td>
+Communication:1345790
+</td>
+<td>
+TAIR
+</td>
+<td>
+2022-02-01
+</td>
+</tr>
+<tr>
+<th>
+456205
+</th>
+<td>
+YI
+</td>
+<td>
+gene:1945470
+</td>
+<td>
+YI
+</td>
+<td>
+enables
+</td>
+<td>
+molecular_function
+</td>
+<td>
+GO:0003674
+</td>
+<td>
+3226
+</td>
+<td>
+F
+</td>
+<td>
+unknown molecular functions
+</td>
+<td>
+ND
+</td>
+<td>
+‘Unknown’ molecular function
+</td>
+<td>
+NaN
+</td>
+<td>
+Communication:1345790
+</td>
+<td>
+TAIR
+</td>
+<td>
+2006-10-20
+</td>
+</tr>
+</tbody>
+</table>
+<p>
+456206 rows × 15 columns
+</p>
+</div>
+<p>As you can see, this is a quite large dataframe with <span
+class="math inline">456\,206</span> genes and their associated
+functions. The <code>go_term</code> column is a nice description of what
+the gene does, so we will use that. I have also noticed that there are 3
+GO terms we need to exclude, because they are very generic and not
+useful:
+<code>["molecular_function", "biological_process", "cellular_component"]</code>.</p>
+<p>We select the columns by indexing into the dataframe, drop
+duplicates, and finally drop the rows which contain the excluded
+go_terms with <code>query()</code>. We could also use indexing for this,
+but query looks nicer I think.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>select_columns <span class="op">=</span> [<span class="st">&quot;locus_name&quot;</span>, <span class="st">&quot;go_term&quot;</span>]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>excluded_go_terms <span class="op">=</span> [<span class="st">&quot;molecular_function&quot;</span>, <span class="st">&quot;biological_process&quot;</span>, <span class="st">&quot;cellular_component&quot;</span>]</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df0[select_columns] <span class="co"># select gene name and function</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.drop_duplicates() <span class="co"># drop duplicates</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.query(<span class="st">&quot;go_term not in @excluded_go_terms&quot;</span>) <span class="co"># exclude go_terms</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th>
+</th>
+<th>
+locus_name
+</th>
+<th>
+go_term
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+0
+</th>
+<td>
+AT1G01010
+</td>
+<td>
+defense response to other organism
+</td>
+</tr>
+<tr>
+<th>
+1
+</th>
+<td>
+AT1G01010
+</td>
+<td>
+response to oxidative stress
+</td>
+</tr>
+<tr>
+<th>
+2
+</th>
+<td>
+AT1G01010
+</td>
+<td>
+response to abscisic acid
+</td>
+</tr>
+<tr>
+<th>
+3
+</th>
+<td>
+AT1G01010
+</td>
+<td>
+response to lipid
+</td>
+</tr>
+<tr>
+<th>
+4
+</th>
+<td>
+AT1G01010
+</td>
+<td>
+oxoacid metabolic process
+</td>
+</tr>
+<tr>
+<th>
+…
+</th>
+<td>
+…
+</td>
+<td>
+…
+</td>
+</tr>
+<tr>
+<th>
+456175
+</th>
+<td>
+XRS9
+</td>
+<td>
+DNA damage response
+</td>
+</tr>
+<tr>
+<th>
+456176
+</th>
+<td>
+XRS9
+</td>
+<td>
+DNA repair
+</td>
+</tr>
+<tr>
+<th>
+456182
+</th>
+<td>
+XRS9
+</td>
+<td>
+response to X-ray
+</td>
+</tr>
+<tr>
+<th>
+456183
+</th>
+<td>
+XTC1
+</td>
+<td>
+embryo development ending in seed dormancy
+</td>
+</tr>
+<tr>
+<th>
+456190
+</th>
+<td>
+XTC2
+</td>
+<td>
+embryo development ending in seed dormancy
+</td>
+</tr>
+</tbody>
+</table>
+<p>
+175917 rows × 2 columns
+</p>
+</div>
+<p>We are left with a table <span class="math inline">175\,917</span> of
+genes with their corresponding functions, but I want to analyze them by
+function. Let’s see which functions are done by which genes. We do this
+by using <code>groupby</code>:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dfg <span class="op">=</span> df.groupby(<span class="st">&quot;go_term&quot;</span>, as_index<span class="op">=</span><span class="va">False</span>).<span class="bu">apply</span>(<span class="kw">lambda</span> x: x)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>dfg</span></code></pre></div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th>
+</th>
+<th>
+</th>
+<th>
+locus_name
+</th>
+<th>
+go_term
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th rowspan="3" valign="top">
+0
+</th>
+<th>
+59240
+</th>
+<td>
+AT1G36280
+</td>
+<td>
+‘de novo’ AMP biosynthetic process
+</td>
+</tr>
+<tr>
+<th>
+264420
+</th>
+<td>
+AT3G57610
+</td>
+<td>
+‘de novo’ AMP biosynthetic process
+</td>
+</tr>
+<tr>
+<th>
+301471
+</th>
+<td>
+AT4G18440
+</td>
+<td>
+‘de novo’ AMP biosynthetic process
+</td>
+</tr>
+<tr>
+<th rowspan="2" valign="top">
+1
+</th>
+<th>
+52413
+</th>
+<td>
+AT1G30820
+</td>
+<td>
+‘de novo’ CTP biosynthetic process
+</td>
+</tr>
+<tr>
+<th>
+161072
+</th>
+<td>
+AT2G34890
+</td>
+<td>
+‘de novo’ CTP biosynthetic process
+</td>
+</tr>
+<tr>
+<th>
+…
+</th>
+<th>
+…
+</th>
+<td>
+…
+</td>
+<td>
+…
+</td>
+</tr>
+<tr>
+<th rowspan="3" valign="top">
+7460
+</th>
+<th>
+97088
+</th>
+<td>
+AT1G69770
+</td>
+<td>
+zygote asymmetric cytokinesis in embryo sac
+</td>
+</tr>
+<tr>
+<th>
+118068
+</th>
+<td>
+AT2G01210
+</td>
+<td>
+zygote asymmetric cytokinesis in embryo sac
+</td>
+</tr>
+<tr>
+<th>
+412150
+</th>
+<td>
+AT5G49160
+</td>
+<td>
+zygote asymmetric cytokinesis in embryo sac
+</td>
+</tr>
+<tr>
+<th rowspan="2" valign="top">
+7461
+</th>
+<th>
+129874
+</th>
+<td>
+AT2G17090
+</td>
+<td>
+zygote elongation
+</td>
+</tr>
+<tr>
+<th>
+157944
+</th>
+<td>
+AT2G33160
+</td>
+<td>
+zygote elongation
+</td>
+</tr>
+</tbody>
+</table>
+<p>
+175917 rows × 2 columns
+</p>
+</div>
+<p>We see that, for example <em>‘de novo’ AMP biosynthetic process</em>
+is regulated by three different genes: AT1G36280, AT3G57610 and
+AT4G18440. We can see which functions are regulated by the most number
+of genes using grouby combined with count, and sort them in descending
+order:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dfg_sum <span class="op">=</span> df.groupby(<span class="st">&quot;go_term&quot;</span>).count()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>dfg_sum <span class="op">=</span> dfg_sum.sort_values(by<span class="op">=</span>[<span class="st">&#39;locus_name&#39;</span>], ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>dfg_sum</span></code></pre></div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th>
+</th>
+<th>
+locus_name
+</th>
+</tr>
+<tr>
+<th>
+go_term
+</th>
+<th>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+nucleus
+</th>
+<td>
+10494
+</td>
+</tr>
+<tr>
+<th>
+chloroplast
+</th>
+<td>
+4966
+</td>
+</tr>
+<tr>
+<th>
+cytoplasm
+</th>
+<td>
+4771
+</td>
+</tr>
+<tr>
+<th>
+protein binding
+</th>
+<td>
+4519
+</td>
+</tr>
+<tr>
+<th>
+mitochondrion
+</th>
+<td>
+4449
+</td>
+</tr>
+<tr>
+<th>
+…
+</th>
+<td>
+…
+</td>
+</tr>
+<tr>
+<th>
+organelle fission
+</th>
+<td>
+1
+</td>
+</tr>
+<tr>
+<th>
+beta,beta digalactosyldiacylglycerol galactosyltransferase activity
+</th>
+<td>
+1
+</td>
+</tr>
+<tr>
+<th>
+regulation of MAPK cascade
+</th>
+<td>
+1
+</td>
+</tr>
+<tr>
+<th>
+regulation of GTPase activity
+</th>
+<td>
+1
+</td>
+</tr>
+<tr>
+<th>
+regulation of trichome patterning
+</th>
+<td>
+1
+</td>
+</tr>
+</tbody>
+</table>
+<p>
+7462 rows × 1 columns
+</p>
+</div>
+<p>This is nice, but not very helpful. Go terms like <em>nucleus</em>
+and <em>protein binding</em> seem to me too broad to be meaningful. Of
+course at the other end we have very specific functions regulated by a
+single gene. I would like to see more of what’s in between, so let’s
+look at the distribution:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>distribution <span class="op">=</span> dfg_sum.iloc[:<span class="dv">50</span>].plot.bar(figsize<span class="op">=</span>(<span class="dv">20</span>, <span class="dv">5</span>))</span></code></pre></div>
+<figure>
+<img src="arabidopsis_files/arabidopsis_17_0.png"
+alt="Gene function distribution." />
+<figcaption aria-hidden="true">Gene function distribution.</figcaption>
+</figure>
+<p>Apart from the usual suspects, the more interesting functions to me
+are “response to water deprivation”, “response to light stimulus” and
+“response to abscisic acid”. We see that the type of things which are
+more important to a plant have more genes to express/regulate them.
+Abscisic acid is a <em>plant hormone that regulates numerous aspects of
+plant growth, development, and stress responses.</em></p>
+<p>Another thing worthy of notice is that the distribution seems to
+follow a <a href="https://en.wikipedia.org/wiki/Power_law"><em>power
+law</em></a> and the <a
+href="https://en.wikipedia.org/wiki/Pareto_principle"><em>Pareto
+principle</em></a>. I don’t know if this is to be expected or not.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>plot <span class="op">=</span> dfg_sum.iloc[:<span class="dv">100</span>].plot(figsize<span class="op">=</span>(<span class="dv">20</span>, <span class="dv">5</span>), marker<span class="op">=</span><span class="st">&quot;.&quot;</span>, grid<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>plot.plot([<span class="dv">10_000</span><span class="op">/</span>x <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">100</span>)])</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>_ <span class="op">=</span> plot.legend([<span class="st">&quot;locus_name&quot;</span>, <span class="st">&quot;1/x&quot;</span>])</span></code></pre></div>
+<figure>
+<img src="arabidopsis_files/arabidopsis_20_0.png" alt="Power law." />
+<figcaption aria-hidden="true">Power law.</figcaption>
+</figure>
+<h1 id="citations">Citations</h1>
+<ul>
+<li><p>Berardini, TZ, Mundodi, S, Reiser, R, Huala, E, Garcia-Hernandez,
+M, Zhang, P, Mueller, LM, Yoon, J, Doyle, A, Lander, G, Moseyko, N, Yoo,
+D, Xu, I, Zoeckler, B, Montoya, M, Miller, N, Weems, D, and Rhee, SY
+(2004) Functional annotation of the Arabidopsis genome using controlled
+vocabularies. Plant Physiol. 135(2):1-11.</p></li>
+<li><p>TAIR Terms of Use:
+http://www.arabidopsis.org/doc/about/tair_terms_of_use/417.</p></li>
+</ul>
+<hr>
+
+<div class="footer">
+
+    <p>
+        <small>somewhat ineptly hand-crafted by</small> Miraç Lütfullah Gülgönül
+        <br>
+        <a class="fa-solid fa-globe" style="text-decoration:none" href="https://mlg556.github.io"></a>
+        &nbsp
+        <a class="fa-regular fa-envelope" style="text-decoration:none" href="mailto:miraclgulgonul@gmail.com"></a>
+        &nbsp
+        <a class="fa-brands fa-linkedin" style="text-decoration:none" href="https://www.linkedin.com/in/mira%C3%A7-g%C3%BClg%C3%B6n%C3%BCl-b787841b5/"></a> 
+    </p>
+
+
+</div>
+
+</body>
+</html>

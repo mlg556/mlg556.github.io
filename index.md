@@ -15,6 +15,8 @@ I also write blog posts now and then:
 
 # Posts
 
+- [Analyzing Gene Functions in Arabidopsis Thaliana](posts\arabidopsis\arabidopsis.html)
+
 - [8051 Assembly Workflow in macOS](posts\8051-assembly-workflow-in-macos\8051-assembly-workflow-in-macos.html)
 
 - [A Stationary Charged Particle in a Gravitational Field](posts\a-stationary-charged-particle-in-a-gravitational-field\a-stationary-charged-particle-in-a-gravitational-field.html)
