@@ -223,12 +223,13 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a hr
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> zipfile.ZipFile(fname_gz, <span class="st">&#39;r&#39;</span>) <span class="im">as</span> z:</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    z.extractall(<span class="st">&quot;.&quot;</span>)</span></code></pre></div>
-<p>The resulting file is txt file using ’ as a delimiter. The column
-header names is absent, but we can read that from the companion file
-<code>ATH_GO.README.txt</code>, which I also included in the repo. To
-read the data into a pandas dataframe, I used <code>read_csv</code>. We
-specify the separator with <code>sep="\t"</code>, and the column names.
-We need skip the first 4 rows because they are comments:</p>
+<p>The resulting file is txt file using <code>\t</code> as a delimiter.
+The column header names is absent, but we can read that from the
+companion file <code>ATH_GO.README.txt</code>, which I also included in
+the repo. To read the data into a pandas dataframe, I used
+<code>read_csv</code>. We specify the separator with
+<code>sep="\t"</code>, and the column names. We need skip the first 4
+rows because they are comments:</p>
 <pre><code>!Project_name: The Arabidopsis Information Resource (TAIR)
 !URL: http://www.arabidopsis.org
 !Contact Email: curator@arabidopsis.org
