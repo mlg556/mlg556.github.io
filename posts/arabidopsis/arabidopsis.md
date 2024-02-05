@@ -25,7 +25,7 @@ with zipfile.ZipFile(fname_gz, 'r') as z:
     z.extractall(".")
 ```
 
-The resulting file is txt file using '\t' as a delimiter. The column header names is absent, but we can read that from the companion file `ATH_GO.README.txt`, which I also included in the repo. To read the data into a pandas dataframe, I used `read_csv`. We specify the separator with `sep="\t"`, and the column names. We need skip the first 4 rows because they are comments:
+The resulting file is txt file using `\t` as a delimiter. The column header names is absent, but we can read that from the companion file `ATH_GO.README.txt`, which I also included in the repo. To read the data into a pandas dataframe, I used `read_csv`. We specify the separator with `sep="\t"`, and the column names. We need skip the first 4 rows because they are comments:
 
 ```
 !Project_name: The Arabidopsis Information Resource (TAIR)
